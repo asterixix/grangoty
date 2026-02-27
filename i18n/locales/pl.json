@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "GrantHub PL",
+    "title": "GRANgoTY",
     "home": "Strona główna",
     "submit": "Zgłoś dotację",
     "language": "Język"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
-    "heroDescription": "GrantHub PL agreguje dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
+    "heroDescription": "GRANgoTY agreguje dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
     "openGrants": "Aktywne dotacje",
     "closingSoon": "Zamkną się wkrótce",
     "totalGrants": "Łącznie dotacji",
@@ -78,7 +78,7 @@
     "visitSource": "Odwiedź źródło"
   },
   "footer": {
-    "description": "GrantHub PL - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
+    "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
     "resources": "Zasoby",
     "grantSearch": "Wyszukiwarka dotacji",
     "tutorials": "Poradniki",
@@ -106,6 +106,50 @@
   "a11y": {
     "opensNewTab": "(otwiera w nowej karcie)",
     "saveGrant": "Zapisz dotację",
-    "shareGrant": "Udostępnij dotację"
+    "shareGrant": "Udostępnij dotację",
+    "notifications": "Powiadomienia"
+  },
+  "notifications": {
+    "dismiss": "Zamknij",
+    "grants": {
+      "loadSuccess": "Załadowano {count} konkursów",
+      "loadError": "Nie udało się pobrać konkursów",
+      "loadErrorHint": "Sprawdź połączenie i spróbuj ponownie",
+      "saveSuccess": "Konkurs zapisany w ulubionych",
+      "saveError": "Nie można zapisać — spróbuj ponownie",
+      "newAvailable": "{count} nowych konkursów dostępnych",
+      "noResults": "Brak wyników dla wybranych filtrów",
+      "scraperDown": "Źródło {source} chwilowo niedostępne",
+      "notFound": "Konkurs nie został znaleziony"
+    },
+    "network": {
+      "offline": "Brak połączenia z internetem",
+      "offlineHint": "Przeglądasz zapisane dane",
+      "backOnline": "Połączenie przywrócone",
+      "slowConnection": "Wolne połączenie — ładowanie może potrwać",
+      "timeout": "Przekroczono czas oczekiwania",
+      "retrying": "Ponawiam próbę... ({attempt}/3)"
+    },
+    "auth": {
+      "sessionExpired": "Sesja wygasła — zaloguj się ponownie",
+      "forbidden": "Brak dostępu do tego zasobu"
+    },
+    "system": {
+      "updateAvailable": "Dostępna nowa wersja aplikacji",
+      "updateAction": "Odśwież",
+      "sessionExpired": "Sesja wygasła — zaloguj się ponownie",
+      "copySuccess": "Skopiowano do schowka",
+      "rssReady": "Kanał RSS gotowy do subskrypcji",
+      "unexpectedError": "Wystąpił nieoczekiwany błąd",
+      "unexpectedErrorHint": "Spróbuj odświeżyć stronę lub spróbuj później"
+    }
+  },
+  "errors": {
+    "notFound": "Strona nie znaleziona",
+    "serviceUnavailable": "Usługa niedostępna",
+    "unexpected": "Wystąpił nieoczekiwany błąd",
+    "codeLabel": "Kod błędu: {code}",
+    "backHome": "Wróć na stronę główną",
+    "retry": "Spróbuj ponownie"
   }
 }

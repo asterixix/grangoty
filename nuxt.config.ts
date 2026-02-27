@@ -5,17 +5,17 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-      title: 'GrantHub PL - Find grants for your organization',
+      title: 'GRANgoTY - Find grants for your organization',
       meta: [
-        { name: 'description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { name: 'description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
         { name: 'theme-color', content: '#0F6E84' },
-        { property: 'og:title', content: 'GrantHub PL' },
-        { property: 'og:description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { property: 'og:title', content: 'GRANgoTY' },
+        { property: 'og:description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
         { property: 'og:type', content: 'website' },
         { property: 'og:image', content: '/og-image.png' },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: 'GrantHub PL' },
-        { name: 'twitter:description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { name: 'twitter:title', content: 'GRANgoTY' },
+        { name: 'twitter:description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
         { name: 'twitter:image', content: '/og-image.png' }
       ],
       link: [
@@ -38,7 +38,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    // '@sentry/nuxt/module', // Uncomment when @sentry/nuxt is installed
   ],
 
   // @ts-expect-error - i18n module extends NuxtConfig
@@ -110,8 +111,20 @@ export default defineNuxtConfig({
     deeplApiKey: process.env.DEEPL_API_KEY,
     // Public (client-side)
     public: {
-      siteName: 'GrantHub PL',
-      siteUrl: process.env.SITE_URL || 'https://grangoty.vercel.app'
+      siteName: 'GRANgoTY',
+      siteUrl: process.env.SITE_URL || 'https://grangoty.vercel.app',
+      // Sentry DSN (safe to expose - it's a public identifier)
+      sentryDsn: process.env.SENTRY_DSN,
     }
+  },
+
+  // Sentry configuration (uncomment when @sentry/nuxt is installed)
+  // sentry: {
+  //   sourceMapsUploadOptions: {
+  //     org: process.env.SENTRY_ORG,
+  //     project: 'granthub-pl',
+  //     authToken: process.env.SENTRY_AUTH_TOKEN,
+  //   },
+  // },
   }
 })

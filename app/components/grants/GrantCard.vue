@@ -1,8 +1,39 @@
 <template>
   <article
     role="article"
+    :aria-busy="isLoading"
     class="grant-card hn-list-item flex flex-col sm:flex-row gap-3 sm:gap-4 group"
   >
+    <!-- Loading skeleton state -->
+    <template v-if="isLoading">
+      <div class="flex-shrink-0 mt-1">
+        <div class="w-5 h-5 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+      </div>
+      <div class="grant-body flex-1 min-w-0 animate-pulse space-y-2">
+        <!-- Title skeleton -->
+        <div class="h-5 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4" />
+        <!-- Badges skeleton -->
+        <div class="flex gap-2">
+          <div class="h-5 w-16 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
+          <div class="h-5 w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
+        </div>
+        <!-- Meta skeleton -->
+        <div class="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2" />
+      </div>
+    </template>
+
+    <!-- Error state -->
+    <template v-else-if="error">
+      <div class="flex-1">
+        <InlineError
+          :message="$t('notifications.grants.loadError')"
+          :on-retry="emit('retry')"
+        />
+      </div>
+    </template>
+
+    <!-- Normal content -->
+    <template v-else>
     <!-- Upvote / Save button (civic engagement, not popularity contest) -->
     <button
       :aria-label="`${t('a11y.saveGrant')}: ${grant.title}`"
@@ -21,55 +52,7 @@
       />
     </button>
 
-    <div class="grant-body flex-1 min-w-0">
-      <!-- Title: external link with security attrs -->
-      <h2 class="grant-title text-base sm:text-lg font-semibold mb-1">
-        <a
-          :href="grant.website"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
-        >
-          {{ grant.title }}
-          <span class="sr-only">{{ t('a11y.opensNewTab') }}</span>
-        </a>
-      </h2>
-
-      <!-- Badge row -->
-      <div class="grant-badges flex flex-wrap items-center gap-2 mb-1.5">
-        <!-- Deadline badge with urgency tiers -->
-        <UBadge
-          :class="urgency.class"
-          variant="outline"
-          role="listitem"
-        >
-          <UIcon :name="urgency.icon" class="w-3 h-3 mr-1" />
-          {{ daysRemaining }} {{ t('deadline.days') }}
-        </UBadge>
-
-        <!-- Amount badge -->
-        <UBadge
-          v-if="grant.amount"
-          variant="outline"
-          class="bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-          role="listitem"
-        >
-          {{ formatAmount(grant.amount) }}
-        </UBadge>
-      </div>
-
-      <!-- Metadata line — secondary info, muted -->
-      <p class="grant-meta text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span class="truncate max-w-[150px] sm:max-w-none">{{ formatSource(grant.website) }}</span>
-        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
-        <span class="truncate max-w-[100px] sm:max-w-none">{{ grant.region }}</span>
-        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
-        <span class="truncate max-w-[80px] sm:max-w-none">{{ grant.category }}</span>
-        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
-        <time :datetime="grant.scrapedAt" class="whitespace-nowrap">
-          {{ timeAgo }}
-        </time>
-      </p>
+    </template>
     </div>
   </article>
 </template>
@@ -80,16 +63,23 @@ import { parseISO, differenceInDays, formatDistanceToNow } from 'date-fns'
 import { useI18n } from 'vue-i18n'
 import type { Grant } from '~/types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   grant: Grant
   rank?: number
   isSaved?: boolean
-}>()
+  isLoading?: boolean
+  error?: Error | null
+}>(), {
+  rank: 0,
+  isSaved: false,
+  isLoading: false,
+  error: null,
+})
 
 const emit = defineEmits<{
   (e: 'save', rank: number): void
+  (e: 'retry'): void
 }>()
-
 const { t } = useI18n()
 
 // Deadline urgency computed

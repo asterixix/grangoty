@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "GrantHub PL",
+    "title": "GRANgoTY",
     "home": "Home",
     "submit": "Submit Grant",
     "language": "Language"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
-    "heroDescription": "GrantHub PL aggregates grants from various sources to help nonprofits find funding for their projects.",
+    "heroDescription": "GRANgoTY aggregates grants from various sources to help nonprofits find funding for their projects.",
     "openGrants": "Open Grants",
     "closingSoon": "Closing Soon",
     "totalGrants": "Total Grants",
@@ -78,7 +78,7 @@
     "visitSource": "Visit Source"
   },
   "footer": {
-    "description": "GrantHub PL - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
+    "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
     "resources": "Resources",
     "grantSearch": "Grant Search",
     "tutorials": "Tutorials",
@@ -106,6 +106,50 @@
   "a11y": {
     "opensNewTab": "(opens in new tab)",
     "saveGrant": "Save grant",
-    "shareGrant": "Share grant"
+    "shareGrant": "Share grant",
+    "notifications": "Notifications"
+  },
+  "notifications": {
+    "dismiss": "Dismiss",
+    "grants": {
+      "loadSuccess": "Loaded {count} grants",
+      "loadError": "Failed to load grants",
+      "loadErrorHint": "Check your connection and try again",
+      "saveSuccess": "Grant saved to favorites",
+      "saveError": "Could not save — please try again",
+      "newAvailable": "{count} new grants available",
+      "noResults": "No results for selected filters",
+      "scraperDown": "Source {source} temporarily unavailable",
+      "notFound": "Grant not found"
+    },
+    "network": {
+      "offline": "No internet connection",
+      "offlineHint": "Browsing cached data",
+      "backOnline": "Connection restored",
+      "slowConnection": "Slow connection — loading may take longer",
+      "timeout": "Request timed out",
+      "retrying": "Retrying... ({attempt}/3)"
+    },
+    "auth": {
+      "sessionExpired": "Session expired — please log in again",
+      "forbidden": "Access denied to this resource"
+    },
+    "system": {
+      "updateAvailable": "New app version available",
+      "updateAction": "Refresh",
+      "sessionExpired": "Session expired — please log in again",
+      "copySuccess": "Copied to clipboard",
+      "rssReady": "RSS feed ready for subscription",
+      "unexpectedError": "An unexpected error occurred",
+      "unexpectedErrorHint": "Try refreshing the page or come back later"
+    }
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "serviceUnavailable": "Service temporarily unavailable",
+    "unexpected": "An unexpected error occurred",
+    "codeLabel": "Error code: {code}",
+    "backHome": "Back to Home",
+    "retry": "Try Again"
   }
 }

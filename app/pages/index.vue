@@ -369,7 +369,7 @@ onMounted(() => {
 
 // SEO
 useHead({
-  title: 'GrantHub PL - ' + t('home.heroTitle'),
+  title: 'GRANgoTY - ' + t('home.heroTitle'),
   meta: [
     { name: 'description', content: t('home.heroDescription') }
   ]

@@ -75,7 +75,12 @@
     "cancel": "Abbrechen",
     "submit": "Einreichen",
     "submitting": "Einreichen...",
-    "visitSource": "Quelle besuchen"
+    "visitSource": "Quelle besuchen",
+    "retry": "Erneut versuchen",
+    "refresh": "Aktualisieren",
+    "clearFilters": "Filter löschen",
+    "login": "Anmelden",
+    "backHome": "Zur Startseite"
   },
   "footer": {
     "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
@@ -96,5 +101,51 @@
     "allRights": "Alle Rechte vorbehalten.",
     "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
   },
-  "skipLink": "Zum Hauptinhalt springen"
+  "skipLink": "Zum Hauptinhalt springen",
+  "a11y": {
+    "notifications": "Benachrichtigungen"
+  },
+  "notifications": {
+    "dismiss": "Schließen",
+    "grants": {
+      "loadSuccess": "{count} Fördermittel geladen",
+      "loadError": "Fördermittel konnten nicht geladen werden",
+      "loadErrorHint": "Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut",
+      "saveSuccess": "Fördermittel in Favoriten gespeichert",
+      "saveError": "Konnte nicht gespeichert werden — bitte erneut versuchen",
+      "newAvailable": "{count} neue Fördermittel verfügbar",
+      "noResults": "Keine Ergebnisse für ausgewählte Filter",
+      "scraperDown": "Quelle {source} vorübergehend nicht verfügbar",
+      "notFound": "Fördermittel nicht gefunden"
+    },
+    "network": {
+      "offline": "Keine Internetverbindung",
+      "offlineHint": "Sie sehen zwischengespeicherte Daten",
+      "backOnline": "Verbindung wiederhergestellt",
+      "slowConnection": "Langsame Verbindung — Laden kann länger dauern",
+      "timeout": "Zeitüberschreitung der Anfrage",
+      "retrying": "Erneuter Versuch... ({attempt}/3)"
+    },
+    "auth": {
+      "sessionExpired": "Sitzung abgelaufen — bitte erneut anmelden",
+      "forbidden": "Zugriff auf diese Ressource verweigert"
+    },
+    "system": {
+      "updateAvailable": "Neue App-Version verfügbar",
+      "updateAction": "Aktualisieren",
+      "sessionExpired": "Sitzung abgelaufen — bitte erneut anmelden",
+      "copySuccess": "In Zwischenablage kopiert",
+      "rssReady": "RSS-Feed bereit zum Abonnieren",
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
+      "unexpectedErrorHint": "Versuchen Sie die Seite zu aktualisieren oder kommen Sie später zurück"
+    }
+  },
+  "errors": {
+    "notFound": "Seite nicht gefunden",
+    "serviceUnavailable": "Dienst vorübergehend nicht verfügbar",
+    "unexpected": "Ein unerwarteter Fehler ist aufgetreten",
+    "codeLabel": "Fehlercode: {code}",
+    "backHome": "Zur Startseite",
+    "retry": "Erneut versuchen"
+  }
 }

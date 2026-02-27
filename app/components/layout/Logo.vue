@@ -1,6 +1,6 @@
 <template>
   <div class="logo flex items-center">
-    <NuxtLink to="/" class="flex items-center group" aria-label="GrantHub PL Home">
+    <NuxtLink to="/" class="flex items-center group" aria-label="GRANgoTY Home">
       <!-- Logo Icon -->
       <div class="logo-icon h-8 w-8 sm:h-10 sm:w-10 bg-primary-500 rounded-lg flex items-center justify-center mr-3 transition-transform group-hover:scale-105">
         <svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -12,12 +12,9 @@
         </svg>
       </div>
       <!-- Wordmark -->
-      <div class="logo-wordmark flex flex-col">
+      <div class="logo-wordmark">
         <span class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-tight">
-          GrantHub
-        </span>
-        <span class="text-xs sm:text-sm font-semibold text-primary-600 dark:text-primary-400 tracking-wide">
-          PL
+          GRANgoTY
         </span>
       </div>
     </NuxtLink>
@@ -25,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-// Logo component for GrantHub PL brand identity
+// Logo component for GRANgoTY brand identity
 </script>
 
 <style scoped>

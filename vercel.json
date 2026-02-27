@@ -5,6 +5,12 @@
       "schedule": "0 6 * * *"
     }
   ],
+  "logDrains": [
+    {
+      "type": "json",
+      "url": "https://your-log-receiver.com/ingest"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
@@ -14,6 +20,20 @@
           "value": "no-store, max-age=0"
         }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/feed",
+      "destination": "/api/rss"
     }
   ]
 }

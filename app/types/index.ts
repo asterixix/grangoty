@@ -102,3 +102,6 @@ export interface ScrapeResult {
   timestamp: string
   error?: string
 }
+
+// Notification types
+export * from './notifications'

@@ -76,7 +76,11 @@
     "submit": "Wyślij",
     "submitting": "Wysyłanie...",
     "visitSource": "Odwiedź źródło",
-    "retry": "Ponów"
+    "retry": "Ponów",
+    "refresh": "Odśwież",
+    "clearFilters": "Wyczyść filtry",
+    "login": "Zaloguj się",
+    "backHome": "Wróć na stronę główną"
   },
   "footer": {
     "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
