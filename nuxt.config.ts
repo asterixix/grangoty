@@ -8,15 +8,16 @@ export default defineNuxtConfig({
       title: 'GRANgoTY - Grant Aggregator for NGOs',
       meta: [
         { name: 'description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
-        { name: 'theme-color', content: '#0ea5e9' }
+        { name: 'theme-color', content: '#ff6600' }
       ],
       link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
       ]
     }
   },
+
+  // Source directory
+  srcDir: 'app/',
 
   // CSS is handled by @nuxtjs/tailwindcss module
   // css: [],
@@ -49,8 +50,8 @@ export default defineNuxtConfig({
   },
 
   tailwindcss: {
-    cssPath: 'app/assets/styles/tailwind.css',
-    configPath: 'tailwind.config.ts',
+    cssPath: 'assets/styles/tailwind.css',
+    configPath: '../tailwind.config.ts',
     exposeConfig: false,
     injectPosition: 0,
     viewer: true

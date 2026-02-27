@@ -4,14 +4,15 @@ export default {
   content: {
     files: [
       './app/**/*.{vue,js,ts}',
-      './components/**/*.{vue,js,ts}',
-      './layouts/**/*.{vue,js,ts}',
-      './pages/**/*.vue',
-      './plugins/**/*.{js,ts}',
-      './error.vue'
+      './app/components/**/*.{vue,js,ts}',
+      './app/layouts/**/*.{vue,js,ts}',
+      './app/pages/**/*.vue',
+      './app/plugins/**/*.{js,ts}',
+      './app/app.vue',
+      './app/error.vue'
     ],
     transform: {
-      vue: (content) => {
+      vue: (content: string) => {
         return content
           .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '$1')
           .replace(/<template[^>]*>([\s\S]*?)<\/template>/gi, '$1')
@@ -21,47 +22,55 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif']
+        sans: ['Verdana', 'Geneva', 'sans-serif'],
+        mono: ['Monaco', 'Consolas', 'monospace']
       },
       colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e'
+        // Hacker News inspired colors
+        'hn': {
+          'orange': '#ff6600',
+          'orange-dark': '#e65c00',
+          'orange-light': '#ff8533',
+          'beige': '#f6f6ef',
+          'gray': '#828282',
+          'gray-light': '#aaaaaa',
+          'gray-dark': '#6a6a6a',
         },
-        accent: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75'
+        'primary': {
+          50: '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+          800: '#9a3412',
+          900: '#7c2d12',
         }
+      },
+      fontSize: {
+        'xs': '10px',
+        'sm': '12px',
+        'base': '14px',
+        'lg': '16px',
+        'xl': '18px',
+      },
+      spacing: {
+        '0.5': '2px',
+        '1': '4px',
+        '2': '8px',
+        '3': '12px',
+        '4': '16px',
+        '5': '20px',
+        '6': '24px',
+        '8': '32px',
       },
       screens: {
         'sm': '640px',
         'md': '768px',
         'lg': '1024px',
         'xl': '1280px',
-        '2xl': '1536px'
-      },
-      spacing: {
-        '128': '32rem',
-        '144': '36rem'
-      },
-      borderRadius: {
-        '4xl': '2rem'
       }
     }
   },
