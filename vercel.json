@@ -5,11 +5,6 @@
       "schedule": "0 6 * * *"
     }
   ],
-  "logDrains": [
-    {
-      "type": "json",
-      "url": "https://your-log-receiver.com/ingest"
-    }
   ],
   "headers": [
     {
