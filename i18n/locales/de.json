@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "NGO Fördermittel Aggregator",
+    "title": "GRANgoTY",
     "home": "Startseite",
     "submit": "Fördermittel einreichen",
     "language": "Sprache"
   },
   "home": {
     "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
-    "heroDescription": "Wir aggregieren Fördermittel aus verschiedenen Quellen, um gemeinnützigen Organisationen bei der Finanzierung ihrer Projekte zu helfen.",
+    "heroDescription": "GRANgoTY aggregiert Fördermittel aus verschiedenen Quellen, um gemeinnützigen Organisationen bei der Finanzierung ihrer Projekte zu helfen.",
     "openGrants": "Offene Fördermittel",
     "closingSoon": "Schließen bald",
     "totalGrants": "Gesamt Fördermittel",
@@ -69,7 +69,7 @@
     "website": "Webseite",
     "websitePlaceholder": "https://...",
     "email": "E-Mail",
-    "emailPlaceholder": "contact (at) organisation.org"
+    "emailPlaceholder": "kontakt (at) organisation.org"
   },
   "common": {
     "cancel": "Abbrechen",
@@ -78,7 +78,7 @@
     "visitSource": "Quelle besuchen"
   },
   "footer": {
-    "description": "Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
+    "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
     "resources": "Ressourcen",
     "grantSearch": "Fördermittelsuche",
     "tutorials": "Anleitungen",

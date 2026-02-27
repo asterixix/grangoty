@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "Aggregator dotacji dla NGO",
+    "title": "GRANgoTY",
     "home": "Strona główna",
     "submit": "Zgłoś dotację",
     "language": "Język"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
-    "heroDescription": "Aggregujemy dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
+    "heroDescription": "GRANgoTY agreguje dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
     "openGrants": "Aktywne dotacje",
     "closingSoon": "Zamkną się wkrótce",
     "totalGrants": "Łącznie dotacji",
@@ -78,7 +78,7 @@
     "visitSource": "Odwiedź źródło"
   },
   "footer": {
-    "description": "Aggregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
+    "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
     "resources": "Zasoby",
     "grantSearch": "Wyszukiwarka dotacji",
     "tutorials": "Poradniki",

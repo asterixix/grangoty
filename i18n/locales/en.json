@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "NGO Grants Aggregator",
+    "title": "GRANgoTY",
     "home": "Home",
     "submit": "Submit Grant",
     "language": "Language"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
-    "heroDescription": "We aggregate grants from various sources to help nonprofits find funding for their projects.",
+    "heroDescription": "GRANgoTY aggregates grants from various sources to help nonprofits find funding for their projects.",
     "openGrants": "Open Grants",
     "closingSoon": "Closing Soon",
     "totalGrants": "Total Grants",
@@ -78,7 +78,7 @@
     "visitSource": "Visit Source"
   },
   "footer": {
-    "description": "Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
+    "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
     "resources": "Resources",
     "grantSearch": "Grant Search",
     "tutorials": "Tutorials",

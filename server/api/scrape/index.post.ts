@@ -1,9 +1,8 @@
 import { defineEventHandler, readBody, setResponseStatus } from 'h3'
+import { grantStorage } from '~/server/utils/redis'
+import { scrapers } from '~/server/scrapers/real-scrapers'
 import { deduplicateGrants, filterValidGrants } from '~/server/utils/deduplicator'
-import type { ApiError, ScrapeResult } from '~/app/types'
-
-// Import scrapers
-import { scrapers } from '~/server/scrapers'
+import type { ApiError, ScrapeResult, Grant } from '~/app/types'
 
 export default defineEventHandler(async (event): Promise<ScrapeResult | ApiError> => {
   // Only allow POST
@@ -16,7 +15,7 @@ export default defineEventHandler(async (event): Promise<ScrapeResult | ApiError
   }
 
   const body = await readBody(event)
-  const { source } = body
+  const { source } = body || {}
 
   const result: ScrapeResult = {
     source: source || 'all',
@@ -32,7 +31,7 @@ export default defineEventHandler(async (event): Promise<ScrapeResult | ApiError
 
     // If specific source requested, filter
     if (source) {
-      sourcesToScrape = scrapers.filter(s => s.name === source)
+      sourcesToScrape = scrapers.filter(s => s.source === source)
       if (sourcesToScrape.length === 0) {
         return {
           message: `Unknown source: ${source}`,
@@ -42,33 +41,80 @@ export default defineEventHandler(async (event): Promise<ScrapeResult | ApiError
     }
 
     // Scrape each source
-    for (const ScraperClass of sourcesToScrape) {
-      const scraper = new ScraperClass()
-
+    for (const scraper of sourcesToScrape) {
       if (!scraper.enabled) {
         result.failed++
         continue
       }
 
       try {
-        const grants = await scraper.scrape()
-        const validGrants = filterValidGrants(grants)
+        console.log(`[GRANgoTY] Starting scrape for: ${scraper.source}`)
+        const rawGrants = await scraper.scrape()
+        const validGrants = filterValidGrants(rawGrants)
         const deduplicated = deduplicateGrants(validGrants)
 
-        result.count += grants.length
-        result.newGrants += deduplicated.length
+        // Save each grant to Redis
+        for (const rawGrant of deduplicated) {
+          const grant: Grant = {
+            id: rawGrant.id || crypto.randomUUID(),
+            source: rawGrant.source,
+            title: rawGrant.title || 'Untitled Grant',
+            description: rawGrant.description || '',
+            amount: typeof rawGrant.amount === 'string' ? undefined : rawGrant.amount,
+            deadline: rawGrant.deadline,
+            category: rawGrant.category || 'general',
+            region: rawGrant.region || 'Poland',
+            eligibility: rawGrant.eligibility || [],
+            website: rawGrant.website,
+            contact: rawGrant.contact,
+            tags: rawGrant.tags || [],
+            status: rawGrant.status || 'open',
+            scrapedAt: rawGrant.scrapedAt || new Date().toISOString(),
+            lastVerifiedAt: new Date().toISOString(),
+          }
 
-        // In production, save to database here
-        console.log(`Scraped ${deduplicated.length} grants from ${scraper.source}`)
+          // Check if grant already exists (by title + source)
+          const existingGrants = await grantStorage.getAllGrants()
+          const existing = existingGrants.find(g => 
+            g.title === grant.title && g.source === grant.source
+          )
+
+          if (existing) {
+            // Update existing grant
+            grant.id = existing.id
+            result.updatedGrants++
+          } else {
+            result.newGrants++
+          }
+
+          await grantStorage.saveGrant(grant)
+        }
+
+        result.count += deduplicated.length
+
+        // Save scraper status
+        await grantStorage.saveScraperStatus(scraper.source, {
+          lastRun: new Date().toISOString(),
+          count: deduplicated.length,
+        })
+
+        console.log(`[GRANgoTY] Scraped ${deduplicated.length} grants from ${scraper.source}`)
       } catch (error) {
-        console.error(`Error scraping ${scraper.source}:`, error)
+        console.error(`[GRANgoTY] Error scraping ${scraper.source}:`, error)
         result.failed++
+
+        // Save error status
+        await grantStorage.saveScraperStatus(scraper.source, {
+          lastRun: new Date().toISOString(),
+          count: 0,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        })
       }
     }
 
     return result
   } catch (error) {
-    console.error('Scrape error:', error)
+    console.error('[GRANgoTY] Scrape error:', error)
     return {
       message: 'Scraping failed',
       code: 'SCRAPER_ERROR'

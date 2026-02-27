@@ -5,10 +5,10 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-      title: 'NGO Grants Aggregator',
+      title: 'GRANgoTY - Grant Aggregator for NGOs',
       meta: [
-        { name: 'description', content: 'Aggregating grants for NGOs across Europe' },
-        { name: 'theme-color', content: '#ffffff' }
+        { name: 'description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { name: 'theme-color', content: '#0ea5e9' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -85,6 +85,19 @@ export default defineNuxtConfig({
           additionalData: '@use "~/assets/styles/variables" as *;'
         }
       }
+    }
+  },
+
+  // Runtime config for environment variables
+  runtimeConfig: {
+    // Server-side only
+    upstashRedisRestUrl: process.env.UPSTASH_REDIS_REST_URL,
+    upstashRedisRestToken: process.env.UPSTASH_REDIS_REST_TOKEN,
+    deeplApiKey: process.env.DEEPL_API_KEY,
+    // Public (client-side)
+    public: {
+      siteName: 'GRANgoTY',
+      siteUrl: process.env.SITE_URL || 'https://grangoty.vercel.app'
     }
   }
 })

@@ -1,8 +1,8 @@
 import { defineEventHandler, getQuery } from 'h3'
-import { deduplicateGrants, filterValidGrants } from '~/server/utils/deduplicator'
-import type { PaginatedResponse, RawGrant } from '~/app/types'
+import { grantStorage } from '~/server/utils/redis'
+import type { PaginatedResponse, Grant } from '~/app/types'
 
-export default defineEventHandler(async (event): Promise<PaginatedResponse<RawGrant>> => {
+export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant>> => {
   // Handle CORS preflight
   if (event.method === 'OPTIONS') {
     event.node.res.statusCode = 204
@@ -13,38 +13,47 @@ export default defineEventHandler(async (event): Promise<PaginatedResponse<RawGr
   const query = getQuery(event)
   const page = parseInt(query.page as string) || 1
   const pageSize = parseInt(query.pageSize as string) || 20
+  const searchQuery = query.q as string || query.search as string || ''
+  const category = query.category as string
+  const region = query.region as string
+  const status = query.status as string
 
   try {
-    // Note: In production, this would call actual scraper services
-    // For now, return mock data structure
-    const mockGrants: RawGrant[] = [
-      {
-        source: 'mock',
-        title: 'Mock Grant 1',
-        description: 'This is a mock grant for demonstration purposes.',
-        category: 'general',
-        region: 'Poland',
-        status: 'open'
-      },
-      {
-        source: 'mock',
-        title: 'Mock Grant 2',
-        description: 'Another mock grant to demonstrate the system.',
-        category: 'regional',
-        region: 'Lesser Poland',
-        status: 'open'
-      }
-    ]
+    // Get grants from Redis storage
+    let grants = await grantStorage.getAllGrants()
 
-    // Deduplicate and filter
-    const validGrants = filterValidGrants(mockGrants)
-    const deduplicated = deduplicateGrants(validGrants)
+    // Apply search filter
+    if (searchQuery) {
+      grants = await grantStorage.searchGrants(searchQuery)
+    }
+
+    // Apply category filter
+    if (category) {
+      grants = grants.filter(g => g.category === category)
+    }
+
+    // Apply region filter
+    if (region) {
+      grants = grants.filter(g => g.region === region)
+    }
+
+    // Apply status filter
+    if (status) {
+      grants = grants.filter(g => g.status === status)
+    }
+
+    // Sort by deadline (closing soonest first, nulls last)
+    grants.sort((a, b) => {
+      if (!a.deadline) return 1
+      if (!b.deadline) return -1
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    })
 
     // Calculate pagination
-    const total = deduplicated.length
+    const total = grants.length
     const startIndex = (page - 1) * pageSize
     const endIndex = startIndex + pageSize
-    const paginatedGrants = deduplicated.slice(startIndex, endIndex)
+    const paginatedGrants = grants.slice(startIndex, endIndex)
 
     return {
       data: paginatedGrants,
