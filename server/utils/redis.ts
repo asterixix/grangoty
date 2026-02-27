@@ -3,17 +3,24 @@ import type { Grant } from '~/app/types'
 
 /**
  * Redis client singleton for Upstash
+ * Supports multiple environment variable formats for flexibility
  */
 let redis: Redis | null = null
 
 export function getRedisClient(): Redis {
   if (!redis) {
-    const url = process.env.UPSTASH_REDIS_REST_URL
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN
+    // Support multiple env variable formats
+    // Priority: KV_* > UPSTASH_* > REDIS_URL
+    const url = process.env.KV_REST_API_URL || 
+                process.env.UPSTASH_REDIS_REST_URL ||
+                process.env.KV_URL
+    
+    const token = process.env.KV_REST_API_TOKEN || 
+                  process.env.UPSTASH_REDIS_REST_TOKEN
 
     if (!url || !token) {
       console.warn('Upstash Redis credentials not configured. Using in-memory fallback.')
-      // Return a mock client for development
+      console.warn('Set KV_REST_API_URL and KV_REST_API_TOKEN environment variables.')
       return createMockRedis()
     }
 
@@ -30,6 +37,8 @@ export function getRedisClient(): Redis {
  */
 function createMockRedis(): Redis {
   const store = new Map<string, any>()
+  
+  console.log('[Redis] Using in-memory mock storage')
   
   return {
     get: async (key: string) => store.get(key) || null,
@@ -76,6 +85,12 @@ function createMockRedis(): Redis {
     sismember: async (key: string, member: any) => {
       const set = store.get(key) || new Set()
       return set.has(member) ? 1 : 0
+    },
+    srem: async (key: string, ...members: any[]) => {
+      const set = store.get(key) || new Set()
+      members.forEach(m => set.delete(m))
+      store.set(key, set)
+      return members.length
     },
     expire: async (_key: string, _ttl: number) => 1,
     ttl: async (_key: string) => -1,
@@ -223,18 +238,18 @@ export class GrantStorage {
     
     // Remove from indexes
     await this.redis.del(REDIS_KEYS.GRANT_BY_ID(id))
-    await this.redis.srem?.(REDIS_KEYS.GRANTS_LIST, id) || await this.redis.del(`${REDIS_KEYS.GRANTS_LIST}:${id}`)
+    await this.redis.srem?.(REDIS_KEYS.GRANTS_LIST, id)
     
     if (grant.source) {
-      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_SOURCE(grant.source), id) || await this.redis.del(`${REDIS_KEYS.GRANTS_BY_SOURCE(grant.source)}:${id}`)
+      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_SOURCE(grant.source), id)
     }
     
     if (grant.category) {
-      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category), id) || await this.redis.del(`${REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category)}:${id}`)
+      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category), id)
     }
     
     if (grant.region) {
-      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_REGION(grant.region), id) || await this.redis.del(`${REDIS_KEYS.GRANTS_BY_REGION(grant.region)}:${id}`)
+      await this.redis.srem?.(REDIS_KEYS.GRANTS_BY_REGION(grant.region), id)
     }
   }
 
