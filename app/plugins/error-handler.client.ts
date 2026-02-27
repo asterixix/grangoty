@@ -3,11 +3,16 @@
  * Captures Vue runtime errors, Nuxt lifecycle errors, and unhandled promise rejections
  * @see docs: https://nuxt.com/docs/getting-started/error-handling
  */
-export default defineNuxtPlugin((nuxtApp) => {
+import { defineNuxtPlugin } from 'nuxt/app'
+import { useNotifications } from '../composables/useNotifications'
+import { useNotifications } from '../composables/useNotifications'
+import { useNotifications } from '../composables/useNotifications'
+
+export default defineNuxtPlugin((nuxtApp: any) => {
   const notifications = useNotifications()
 
   // Vue runtime errors (component crashes)
-  nuxtApp.vueApp.config.errorHandler = (error, instance, info) => {
+  nuxtApp.vueApp.config.errorHandler = (error: unknown, instance: any, info: string) => {
     // Log to console in development
     if (process.dev) {
       console.error('[Vue Error]', info, error)
@@ -34,7 +39,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   // Nuxt lifecycle hooks (SSR hydration, navigation errors)
-  nuxtApp.hook('vue:error', (error, instance, info) => {
+  nuxtApp.hook('vue:error', (error: unknown, instance: any, info: string) => {
     const { $sentry } = useNuxtApp()
     $sentry?.captureException(error, {
       extra: {

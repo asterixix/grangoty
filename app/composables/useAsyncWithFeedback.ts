@@ -1,5 +1,8 @@
-import { ref, readonly, type Ref, type DeepReadonly } from 'vue'
+import { ref, readonly, type Ref } from 'vue'
 import type { NotificationAction } from '~/app/types/notifications'
+
+// Import useNotifications explicitly for TypeScript
+import { useNotifications } from './useNotifications'
 
 /**
  * Sleep utility for delays
@@ -60,13 +63,13 @@ export interface AsyncWithFeedbackReturn<T> {
   /** Execute the async function */
   execute: () => Promise<T | null>
   /** Whether the function is currently executing */
-  isLoading: DeepReadonly<Ref<boolean>>
+  isLoading: Readonly<Ref<boolean>>
   /** The last error that occurred */
-  error: DeepReadonly<Ref<Error | null>>
+  error: Readonly<Ref<Error | null>>
   /** The data returned from the function */
-  data: DeepReadonly<Ref<T | null>>
+  data: Readonly<Ref<T | null>>
   /** Current retry attempt number */
-  attempt: DeepReadonly<Ref<number>>
+  attempt: Readonly<Ref<number>>
   /** Reset state */
   reset: () => void
 }

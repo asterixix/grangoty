@@ -1,6 +1,20 @@
 import { PlaywrightCrawler, createPlaywrightRouter } from 'crawlee'
 import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
+import { WitkacApiScraper } from './sources/witkac-api'
+import { GovPlPozytekScraper } from './sources/gov-pl-pozytek'
+import { NiwGeneratorScraper } from './sources/niw-generator'
+import { EuFundingTendersScraper } from './sources/eu-funding-tenders'
+import { ActiveCitizensFundScraper } from './sources/active-citizens-fund'
+import { GrantowoPlScraper } from './sources/grantowo'
+import { WarsawNgoScraper } from './sources/warsaw'
+import { WroclawNgoScraper } from './sources/wroclaw'
+import { LodzNgoScraper } from './sources/lodz'
+import { PoznanNgoScraper } from './sources/poznan'
+import { PodkarpackieNgoScraper } from './sources/podkarpackie'
+import { GdanskNgoScraper } from './sources/gdansk'
+import { LesznoNgoScraper } from './sources/leszno'
+import { AktywniPlusScraper } from './sources/aktywni-plus'
 
 /**
  * Base configuration for scrapers
@@ -446,4 +460,19 @@ export const scrapers = [
   new MalopolskaPlScraper(),
   new KrakowNgoPlScraper(),
   new EurodeskPlScraper(),
+  // New scrapers from sources directory
+  new WitkacApiScraper(),
+  new GovPlPozytekScraper(),
+  new NiwGeneratorScraper(),
+  new EuFundingTendersScraper(),
+  new ActiveCitizensFundScraper(),
+  new GrantowoPlScraper(),
+  new WarsawNgoScraper(),
+  new WroclawNgoScraper(),
+  new LodzNgoScraper(),
+  new PoznanNgoScraper(),
+  new PodkarpackieNgoScraper(),
+  new GdanskNgoScraper(),
+  new LesznoNgoScraper(),
+  new AktywniPlusScraper(),
 ]

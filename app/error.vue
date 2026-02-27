@@ -7,7 +7,31 @@
     >
       <!-- Error illustration based on status code -->
       <div class="error-icon mb-6" aria-hidden="true">
-        <ErrorIllustration :code="error.statusCode" />
+        <div class="flex flex-col items-center justify-center">
+          <div class="relative mb-4">
+            <!-- Main error icon -->
+            <svg 
+              viewBox="0 0 100 100" 
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-24 h-24 text-slate-400"
+              aria-hidden="true"
+            >
+              <!-- Error circle -->
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="5"/>
+              <!-- X mark -->
+              <line x1="30" y1="30" x2="70" y2="70" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <line x1="70" y1="30" x2="30" y2="70" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            
+            <!-- Status code overlay -->
+            <div 
+              v-if="error.statusCode"
+              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold"
+            >
+              {{ error.statusCode }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Error title -->
@@ -49,7 +73,6 @@
 
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import ErrorIllustration from '~/app/components/ui/ErrorIllustration.vue'
 
 const props = defineProps<{
   error: NuxtError

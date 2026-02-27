@@ -3,6 +3,8 @@
  * Only available in dev mode
  */
 
+import { useNotifications } from '../useNotifications'
+
 export function useErrorSimulator() {
   const notifications = useNotifications()
 
@@ -28,7 +30,7 @@ export function useErrorSimulator() {
    * Simulate a scraper source being down
    */
   function scraperDown(source: string): void {
-    notifications.warn('notifications.grants.scraperDown', undefined, { source } as any)
+    notifications.warn('notifications.grants.scraperDown', undefined, { source })
   }
 
   /**
@@ -99,6 +101,22 @@ export function useErrorSimulator() {
    */
   function noResults(): void {
     notifications.info('notifications.grants.noResults', undefined, {
+      action: {
+        labelKey: 'common.clearFilters',
+        handler: () => {
+          notifications.success('notifications.grants.loadSuccess', { count: 25 })
+        },
+      },
+    })
+  }
+    notifications.info('notifications.grants.noResults', undefined, {
+      action: {
+        labelKey: 'common.clearFilters',
+        handler: () => {
+          notifications.success('notifications.grants.loadSuccess', { count: 25 })
+        },
+      },
+    })
       action: {
         labelKey: 'common.clearFilters',
         handler: () => {

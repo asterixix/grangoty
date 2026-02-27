@@ -6,8 +6,6 @@
 // Tier 1: Primary National Portals
 export { FunduszeNgoScraper } from './fundusze-ngo'
 export { GrantowoPlScraper } from './grantowo'
-export { GrantyPlScraper } from './granty-pl'
-export { GrantMatcherScraper } from './grantmatcher'
 
 // Tier 2: Government & Official Systems
 export { WitkacApiScraper, WITKAC_MUNICIPALITY_IDS } from './witkac-api'
@@ -29,14 +27,9 @@ export { LesznoNgoScraper } from './leszno'
 export { EuFundingTendersScraper } from './eu-funding-tenders'
 export { EurodeskPlScraper } from './eurodesk'
 export { ActiveCitizensFundScraper } from './active-citizens-fund'
-export { UnhcrPolandScraper } from './unhcr-poland'
-export { DevelopmentAidScraper } from './development-aid'
 
 // Tier 5: Sector-Specific Sources
 export { AktywniPlusScraper } from './aktywni-plus'
-export { FunduszMlodziezowyScraper } from './fundusz-mlodziezowy'
-export { NfosigwScraper } from './nfosigw'
-export { CultureMinistryScraper } from './culture-ministry'
 
 // Import types
 import type { RawGrant } from '~/app/types'
@@ -97,11 +90,11 @@ export function getEnabledScrapers() {
  */
 export function getScrapersByTier(tier: 'primary' | 'government' | 'regional' | 'european' | 'sector') {
   const tierMap = {
-    primary: ['fundusze-ngo', 'grantowo', 'granty-pl', 'grantmatcher'],
+    primary: ['fundusze-ngo', 'grantowo'],
     government: ['witkac-api', 'gov-pl-pozytek', 'niw-generator'],
     regional: ['malopolska', 'krakow-ngo', 'warsaw', 'wroclaw', 'lodz', 'poznan', 'podkarpackie', 'gdansk', 'leszno'],
-    european: ['eu-funding-tenders', 'eurodesk', 'active-citizens-fund', 'unhcr-poland', 'development-aid'],
-    sector: ['aktywni-plus', 'fundusz-mlodziezowy', 'nfosigw', 'culture-ministry'],
+    european: ['eu-funding-tenders', 'eurodesk', 'active-citizens-fund'],
+    sector: ['aktywni-plus'],
   }
   
   return allScrapers.filter(scraper => tierMap[tier].includes(scraper.source))
@@ -113,7 +106,7 @@ export function getScrapersByTier(tier: 'primary' | 'government' | 'regional' | 
 export async function runAllScrapers(): Promise<RawGrant[]> {
   const results = await Promise.allSettled(
     getEnabledScrapers().map(scraper => 
-      scraper.scrape().catch(error => {
+      scraper.scrape().catch((error: unknown) => {
         console.error(`Scraper ${scraper.source} failed:`, error)
         return [] as RawGrant[]
       })

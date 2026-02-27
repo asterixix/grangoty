@@ -1,10 +1,11 @@
-import { ref, readonly, type Ref, type DeepReadonly } from 'vue'
+import { ref, readonly, type Ref } from 'vue'
+import { useNotifications } from './useNotifications'
 
 export interface NetworkStatusReturn {
   /** Whether the browser is online */
-  isOnline: DeepReadonly<Ref<boolean>>
+  isOnline: Readonly<Ref<boolean>>
   /** Whether the browser was offline at some point (for showing "back online" message) */
-  wasOffline: DeepReadonly<Ref<boolean>>
+  wasOffline: Readonly<Ref<boolean>>
   /** Force a check of network status */
   checkStatus: () => boolean
 }
@@ -30,7 +31,6 @@ export function useNetworkStatus(): NetworkStatusReturn {
 
       // Persistent warning - stays until back online
       notifications.push({
-        id: 'network-offline',
         level: 'warning',
         context: 'network',
         titleKey: 'notifications.network.offline',
@@ -47,13 +47,38 @@ export function useNetworkStatus(): NetworkStatusReturn {
       notifications.dismiss('network-offline')
 
       // Show "back online" message if we were previously offline
+      // Show "back online" message if we were previously offline
       if (wasOffline.value) {
+        notifications.success('notifications.network.backOnline')
+      }
         notifications.success('notifications.network.backOnline')
 
         // Trigger background re-fetch of grants feed
         try {
-          const grantsStore = useGrantsStore()
-          grantsStore.fetchGrants()
+          // Dynamic import to avoid circular dependency
+          import('~/app/stores/grants').then(({ useGrantsStore }) => {
+            const grantsStore = useGrantsStore()
+        // Show "back online" message if we were previously offline
+        if (wasOffline.value) {
+          notifications.success('notifications.network.backOnline')
+          
+          // No need to re-fetch grants as we don't have the store
+          // The user will get new data on next manual refresh
+        }
+          }).catch(() => {
+            // Store may not be initialized yet, ignore
+          })
+        } catch {
+          // Store may not be initialized yet, ignore
+        }
+        try {
+          // Dynamic import to avoid circular dependency
+          import('~/app/stores/grants').then(({ useGrantsStore }) => {
+            const grantsStore = useGrantsStore()
+            grantsStore.fetchGrants()
+          }).catch(() => {
+            // Store may not be initialized yet, ignore
+          })
         } catch {
           // Store may not be initialized yet, ignore
         }
