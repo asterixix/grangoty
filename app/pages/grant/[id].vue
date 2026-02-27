@@ -150,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 const { t } = useI18n()
 const localePath = useLocalePath()

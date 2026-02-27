@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "GRANgoTY",
+    "title": "GrantHub PL",
     "home": "Startseite",
     "submit": "Fördermittel einreichen",
     "language": "Sprache"
   },
   "home": {
     "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
-    "heroDescription": "GRANgoTY aggregiert Fördermittel aus verschiedenen Quellen, um gemeinnützigen Organisationen bei der Finanzierung ihrer Projekte zu helfen.",
+    "heroDescription": "GrantHub PL aggregiert Fördermittel aus verschiedenen Quellen, um gemeinnützigen Organisationen bei der Finanzierung ihrer Projekte zu helfen.",
     "openGrants": "Offene Fördermittel",
     "closingSoon": "Schließen bald",
     "totalGrants": "Gesamt Fördermittel",
@@ -78,7 +78,7 @@
     "visitSource": "Quelle besuchen"
   },
   "footer": {
-    "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
+    "description": "GrantHub PL - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
     "resources": "Ressourcen",
     "grantSearch": "Fördermittelsuche",
     "tutorials": "Anleitungen",
@@ -96,5 +96,16 @@
     "allRights": "Alle Rechte vorbehalten.",
     "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
   },
-  "skipLink": "Zum Hauptinhalt springen"
+  "skipLink": "Zum Hauptinhalt springen",
+  "deadline": {
+    "hot": "Endet",
+    "warm": "Bald",
+    "normal": "Langfristig",
+    "days": "Tage"
+  },
+  "a11y": {
+    "opensNewTab": "(öffnet in neuem Tab)",
+    "saveGrant": "Fördermittel speichern",
+    "shareGrant": "Fördermittel teilen"
+  }
 }

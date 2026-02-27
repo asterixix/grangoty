@@ -5,13 +5,26 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-      title: 'GRANgoTY - Grant Aggregator for NGOs',
+      title: 'GrantHub PL - Find grants for your organization',
       meta: [
-        { name: 'description', content: 'GRANgoTY - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
-        { name: 'theme-color', content: '#ff6600' }
+        { name: 'description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { name: 'theme-color', content: '#0F6E84' },
+        { property: 'og:title', content: 'GrantHub PL' },
+        { property: 'og:description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: '/og-image.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'GrantHub PL' },
+        { name: 'twitter:description', content: 'GrantHub PL - Aggregating grants for NGOs across Europe. Find funding opportunities for your organization.' },
+        { name: 'twitter:image', content: '/og-image.png' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap' }
       ]
     }
   },
@@ -97,7 +110,7 @@ export default defineNuxtConfig({
     deeplApiKey: process.env.DEEPL_API_KEY,
     // Public (client-side)
     public: {
-      siteName: 'GRANgoTY',
+      siteName: 'GrantHub PL',
       siteUrl: process.env.SITE_URL || 'https://grangoty.vercel.app'
     }
   }

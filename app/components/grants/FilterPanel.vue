@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useFilters } from '~/app/composables/useFilters'
+import { useFilters } from '~/composables/useFilters'
 
 const props = defineProps<{
   categories: string[]

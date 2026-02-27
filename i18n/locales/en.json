@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "GRANgoTY",
+    "title": "GrantHub PL",
     "home": "Home",
     "submit": "Submit Grant",
     "language": "Language"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
-    "heroDescription": "GRANgoTY aggregates grants from various sources to help nonprofits find funding for their projects.",
+    "heroDescription": "GrantHub PL aggregates grants from various sources to help nonprofits find funding for their projects.",
     "openGrants": "Open Grants",
     "closingSoon": "Closing Soon",
     "totalGrants": "Total Grants",
@@ -78,7 +78,7 @@
     "visitSource": "Visit Source"
   },
   "footer": {
-    "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
+    "description": "GrantHub PL - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
     "resources": "Resources",
     "grantSearch": "Grant Search",
     "tutorials": "Tutorials",
@@ -96,5 +96,16 @@
     "allRights": "All rights reserved.",
     "madeWithLove": "Made with ❤️ for the NGO community"
   },
-  "skipLink": "Skip to main content"
+  "skipLink": "Skip to main content",
+  "deadline": {
+    "hot": "Ending",
+    "warm": "Soon",
+    "normal": "Far",
+    "days": "days"
+  },
+  "a11y": {
+    "opensNewTab": "(opens in new tab)",
+    "saveGrant": "Save grant",
+    "shareGrant": "Share grant"
+  }
 }

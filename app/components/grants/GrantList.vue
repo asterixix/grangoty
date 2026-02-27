@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 const props = defineProps<{
   grants: Grant[]

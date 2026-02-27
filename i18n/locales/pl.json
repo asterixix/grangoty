@@ -1,13 +1,13 @@
 {
   "nav": {
-    "title": "GRANgoTY",
+    "title": "GrantHub PL",
     "home": "Strona główna",
     "submit": "Zgłoś dotację",
     "language": "Język"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
-    "heroDescription": "GRANgoTY agreguje dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
+    "heroDescription": "GrantHub PL agreguje dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
     "openGrants": "Aktywne dotacje",
     "closingSoon": "Zamkną się wkrótce",
     "totalGrants": "Łącznie dotacji",
@@ -78,7 +78,7 @@
     "visitSource": "Odwiedź źródło"
   },
   "footer": {
-    "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
+    "description": "GrantHub PL - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
     "resources": "Zasoby",
     "grantSearch": "Wyszukiwarka dotacji",
     "tutorials": "Poradniki",
@@ -96,5 +96,16 @@
     "allRights": "Wszelkie prawa zastrzeżone.",
     "madeWithLove": "Stworzone z ❤️ dla społeczności NGO"
   },
-  "skipLink": "Pomiń do głównej zawartości"
+  "skipLink": "Pomiń do głównej zawartości",
+  "deadline": {
+    "hot": "Kończy się",
+    "warm": "Wkrótce",
+    "normal": "Daleki",
+    "days": "dni"
+  },
+  "a11y": {
+    "opensNewTab": "(otwiera w nowej karcie)",
+    "saveGrant": "Zapisz dotację",
+    "shareGrant": "Udostępnij dotację"
+  }
 }

@@ -1,131 +1,166 @@
 <template>
-  <div class="grant-card card">
-    <div class="flex items-start justify-between mb-4">
-      <Badge :variant="statusBadgeVariant">
-        {{ $t(`status.${grant.status}`) }}
-      </Badge>
-      <a
-        :href="grant.website"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-slate-400 hover:text-primary-600 transition-colors"
-        :aria-label="$t('common.visitSource')"
-      >
-        <Icon name="external-link" size="sm" />
-      </a>
+  <article
+    role="article"
+    class="grant-card hn-list-item flex flex-col sm:flex-row gap-3 sm:gap-4 group"
+  >
+    <!-- Upvote / Save button (civic engagement, not popularity contest) -->
+    <button
+      :aria-label="`${t('a11y.saveGrant')}: ${grant.title}`"
+      class="upvote flex-shrink-0 mt-1 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded transition-colors"
+      :class="[
+        isSaved
+          ? 'text-primary-500'
+          : 'text-neutral-400 hover:text-primary-500 dark:text-neutral-600 dark:hover:text-primary-400'
+      ]"
+      @click="handleSave"
+    >
+      <UIcon
+        name="i-lucide-bookmark"
+        class="w-5 h-5"
+        :class="{ 'fill-current': isSaved }"
+      />
+    </button>
+
+    <div class="grant-body flex-1 min-w-0">
+      <!-- Title: external link with security attrs -->
+      <h2 class="grant-title text-base sm:text-lg font-semibold mb-1">
+        <a
+          :href="grant.website"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+        >
+          {{ grant.title }}
+          <span class="sr-only">{{ t('a11y.opensNewTab') }}</span>
+        </a>
+      </h2>
+
+      <!-- Badge row -->
+      <div class="grant-badges flex flex-wrap items-center gap-2 mb-1.5">
+        <!-- Deadline badge with urgency tiers -->
+        <UBadge
+          :class="urgency.class"
+          variant="outline"
+          role="listitem"
+        >
+          <UIcon :name="urgency.icon" class="w-3 h-3 mr-1" />
+          {{ daysRemaining }} {{ t('deadline.days') }}
+        </UBadge>
+
+        <!-- Amount badge -->
+        <UBadge
+          v-if="grant.amount"
+          variant="outline"
+          class="bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+          role="listitem"
+        >
+          {{ formatAmount(grant.amount) }}
+        </UBadge>
+      </div>
+
+      <!-- Metadata line — secondary info, muted -->
+      <p class="grant-meta text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span class="truncate max-w-[150px] sm:max-w-none">{{ formatSource(grant.website) }}</span>
+        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
+        <span class="truncate max-w-[100px] sm:max-w-none">{{ grant.region }}</span>
+        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
+        <span class="truncate max-w-[80px] sm:max-w-none">{{ grant.category }}</span>
+        <span class="hidden sm:inline text-neutral-300 dark:text-neutral-600">·</span>
+        <time :datetime="grant.scrapedAt" class="whitespace-nowrap">
+          {{ timeAgo }}
+        </time>
+      </p>
     </div>
-
-    <h3 class="text-xl font-semibold mb-2">
-      <NuxtLink
-        :to="`/grant/${grant.id}`"
-        class="text-slate-900 hover:text-primary-600 transition-colors"
-      >
-        {{ grant.title }}
-      </NuxtLink>
-    </h3>
-
-    <p class="text-slate-600 mb-4 line-clamp-2">
-      {{ grant.description }}
-    </p>
-
-    <div class="space-y-2 text-sm text-slate-600">
-      <div v-if="grant.amount" class="flex items-center">
-        <Icon name="currency" size="sm" class="mr-2 text-slate-400" />
-        <span>{{ formatAmount(grant.amount) }}</span>
-      </div>
-      <div v-if="grant.deadline" class="flex items-center">
-        <Icon name="calendar" size="sm" class="mr-2 text-slate-400" />
-        <span>{{ formatDate(grant.deadline) }}</span>
-      </div>
-      <div v-if="grant.category" class="flex items-center">
-        <Icon name="tag" size="sm" class="mr-2 text-slate-400" />
-        <span>{{ grant.category }}</span>
-      </div>
-      <div v-if="grant.region" class="flex items-center">
-        <Icon name="map" size="sm" class="mr-2 text-slate-400" />
-        <span>{{ grant.region }}</span>
-      </div>
-    </div>
-
-    <div v-if="grant.tags && grant.tags.length > 0" class="mt-4 flex flex-wrap gap-2">
-      <span
-        v-for="tag in grant.tags.slice(0, 3)"
-        :key="tag"
-        class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-600"
-      >
-        {{ tag }}
-      </span>
-      <span
-        v-if="grant.tags.length > 3"
-        class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-600"
-      >
-        +{{ grant.tags.length - 3 }}
-      </span>
-    </div>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Grant } from '~/app/types'
+import { parseISO, differenceInDays, formatDistanceToNow } from 'date-fns'
+import { useI18n } from 'vue-i18n'
+import type { Grant } from '~/types'
 
 const props = defineProps<{
   grant: Grant
+  rank?: number
+  isSaved?: boolean
 }>()
 
-const statusBadgeVariant = computed(() => {
-  switch (props.grant.status) {
-    case 'open':
-      return 'success'
-    case 'closing_soon':
-      return 'warning'
-    case 'closed':
-    case 'archived':
-      return 'neutral'
-    default:
-      return 'neutral'
+const emit = defineEmits<{
+  (e: 'save', rank: number): void
+}>()
+
+const { t } = useI18n()
+
+// Deadline urgency computed
+const daysRemaining = computed(() => {
+  if (!props.grant.deadline) return null
+  try {
+    const deadline = parseISO(props.grant.deadline)
+    const now = new Date()
+    const days = differenceInDays(deadline, now)
+    return days
+  } catch {
+    return null
   }
 })
 
-function formatAmount(amount?: { min?: number; max?: number; currency: string }) {
-  if (!amount) return 'N/A'
-
-  const { min, max, currency } = amount
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency,
-    maximumFractionDigits: 0
-  })
-
-  if (min === max) {
-    return formatter.format(min)
+const urgency = computed(() => {
+  if (daysRemaining.value === null) {
+    return { label: t('deadline.normal'), class: 'text-neutral-500', icon: 'i-lucide-calendar' }
   }
-
-  if (min !== undefined && max !== undefined) {
-    return `${formatter.format(min)} - ${formatter.format(max)}`
+  if (daysRemaining.value <= 7) {
+    return { label: t('deadline.hot'), class: 'text-error', icon: 'i-lucide-flame' }
   }
-
-  if (min !== undefined) {
-    return `${formatter.format(min)}+`
+  if (daysRemaining.value <= 21) {
+    return { label: t('deadline.warm'), class: 'text-warning', icon: 'i-lucide-clock' }
   }
+  return { label: t('deadline.normal'), class: 'text-success', icon: 'i-lucide-calendar' }
+})
 
-  if (max !== undefined) {
-    return `Up to ${formatter.format(max)}`
+const timeAgo = computed(() => {
+  if (!props.grant.scrapedAt) return ''
+  try {
+    return formatDistanceToNow(parseISO(props.grant.scrapedAt), { addSuffix: true })
+  } catch {
+    return ''
   }
+})
 
-  return 'N/A'
+function formatAmount(amount: NonNullable<Grant['amount']>): string {
+  if (amount.min !== undefined && amount.max !== undefined) {
+    return `${amount.min.toLocaleString()} - ${amount.max.toLocaleString()} ${amount.currency}`
+  }
+  if (amount.min !== undefined) {
+    return `${amount.min.toLocaleString()} ${amount.currency}`
+  }
+  return amount.currency
 }
 
-function formatDate(dateString?: string) {
-  if (!dateString) return 'N/A'
+function formatSource(url: string): string {
+  try {
+    const hostname = new URL(url).hostname.replace('www.', '')
+    return hostname.length > 25 ? hostname.slice(0, 25) + '...' : hostname
+  } catch {
+    return url.slice(0, 25)
+  }
+}
 
-  const date = new Date(dateString)
-  if (isNaN(date.getTime())) return 'Invalid date'
-
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  }).format(date)
+function handleSave(): void {
+  emit('save', props.rank ?? 0)
 }
 </script>
+
+<style scoped>
+.grant-card {
+  @apply transition-colors duration-200;
+}
+
+.upvote:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+.grant-meta a {
+  @apply text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400;
+}
+</style>

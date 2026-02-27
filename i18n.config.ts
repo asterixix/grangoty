@@ -26,5 +26,7 @@ export default {
       if (choice % 10 === 1 && choice % 100 !== 11) return 'one'
       return 'many'
     }
-  }
+  },
+  missingWarn: false,
+  fallbackWarn: false
 }

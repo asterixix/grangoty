@@ -6,7 +6,7 @@
 /* Custom Styles */
 @layer base {
   html {
-    @apply font-sans text-slate-900 bg-slate-50;
+    @apply font-sans text-neutral-900 bg-neutral-50;
   }
 
   body {
@@ -18,73 +18,117 @@
   }
 
   a {
-    @apply text-primary-600 hover:text-primary-700 underline-offset-4 hover:underline;
+    @apply text-primary-600 hover:text-primary-700 underline-offset-4 hover:underline transition-colors duration-200;
   }
 
   button {
-    @apply cursor-pointer;
+    @apply cursor-pointer transition-colors duration-200;
   }
 
   input, textarea, select {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500;
   }
 
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-600;
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus-visible:ring-primary-500;
   }
 
   .btn-secondary {
-    @apply bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 focus-visible:ring-slate-400;
+    @apply bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50 focus-visible:ring-neutral-400;
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-primary-600 border border-primary-600 hover:bg-primary-50 focus-visible:ring-primary-500;
   }
 
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors duration-200;
   }
 
   .badge-success {
-    @apply bg-green-100 text-green-800;
+    @apply bg-success/10 text-success border border-success/20;
   }
 
   .badge-warning {
-    @apply bg-yellow-100 text-yellow-800;
+    @apply bg-warning/10 text-warning border border-warning/20;
   }
 
   .badge-danger {
-    @apply bg-red-100 text-red-800;
+    @apply bg-error/10 text-error border border-error/20;
+  }
+
+  .badge-neutral {
+    @apply bg-neutral-100 text-neutral-700;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-slate-200 p-6;
+    @apply bg-white rounded-xl shadow-sm border border-neutral-200 p-6 transition-colors duration-200;
   }
 
   .skip-link {
-    @apply absolute -translate-y-full focus:translate-y-0 focus:z-50 focus:top-4 focus:left-4 px-4 py-2 bg-primary-600 text-white rounded-lg shadow-lg transition-transform duration-200;
+    @apply absolute -translate-y-full focus:translate-y-0 focus:z-50 focus:top-4 focus:left-4 px-4 py-2 bg-primary-500 text-white rounded-lg shadow-lg transition-transform duration-200;
+  }
+
+  /* Deadline badges */
+  .badge-deadline-hot {
+    @apply bg-error/10 text-error border border-error/20;
+  }
+
+  .badge-deadline-warm {
+    @apply bg-warning/10 text-warning border border-warning/20;
+  }
+
+  .badge-deadline-normal {
+    @apply bg-success/10 text-success border border-success/20;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-accent-500;
   }
 
   .animate-fade-in {
     animation: fadeIn 0.3s ease-in-out;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  /* HN-inspired list item */
+  .hn-list-item {
+    @apply py-1.5 border-b border-neutral-100 hover:bg-neutral-50 transition-colors duration-200;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .transition-all-custom {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
   }
 }

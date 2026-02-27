@@ -1,22 +1,39 @@
-/* Global Variables */
+/* GrantHub PL Design System - Color Tokens */
 :root {
-  --color-primary: #0ea5e9;
-  --color-primary-dark: #0284c7;
-  --color-accent: #d946ef;
-  --color-accent-dark: #c026d3;
-  --color-slate-50: #f9fafb;
-  --color-slate-100: #f3f4f6;
-  --color-slate-200: #e5e7eb;
-  --color-slate-300: #d1d5db;
-  --color-slate-400: #9ca3af;
-  --color-slate-500: #6b7280;
-  --color-slate-600: #4b5563;
-  --color-slate-700: #374151;
-  --color-slate-800: #1f2937;
-  --color-slate-900: #111827;
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-danger: #ef4444;
+  /* PRIMARY — Civic Teal: trust, public sector, calm authority */
+  --color-primary-50:  #f0f9fb;
+  --color-primary-100: #d0eef4;
+  --color-primary-400: #3ba8c2;
+  --color-primary-500: #0F6E84;
+  --color-primary-600: #0a5569;
+  --color-primary-900: #042e3a;
+
+  /* ACCENT — Warm Amber: urgency, deadlines, CTAs, energy */
+  --color-accent-400:  #f0924a;
+  --color-accent-500:  #E07B39;
+  --color-accent-600:  #c4621f;
+  --color-accent-900:  #6b2e0a;
+
+  /* NEUTRAL — Warm Gray: not cold, human, approachable */
+  --color-neutral-50:  #fafaf8;
+  --color-neutral-100: #f3f3f0;
+  --color-neutral-200: #e5e4e0;
+  --color-neutral-500: #737370;
+  --color-neutral-700: #464644;
+  --color-neutral-900: #1a1a18;
+
+  /* SEMANTIC — Status colors */
+  --color-success: #1a7a4a;
+  --color-warning: #92610a;
+  --color-error:   #c0392b;
+  --color-info:    #1a4e8c;
+
+  /* DEADLINE urgency tiers */
+  --color-deadline-hot:    #c0392b;
+  --color-deadline-warm:   #92610a;
+  --color-deadline-normal: #1a7a4a;
+
+  /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
@@ -25,30 +42,44 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
   --spacing-4xl: 6rem;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Typography */
+  --font-sans: 'Public Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Border radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
+
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-/* Dark mode variables (for future) */
+/* Dark mode variables */
 [data-theme='dark'] {
-  --color-slate-50: #111827;
-  --color-slate-100: #1f2937;
-  --color-slate-200: #374151;
-  --color-slate-300: #4b5563;
-  --color-slate-400: #6b7280;
-  --color-slate-500: #9ca3af;
-  --color-slate-600: #d1d5db;
-  --color-slate-700: #e5e7eb;
-  --color-slate-800: #f3f4f6;
-  --color-slate-900: #f9fafb;
+  --color-neutral-50: #1a1a18;
+  --color-neutral-100: #2a2a28;
+  --color-neutral-200: #3a3a38;
+  --color-neutral-500: #838380;
+  --color-neutral-700: #b6b6b4;
+  --color-neutral-900: #fafaf8;
+
+  --color-primary-50: #042e3a;
+  --color-primary-100: #0a5569;
+  --color-primary-400: #5dbdd1;
+  --color-primary-500: #3ba8c2;
+  --color-primary-600: #2d8ba5;
+  --color-primary-900: #f0f9fb;
+
+  --color-accent-400: #f4a465;
+  --color-accent-500: #e68a4b;
+  --color-accent-600: #d47637;
+  --color-accent-900: #f0e0d0;
 }
 
 /* Print styles */
