@@ -118,7 +118,6 @@ export default defineNuxtConfig({
     }
   },
 
-  // Sentry configuration (uncomment when @sentry/nuxt is installed)
   // sentry: {
   //   sourceMapsUploadOptions: {
   //     org: process.env.SENTRY_ORG,
@@ -126,5 +125,4 @@ export default defineNuxtConfig({
   //     authToken: process.env.SENTRY_AUTH_TOKEN,
   //   },
   // },
-  }
 })
