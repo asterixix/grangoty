@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "title": "Агрэгатар грантаў для НКА",
+    "home": "Галоўная",
+    "submit": "Падаць грант",
+    "language": "Мова"
+  },
+  "home": {
+    "heroTitle": "Знайдзіце гранты для вашай арганізацыі",
+    "heroDescription": "Мы агрэгуем гранты з розных крыніц, каб дапамагчы грамадскім арганізацыям знайсці фінансаванне для сваіх праектаў.",
+    "openGrants": "Адкрытыя гранты",
+    "closingSoon": "Закрываюцца незабаром",
+    "totalGrants": "Усяго грантаў",
+    "regions": "Рэгіёны"
+  },
+  "status": {
+    "open": "Адкрыты",
+    "closing_soon": "Закрываецца незабаром",
+    "closed": "Закрыты",
+    "archived": "Архіваваны"
+  },
+  "filters": {
+    "title": "Фільтры",
+    "clearAll": "Ачысціць усё",
+    "search": "Пошук",
+    "searchPlaceholder": "Шукаць па назве, апісанні ці тэгах...",
+    "category": "Катэгорыя",
+    "region": "Рэгіён",
+    "status": "Статус",
+    "amount": "Сума",
+    "min": "Мін",
+    "max": "Макс"
+  },
+  "grants": {
+    "noResults": "Няма вынікаў",
+    "noResultsDescription": "Паспрабуйце змяніць фільтры ці пошукайце іншы тэрмін",
+    "resultsCount": "Паказана {count} грантаў з {total} (старонка {page} з {totalPages})",
+    "notFound": "Грант не знойдзены",
+    "notFoundDescription": "Выбачайце, гэты грант не існуе або быў выдалены.",
+    "backToFeed": "Назад да стужкі",
+    "description": "Апісанне",
+    "amount": "Сума",
+    "deadline": "Тэрмін падачы заявак",
+    "category": "Катэгорыя",
+    "region": "Рэгіён",
+    "eligibility": "Крытэрыі адбору",
+    "tags": "Тэгі",
+    "contact": "Кантакт",
+    "email": "Электронная пошта",
+    "phone": "Тэлефон",
+    "address": "Адрас",
+    "lastVerified": "Апошняя праверка: {date}",
+    "visitWebsite": "Наведаць сайт"
+  },
+  "submit": {
+    "title": "Падаць грант",
+    "description": "Прапануйце нам новы грант, які павінен з'явіцца ў нашай базе дадзеных.",
+    "grantTitle": "Назва гранту",
+    "grantTitlePlaceholder": "Увядзіце назву гранту...",
+    "descriptionPlaceholder": "Падрабязнае апісанне гранту...",
+    "category": "Катэгорыя",
+    "selectCategory": "Выберыце катэгорыю...",
+    "region": "Рэгіён",
+    "regionPlaceholder": "Увядзіце рэгіён...",
+    "amount": "Сума",
+    "amountPlaceholder": "Увядзіце суму...",
+    "currency": "Валюта",
+    "deadline": "Тэрмін",
+    "website": "Вэбсайт",
+    "websitePlaceholder": "https://...",
+    "email": "Электронная пошта",
+    "emailPlaceholder": "contact (at) арганізацыя.org"
+  },
+  "common": {
+    "cancel": "Скасаваць",
+    "submit": "Падаць",
+    "submitting": "Падача...",
+    "visitSource": "Наведаць крыніцу"
+  },
+  "footer": {
+    "description": "Агрэгатар грантаў для грамадскіх арганізацый у Польшчы і Еўропе. Злучае НКА з крыніцамі фінансавання.",
+    "resources": "Рэсурсы",
+    "grantSearch": "Пошук грантаў",
+    "tutorials": "Падручнікі",
+    "community": "Супольнасць",
+    "api": "API",
+    "company": "Кампанія",
+    "about": "Пра нас",
+    "contact": "Кантакт",
+    "privacy": "Палітыка канфідэнцыяльнасці",
+    "terms": "Умовы выкарыстання",
+    "newsletter": "Навіны",
+    "newsletterDescription": "Падпішыцеся, каб атрымліваць абнаўленні пра новыя гранты.",
+    "emailPlaceholder": "Ваша электронная пошта",
+    "subscribe": "Падпісацца",
+    "allRights": "Усе правы абаронены.",
+    "madeWithLove": "Зроблена з ❤️ для супольнасці НКА"
+  },
+  "skipLink": "Перайсці да асноўнага зместу"
+}

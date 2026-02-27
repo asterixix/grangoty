@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "title": "NGO Grants Aggregator",
+    "home": "Home",
+    "submit": "Submit Grant",
+    "language": "Language"
+  },
+  "home": {
+    "heroTitle": "Find grants for your organization",
+    "heroDescription": "We aggregate grants from various sources to help nonprofits find funding for their projects.",
+    "openGrants": "Open Grants",
+    "closingSoon": "Closing Soon",
+    "totalGrants": "Total Grants",
+    "regions": "Regions"
+  },
+  "status": {
+    "open": "Open",
+    "closing_soon": "Closing Soon",
+    "closed": "Closed",
+    "archived": "Archived"
+  },
+  "filters": {
+    "title": "Filters",
+    "clearAll": "Clear All",
+    "search": "Search",
+    "searchPlaceholder": "Search by title, description, or tags...",
+    "category": "Category",
+    "region": "Region",
+    "status": "Status",
+    "amount": "Amount",
+    "min": "Min",
+    "max": "Max"
+  },
+  "grants": {
+    "noResults": "No Results",
+    "noResultsDescription": "Try adjusting your filters or searching for a different term",
+    "resultsCount": "Showing {count} grants of {total} (page {page} of {totalPages})",
+    "notFound": "Grant Not Found",
+    "notFoundDescription": "Sorry, this grant doesn't exist or has been removed.",
+    "backToFeed": "Back to Feed",
+    "description": "Description",
+    "amount": "Amount",
+    "deadline": "Application Deadline",
+    "category": "Category",
+    "region": "Region",
+    "eligibility": "Eligibility Criteria",
+    "tags": "Tags",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "lastVerified": "Last Verified: {date}",
+    "visitWebsite": "Visit Website"
+  },
+  "submit": {
+    "title": "Submit Grant",
+    "description": "Suggest a grant that should be added to our database.",
+    "grantTitle": "Grant Title",
+    "grantTitlePlaceholder": "Enter grant title...",
+    "descriptionPlaceholder": "Detailed description of the grant...",
+    "category": "Category",
+    "selectCategory": "Select a category...",
+    "region": "Region",
+    "regionPlaceholder": "Enter region...",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount...",
+    "currency": "Currency",
+    "deadline": "Deadline",
+    "website": "Website",
+    "websitePlaceholder": "https://...",
+    "email": "Email",
+    "emailPlaceholder": "contact (at) organization.org"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "visitSource": "Visit Source"
+  },
+  "footer": {
+    "description": "Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
+    "resources": "Resources",
+    "grantSearch": "Grant Search",
+    "tutorials": "Tutorials",
+    "community": "Community",
+    "api": "API",
+    "company": "Company",
+    "about": "About Us",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "Subscribe to receive updates about new grants.",
+    "emailPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "allRights": "All rights reserved.",
+    "madeWithLove": "Made with ❤️ for the NGO community"
+  },
+  "skipLink": "Skip to main content"
+}

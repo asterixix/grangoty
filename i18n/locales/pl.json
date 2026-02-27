@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "title": "Aggregator dotacji dla NGO",
+    "home": "Strona główna",
+    "submit": "Zgłoś dotację",
+    "language": "Język"
+  },
+  "home": {
+    "heroTitle": "Znajdź dotacje dla swojej organizacji",
+    "heroDescription": "Aggregujemy dotacje z różnych źródeł, aby pomóc organizacjom pozarządowym znaleźć finansowanie dla swoich projektów.",
+    "openGrants": "Aktywne dotacje",
+    "closingSoon": "Zamkną się wkrótce",
+    "totalGrants": "Łącznie dotacji",
+    "regions": "Liczba regionów"
+  },
+  "status": {
+    "open": "Otwarta",
+    "closing_soon": "Zamknięcie wkrótce",
+    "closed": "Zamknięta",
+    "archived": "Zarchiwizowana"
+  },
+  "filters": {
+    "title": "Filtry",
+    "clearAll": "Wyczyść",
+    "search": "Szukaj",
+    "searchPlaceholder": "Szukaj po tytule, opisie lub tagach...",
+    "category": "Kategoria",
+    "region": "Region",
+    "status": "Status",
+    "amount": "Kwota",
+    "min": "Min",
+    "max": "Max"
+  },
+  "grants": {
+    "noResults": "Brak wyników",
+    "noResultsDescription": "Spróbuj zmienić filtry lub wyszukać inny termin",
+    "resultsCount": "Wyświetlanie {count} dotacji z {total} (strona {page} z {totalPages})",
+    "notFound": "Dotacja nie znaleziona",
+    "notFoundDescription": "Przepraszamy, ale ta dotacja nie istnieje lub została usunięta.",
+    "backToFeed": "Wróć do listy",
+    "description": "Opis",
+    "amount": "Kwota",
+    "deadline": "Termin składania wniosków",
+    "category": "Kategoria",
+    "region": "Region",
+    "eligibility": "Kryteria kwalifikacji",
+    "tags": "Tagi",
+    "contact": "Kontakt",
+    "email": "Email",
+    "phone": "Telefon",
+    "address": "Adres",
+    "lastVerified": "Ostatnio weryfikowano: {date}",
+    "visitWebsite": "Odwiedź stronę"
+  },
+  "submit": {
+    "title": "Zgłoś dotację",
+    "description": "Zaproponuj nam nową dotację, która powinna znaleźć się na naszej liście.",
+    "grantTitle": "Tytuł dotacji",
+    "grantTitlePlaceholder": "Wprowadź tytuł dotacji...",
+    "descriptionPlaceholder": "Szczegółowy opis dotacji...",
+    "category": "Kategoria",
+    "selectCategory": "Wybierz kategorię...",
+    "region": "Region",
+    "regionPlaceholder": "Wprowadź region...",
+    "amount": "Kwota",
+    "amountPlaceholder": "Wprowadź kwotę...",
+    "currency": "Waluta",
+    "deadline": "Termin",
+    "website": "Strona internetowa",
+    "websitePlaceholder": "https://...",
+    "email": "Email",
+    "emailPlaceholder": "kontakt (at) organizacja.pl"
+  },
+  "common": {
+    "cancel": "Anuluj",
+    "submit": "Wyślij",
+    "submitting": "Wysyłanie...",
+    "visitSource": "Odwiedź źródło"
+  },
+  "footer": {
+    "description": "Aggregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
+    "resources": "Zasoby",
+    "grantSearch": "Wyszukiwarka dotacji",
+    "tutorials": "Poradniki",
+    "community": "Społeczność",
+    "api": "API",
+    "company": "Firma",
+    "about": "O nas",
+    "contact": "Kontakt",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "Zapisz się, aby otrzymywać najnowsze informacje o nowych dotacjach.",
+    "emailPlaceholder": "Twój email",
+    "subscribe": "Zapisz się",
+    "allRights": "Wszelkie prawa zastrzeżone.",
+    "madeWithLove": "Stworzone z ❤️ dla społeczności NGO"
+  },
+  "skipLink": "Pomiń do głównej zawartości"
+}

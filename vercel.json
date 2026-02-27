@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "app/pages/index.vue",
+    "app/pages/grant/[id].vue",
+    "app/pages/submit.vue"
+  ],
+  "output": {
+    "dir": "dist",
+    "client": ".output/client",
+    "server": ".output/server"
+  },
+  "install": {
+    "nodeModules": {
+      "strategy": "auto"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/scrape",
+      "schedule": "0 6,12,18 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/server"
+    }
+  ]
+}

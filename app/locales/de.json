@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "title": "NGO Fördermittel Aggregator",
+    "home": "Startseite",
+    "submit": "Fördermittel einreichen",
+    "language": "Sprache"
+  },
+  "home": {
+    "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
+    "heroDescription": "Wir aggregieren Fördermittel aus verschiedenen Quellen, um gemeinnützigen Organisationen bei der Finanzierung ihrer Projekte zu helfen.",
+    "openGrants": "Offene Fördermittel",
+    "closingSoon": "Schließen bald",
+    "totalGrants": "Gesamt Fördermittel",
+    "regions": "Regionen"
+  },
+  "status": {
+    "open": "Offen",
+    "closing_soon": "Schließt bald",
+    "closed": "Geschlossen",
+    "archived": "Archiviert"
+  },
+  "filters": {
+    "title": "Filter",
+    "clearAll": "Alle löschen",
+    "search": "Suche",
+    "searchPlaceholder": "Suche nach Titel, Beschreibung oder Tags...",
+    "category": "Kategorie",
+    "region": "Region",
+    "status": "Status",
+    "amount": "Betrag",
+    "min": "Min",
+    "max": "Max"
+  },
+  "grants": {
+    "noResults": "Keine Ergebnisse",
+    "noResultsDescription": "Versuchen Sie, Ihre Filter anzupassen oder nach einem anderen Begriff zu suchen",
+    "resultsCount": "Zeige {count} Fördermittel von {total} (Seite {page} von {totalPages})",
+    "notFound": "Fördermittel nicht gefunden",
+    "notFoundDescription": "Entschuldigung, diese Fördermittel existiert nicht oder wurde entfernt.",
+    "backToFeed": "Zurück zur Übersicht",
+    "description": "Beschreibung",
+    "amount": "Betrag",
+    "deadline": "Antragsfrist",
+    "category": "Kategorie",
+    "region": "Region",
+    "eligibility": "Zulassungskriterien",
+    "tags": "Tags",
+    "contact": "Kontakt",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "address": "Adresse",
+    "lastVerified": "Zuletzt überprüft: {date}",
+    "visitWebsite": "Webseite besuchen"
+  },
+  "submit": {
+    "title": "Fördermittel einreichen",
+    "description": "Schlagen Sie uns eine Fördermittel vor, die in unsere Datenbank aufgenommen werden soll.",
+    "grantTitle": "Fördermittel Titel",
+    "grantTitlePlaceholder": "Fördermittel Titel eingeben...",
+    "descriptionPlaceholder": "Detaillierte Beschreibung der Fördermittel...",
+    "category": "Kategorie",
+    "selectCategory": "Kategorie auswählen...",
+    "region": "Region",
+    "regionPlaceholder": "Region eingeben...",
+    "amount": "Betrag",
+    "amountPlaceholder": "Betrag eingeben...",
+    "currency": "Währung",
+    "deadline": "Frist",
+    "website": "Webseite",
+    "websitePlaceholder": "https://...",
+    "email": "E-Mail",
+    "emailPlaceholder": "contact (at) organisation.org"
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "submit": "Einreichen",
+    "submitting": "Einreichen...",
+    "visitSource": "Quelle besuchen"
+  },
+  "footer": {
+    "description": "Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
+    "resources": "Ressourcen",
+    "grantSearch": "Fördermittelsuche",
+    "tutorials": "Anleitungen",
+    "community": "Community",
+    "api": "API",
+    "company": "Unternehmen",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Nutzungsbedingungen",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "Abonnieren Sie, um Updates über neue Fördermittel zu erhalten.",
+    "emailPlaceholder": "Ihre E-Mail",
+    "subscribe": "Abonnieren",
+    "allRights": "Alle Rechte vorbehalten.",
+    "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
+  },
+  "skipLink": "Zum Hauptinhalt springen"
+}

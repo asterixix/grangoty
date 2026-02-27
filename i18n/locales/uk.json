@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "title": "Агрегатор грантів для НКО",
+    "home": "Головна",
+    "submit": "Подати грант",
+    "language": "Мова"
+  },
+  "home": {
+    "heroTitle": "Знайдіть гранти для вашої організації",
+    "heroDescription": "Ми агрегуємо гранти з різних джерел, щоб допомогти громадським організаціям знайти фінансування для своїх проектів.",
+    "openGrants": "Відкриті гранти",
+    "closingSoon": "Закриваються незабаром",
+    "totalGrants": "Всього грантів",
+    "regions": "Регіони"
+  },
+  "status": {
+    "open": "Відкритий",
+    "closing_soon": "Закривається незабаром",
+    "closed": "Закритий",
+    "archived": "Архівований"
+  },
+  "filters": {
+    "title": "Фільтри",
+    "clearAll": "Очистити все",
+    "search": "Пошук",
+    "searchPlaceholder": "Шукати за назвою, описом або тегами...",
+    "category": "Категорія",
+    "region": "Регіон",
+    "status": "Статус",
+    "amount": "Сума",
+    "min": "Мін",
+    "max": "Макс"
+  },
+  "grants": {
+    "noResults": "Немає результатів",
+    "noResultsDescription": "Спробуйте змінити фільтри або пошукати інший термін",
+    "resultsCount": "Показано {count} грантів з {total} (сторінка {page} з {totalPages})",
+    "notFound": "Грант не знайдено",
+    "notFoundDescription": "Вибачте, цей грант не існує або був видалений.",
+    "backToFeed": "Назад до стрічки",
+    "description": "Опис",
+    "amount": "Сума",
+    "deadline": "Термін подачі заявок",
+    "category": "Категорія",
+    "region": "Регіон",
+    "eligibility": "Критерії відбору",
+    "tags": "Теги",
+    "contact": "Контакт",
+    "email": "Електронна пошта",
+    "phone": "Телефон",
+    "address": "Адреса",
+    "lastVerified": "Остання перевірка: {date}",
+    "visitWebsite": "Відвідати сайт"
+  },
+  "submit": {
+    "title": "Подати грант",
+    "description": "Запропонуйте нам новий грант, який має з'явитися в нашій базі даних.",
+    "grantTitle": "Назва гранту",
+    "grantTitlePlaceholder": "Введіть назву гранту...",
+    "descriptionPlaceholder": "Детальний опис гранту...",
+    "category": "Категорія",
+    "selectCategory": "Виберіть категорію...",
+    "region": "Регіон",
+    "regionPlaceholder": "Введіть регіон...",
+    "amount": "Сума",
+    "amountPlaceholder": "Введіть суму...",
+    "currency": "Валюта",
+    "deadline": "Термін",
+    "website": "Вебсайт",
+    "websitePlaceholder": "https://...",
+    "email": "Електронна пошта",
+    "emailPlaceholder": "contact (at) організація.org"
+  },
+  "common": {
+    "cancel": "Скасувати",
+    "submit": "Подати",
+    "submitting": "Подання...",
+    "visitSource": "Відвідати джерело"
+  },
+  "footer": {
+    "description": "Агрегатор грантів для громадських організацій в Польщі та Європі. З'єднує НКО з джерелами фінансування.",
+    "resources": "Ресурси",
+    "grantSearch": "Пошук грантів",
+    "tutorials": "Підручники",
+    "community": "Спільнота",
+    "api": "API",
+    "company": "Компанія",
+    "about": "Про нас",
+    "contact": "Контакт",
+    "privacy": "Політика конфіденційності",
+    "terms": "Умови використання",
+    "newsletter": "Новини",
+    "newsletterDescription": "Підпишіться, щоб отримувати оновлення про нові гранти.",
+    "emailPlaceholder": "Ваша електронна пошта",
+    "subscribe": "Підписатися",
+    "allRights": "Усі права захищено.",
+    "madeWithLove": "Зроблено з ❤️ для спільноти НКО"
+  },
+  "skipLink": "Перейти до основного вмісту"
+}
