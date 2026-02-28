@@ -39,6 +39,16 @@
               </select>
             </div>
 
+            <!-- GitHub Issues Link -->
+            <a
+              href="https://github.com/asterixix/grangoty/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-white text-xs hover:underline hidden sm:inline"
+            >
+              {{ $t('nav.reportIssue') || 'Report Issue' }}
+            </a>
+
             <!-- Submit Link -->
             <NuxtLink
               :to="localePath('/submit')"
@@ -67,6 +77,8 @@
           </div>
           <div class="flex gap-3">
             <a href="/api/rss" class="hover:underline" target="_blank">RSS</a>
+            <a href="https://github.com/asterixix/grangoty/issues/new?template=bug_report.md" target="_blank" rel="noopener noreferrer" class="hover:underline">{{ $t('footer.reportBug') || 'Report Bug' }}</a>
+            <a href="https://github.com/asterixix/grangoty/issues/new?template=feature_request.md" target="_blank" rel="noopener noreferrer" class="hover:underline">{{ $t('footer.featureRequest') || 'Feature Request' }}</a>
             <NuxtLink :to="localePath('/submit')" class="hover:underline">{{ $t('nav.submit') }}</NuxtLink>
           </div>
         </div>
