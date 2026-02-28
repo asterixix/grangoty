@@ -78,45 +78,54 @@
       <!-- Loading State -->
       <div v-if="isLoading" class="py-8 text-center" role="status" aria-live="polite">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-        <p class="mt-2 text-neutral-500 dark:text-neutral-400">{{ t('grants.loading') || 'Ładowanie...' }}</p>
+        <p class="mt-2 text-neutral-500 dark:text-neutral-400">{{ t('grants.loading') }}</p>
       </div>
 
       <!-- Grant List -->
-      <ol
-        v-else-if="paginatedGrants.length > 0"
-        class="space-y-1"
-        role="list"
-        aria-live="polite"
-      >
-        <li
-          v-for="(grant, index) in paginatedGrants"
-          :key="grant.id"
-          class="hn-list-item"
-          :class="{ 'ring-2 ring-primary-500 rounded-lg': currentIndex === index }"
+      <ClientOnly>
+        <template #fallback>
+          <div class="space-y-2">
+            <div v-for="i in 5" :key="i" class="animate-pulse">
+              <div class="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg"></div>
+            </div>
+          </div>
+        </template>
+        <ol
+          v-if="paginatedGrants.length > 0"
+          class="space-y-1"
+          role="list"
+          aria-live="polite"
         >
-          <GrantCard
-            :grant="grant"
-            :rank="(currentPage - 1) * pageSize + index + 1"
-            :is-saved="savedGrants.includes(grant.id)"
-            @save="handleSave"
-          />
-        </li>
-      </ol>
+          <li
+            v-for="(grant, index) in paginatedGrants"
+            :key="grant.id"
+            class="hn-list-item"
+            :class="{ 'ring-2 ring-primary-500 rounded-lg': currentIndex === index }"
+          >
+            <GrantCard
+              :grant="grant"
+              :rank="(currentPage - 1) * pageSize + index + 1"
+              :is-saved="savedGrants.includes(grant.id)"
+              @save="handleSave"
+            />
+          </li>
+        </ol>
 
-      <!-- Empty State -->
-      <div v-else class="py-12 text-center" role="status">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 mb-4">
-          <UIcon name="i-lucide-search" class="w-8 h-8 text-neutral-400" />
+        <!-- Empty State -->
+        <div v-else-if="!isLoading" class="py-12 text-center" role="status">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 mb-4">
+            <UIcon name="i-lucide-search" class="w-8 h-8 text-neutral-400" />
+          </div>
+          <h3 class="text-lg font-medium text-neutral-900 dark:text-white">{{ t('grants.noResults') }}</h3>
+          <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ t('grants.noResultsDescription') }}</p>
+          <button
+            @click="clearFilters"
+            class="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200"
+          >
+            {{ t('filters.clearAll') }}
+          </button>
         </div>
-        <h3 class="text-lg font-medium text-neutral-900 dark:text-white">{{ t('grants.noResults') }}</h3>
-        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ t('grants.noResultsDescription') }}</p>
-        <button
-          @click="clearFilters"
-          class="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200"
-        >
-          {{ t('filters.clearAll') }}
-        </button>
-      </div>
+      </ClientOnly>
 
       <!-- Pagination -->
       <nav v-if="totalPages > 1" class="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800" aria-label="Pagination">

@@ -102,7 +102,8 @@
     "hot": "Kończy się",
     "warm": "Wkrótce",
     "normal": "Daleki",
-    "days": "dni"
+    "days": "dni",
+    "loading": "Ładowanie..."
   },
   "a11y": {
     "opensNewTab": "(otwiera w nowej karcie)",

@@ -102,7 +102,8 @@
     "hot": "Endet",
     "warm": "Bald",
     "normal": "Langfristig",
-    "days": "Tage"
+    "days": "Tage",
+    "loading": "Laden..."
   },
   "a11y": {
     "opensNewTab": "(öffnet in neuem Tab)",
