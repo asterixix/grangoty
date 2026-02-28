@@ -26,6 +26,8 @@
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .logo {
   @apply transition-colors duration-200;
 }

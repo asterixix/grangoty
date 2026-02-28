@@ -58,6 +58,8 @@ const deadlineText = computed(() => {
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .deadline-countdown {
   @apply inline-flex items-center text-sm;
 }

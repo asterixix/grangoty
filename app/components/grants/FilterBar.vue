@@ -62,6 +62,8 @@ function selectFilter(value: string | null): void {
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .filter-bar {
   @apply w-full overflow-x-auto scrollbar-hide py-2;
   -webkit-overflow-scrolling: touch;

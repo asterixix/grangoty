@@ -386,7 +386,9 @@ useHead({
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .hn-list-item {
-  @apply py-1.5 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors duration-200;
+  @apply py-2 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors duration-200;
 }
 </style>

@@ -164,6 +164,8 @@ function truncateText(text: string, maxLength: number): string {
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .grant-card {
   @apply transition-colors duration-200;
 }

@@ -201,6 +201,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@reference "tailwindcss";
+
 .header {
   @apply transition-colors duration-200;
 }
