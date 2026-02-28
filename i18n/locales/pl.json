@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Strona główna",
     "submit": "Zgłoś dotację",
-    "language": "Język"
+    "language": "Język",
+    "reportIssue": "Zgłoś problem"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
@@ -95,7 +96,9 @@
     "emailPlaceholder": "Twój email",
     "subscribe": "Zapisz się",
     "allRights": "Wszelkie prawa zastrzeżone.",
-    "madeWithLove": "Stworzone z ❤️ dla społeczności NGO"
+    "madeWithLove": "Stworzone z ❤️ dla społeczności NGO",
+    "reportBug": "Zgłoś błąd",
+    "featureRequest": "Zaproponuj funkcję"
   },
   "skipLink": "Pomiń do głównej zawartości",
   "deadline": {

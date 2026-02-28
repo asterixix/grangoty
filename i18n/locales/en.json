@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Home",
     "submit": "Submit Grant",
-    "language": "Language"
+    "language": "Language",
+    "reportIssue": "Report Issue"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
@@ -95,7 +96,9 @@
     "emailPlaceholder": "Your email",
     "subscribe": "Subscribe",
     "allRights": "All rights reserved.",
-    "madeWithLove": "Made with ❤️ for the NGO community"
+    "madeWithLove": "Made with ❤️ for the NGO community",
+    "reportBug": "Report Bug",
+    "featureRequest": "Request Feature"
   },
   "skipLink": "Skip to main content",
   "deadline": {

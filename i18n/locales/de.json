@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Startseite",
     "submit": "Fördermittel einreichen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "reportIssue": "Problem melden"
   },
   "home": {
     "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
@@ -95,7 +96,9 @@
     "emailPlaceholder": "Ihre E-Mail",
     "subscribe": "Abonnieren",
     "allRights": "Alle Rechte vorbehalten.",
-    "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
+    "madeWithLove": "Gemacht mit ❤️ für die NGO-Community",
+    "reportBug": "Fehler melden",
+    "featureRequest": "Funktion vorschlagen"
   },
   "skipLink": "Zum Hauptinhalt springen",
   "deadline": {
