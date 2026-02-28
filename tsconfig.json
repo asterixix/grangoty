@@ -28,14 +28,13 @@
       "~/composables/*": ["./app/composables/*"],
       "~/pages/*": ["./app/pages/*"],
       "~/stores/*": ["./app/stores/*"],
-      "~/server/*": ["./server/*"],
+      "~/server/*": ["./app/server/*"],
       "~/tests/*": ["./tests/*"]
     }
   },
   "include": [
     "app/**/*.ts",
     "app/**/*.vue",
-    "server/**/*.ts",
     "tests/**/*.ts",
     "nuxt.config.ts",
     "tailwind.config.ts",
