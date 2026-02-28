@@ -1,15 +1,21 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <NuxtErrorBoundary @error="handleError">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </NuxtErrorBoundary>
 
-  <!-- Global notification center -->
-  <NotificationCenter />
+  <ClientOnly>
+    <NotificationCenter />
+  </ClientOnly>
 
-  <!-- Debug panel (dev only) -->
   <LazyDevDebugPanel v-if="showDebugPanel" />
 </template>
 
 <script setup lang="ts">
 const showDebugPanel = computed(() => import.meta.dev)
+
+function handleError(error: Error) {
+  console.error('[App Error]', error)
+}
 </script>

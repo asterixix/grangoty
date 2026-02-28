@@ -101,6 +101,11 @@ export interface ScrapeResult {
   failed: number
   timestamp: string
   error?: string
+  errors?: Array<{
+    source: string
+    type: string
+    message: string
+  }>
 }
 
 // Notification types

@@ -31,25 +31,32 @@ export interface ScraperConfig {
  * Real scraper implementation using Crawlee + Playwright
  */
 export class RealScraper {
-  protected config: ScraperConfig
+  protected _config: ScraperConfig
   protected grants: RawGrant[] = []
 
   constructor(config: ScraperConfig) {
-    this.config = config
+    this._config = config
+  }
+
+  /**
+   * Get scraper configuration
+   */
+  get config(): ScraperConfig {
+    return this._config
   }
 
   /**
    * Get the source name
    */
   get source(): string {
-    return this.config.name
+    return this._config.name
   }
 
   /**
    * Check if scraper is enabled
    */
   get enabled(): boolean {
-    return this.config.enabled
+    return this._config.enabled
   }
 
   /**
@@ -65,7 +72,7 @@ export class RealScraper {
   protected normalize(raw: Partial<RawGrant>): RawGrant {
     return {
       id: raw.id || crypto.randomUUID(),
-      source: this.config.name,
+      source: this._config.name,
       title: this.cleanText(raw.title),
       description: this.cleanText(raw.description),
       amount: raw.amount,
@@ -186,7 +193,7 @@ export class FunduszeNgoScraper extends RealScraper {
       for (const href of grantLinks.slice(0, 20)) {
         if (href) {
           await enqueueLinks({
-            urls: [href.startsWith('http') ? href : `${this.config.baseUrl}${href}`],
+            urls: [href.startsWith('http') ? href : `${this._config.baseUrl}${href}`],
             label: 'grantDetail',
           })
         }
@@ -199,7 +206,7 @@ export class FunduszeNgoScraper extends RealScraper {
         await page.waitForSelector('h1, .title, .grant-title', { timeout: 5000 })
 
         const grant: Partial<RawGrant> = {
-          source: this.config.name,
+          source: this._config.name,
           website: request.url,
         }
 
@@ -239,15 +246,15 @@ export class FunduszeNgoScraper extends RealScraper {
     try {
       const crawler = new PlaywrightCrawler({
         requestHandler: router,
-        maxRequestsPerCrawl: this.config.maxRequestsPerCrawl,
-        requestHandlerTimeoutSecs: this.config.requestHandlerTimeoutSecs || 30,
+        maxRequestsPerCrawl: this._config.maxRequestsPerCrawl,
+        requestHandlerTimeoutSecs: this._config.requestHandlerTimeoutSecs || 30,
         headless: true,
       })
 
       await crawler.run([
-        { url: `${this.config.baseUrl}/`, label: 'grantList' },
-        { url: `${this.config.baseUrl}/dotacje`, label: 'grantList' },
-        { url: `${this.config.baseUrl}/fundusze`, label: 'grantList' },
+        { url: `${this._config.baseUrl}/`, label: 'grantList' },
+        { url: `${this._config.baseUrl}/dotacje`, label: 'grantList' },
+        { url: `${this._config.baseUrl}/fundusze`, label: 'grantList' },
       ])
     } catch (error) {
       console.error('FunduszeNgoScraper error:', error)
@@ -274,7 +281,7 @@ export class NiwGovPlScraper extends RealScraper {
 
     try {
       // Fetch main grants page
-      const response = await fetch(`${this.config.baseUrl}/o-niw/programy-i-fundusze`)
+      const response = await fetch(`${this._config.baseUrl}/o-niw/programy-i-fundusze`)
       const html = await response.text()
       const $ = cheerio.load(html)
 
@@ -283,10 +290,10 @@ export class NiwGovPlScraper extends RealScraper {
         const $el = $(el)
         
         const grant: Partial<RawGrant> = {
-          source: this.config.name,
+          source: this._config.name,
           title: $el.find('h2, h3, .title').text().trim(),
           description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this.config.baseUrl,
+          website: $el.find('a').attr('href') || this._config.baseUrl,
           category: 'government',
           region: 'Poland',
         }
@@ -332,7 +339,7 @@ export class MalopolskaPlScraper extends RealScraper {
 
     try {
       // Fetch grants/dotacje page
-      const response = await fetch(`${this.config.baseUrl}/dotacje-dla-ngo`)
+      const response = await fetch(`${this._config.baseUrl}/dotacje-dla-ngo`)
       const html = await response.text()
       const $ = cheerio.load(html)
 
@@ -341,10 +348,10 @@ export class MalopolskaPlScraper extends RealScraper {
         const $el = $(el)
         
         const grant: Partial<RawGrant> = {
-          source: this.config.name,
+          source: this._config.name,
           title: $el.find('h2, h3, h4, .title, a').first().text().trim(),
           description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this.config.baseUrl,
+          website: $el.find('a').attr('href') || this._config.baseUrl,
           category: 'regional',
           region: 'Lesser Poland',
         }
@@ -378,7 +385,7 @@ export class KrakowNgoPlScraper extends RealScraper {
 
     try {
       // Fetch main page
-      const response = await fetch(`${this.config.baseUrl}/`)
+      const response = await fetch(`${this._config.baseUrl}/`)
       const html = await response.text()
       const $ = cheerio.load(html)
 
@@ -387,10 +394,10 @@ export class KrakowNgoPlScraper extends RealScraper {
         const $el = $(el)
         
         const grant: Partial<RawGrant> = {
-          source: this.config.name,
+          source: this._config.name,
           title: $el.find('h2, h3, .title, .entry-title').text().trim(),
           description: $el.find('.content, .entry-content, p').text().trim(),
-          website: $el.find('a').attr('href') || this.config.baseUrl,
+          website: $el.find('a').attr('href') || this._config.baseUrl,
           category: 'local',
           region: 'Kraków',
         }
@@ -424,7 +431,7 @@ export class EurodeskPlScraper extends RealScraper {
 
     try {
       // Fetch opportunities page
-      const response = await fetch(`${this.config.baseUrl}/opportunities`)
+      const response = await fetch(`${this._config.baseUrl}/opportunities`)
       const html = await response.text()
       const $ = cheerio.load(html)
 
@@ -433,10 +440,10 @@ export class EurodeskPlScraper extends RealScraper {
         const $el = $(el)
         
         const grant: Partial<RawGrant> = {
-          source: this.config.name,
+          source: this._config.name,
           title: $el.find('h2, h3, .title, a').text().trim(),
           description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this.config.baseUrl,
+          website: $el.find('a').attr('href') || this._config.baseUrl,
           category: 'european',
           region: 'Europe',
         }

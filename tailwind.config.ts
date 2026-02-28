@@ -28,6 +28,8 @@ export default {
     { pattern: /neutral-(50|100|200|300|400|500|600|700|800|900)/ },
     // Semantic colors
     { pattern: /(success|warning|error|info)/ },
+    // HN-inspired colors (legacy support)
+    { pattern: /hn-(orange|orange-dark|beige|gray|gray-dark)/ },
     // Deadline colors
     { pattern: /(deadline-hot|deadline-warm|deadline-normal)/ },
     // Hover states
@@ -79,6 +81,14 @@ export default {
           700: '#464644',
           800: '#363634',
           900: '#1a1a18',
+        },
+        // Hacker News inspired colors (for legacy layout support)
+        hn: {
+          orange: '#ff6600',
+          'orange-dark': '#e65c00',
+          beige: '#f6f6ef',
+          gray: '#e5e5e5',
+          'gray-dark': '#828282',
         },
         // Semantic colors
         success: '#1a7a4a',
