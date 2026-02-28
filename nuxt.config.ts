@@ -73,6 +73,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
+    serverDir: 'server',
     routeRules: {
       '/': { isr: 300 },
       '/grant/**': { isr: 600 },
