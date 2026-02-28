@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   app: {
@@ -88,6 +89,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     css: {
       preprocessorOptions: {
       }
