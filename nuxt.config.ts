@@ -39,7 +39,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    // '@sentry/nuxt/module', // Uncomment when @sentry/nuxt is installed
   ],
 
   // @ts-expect-error - i18n module extends NuxtConfig
@@ -75,7 +74,6 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'vercel',
     serverDir: 'server',
-    scanDirs: ['server'],
     routeRules: {
       '/api/**': { cors: true, prerender: false },
       '/': { isr: 300 },
