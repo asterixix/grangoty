@@ -1,7 +1,9 @@
 import { defineConfig } from 'vitest/config'
 import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  plugins: [tailwindcss()],
   test: {
     include: ['tests/**/*.{test,spec}.{ts,tsx}'],
     environment: 'node',

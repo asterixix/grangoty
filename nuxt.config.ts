@@ -32,12 +32,10 @@ export default defineNuxtConfig({
   // Source directory
   srcDir: 'app/',
 
-  // CSS is handled by @nuxtjs/tailwindcss module
-  // css: [],
+  css: ['~/assets/styles/tailwind.css'],
 
   modules: [
     '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
   ],
 
@@ -63,13 +61,10 @@ export default defineNuxtConfig({
     ignoreRoutes: ['api', 'api/**', '_nuxt', 'assets']
   },
 
-  tailwindcss: {
-    cssPath: 'assets/styles/tailwind.css',
-    configPath: '../tailwind.config.ts',
-    exposeConfig: false,
-    injectPosition: 0,
-    viewer: true
-  },
+  // tailwindcss: {
+  //   cssPath: '~/assets/styles/tailwind.css',
+  //   configPath: 'tailwind.config.ts',
+  // },
 
   nitro: {
     preset: 'vercel',
@@ -95,9 +90,6 @@ export default defineNuxtConfig({
   vite: {
     css: {
       preprocessorOptions: {
-        scss: {
-          additionalData: '@use "~/assets/styles/variables" as *;'
-        }
       }
     }
   },
