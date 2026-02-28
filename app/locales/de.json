@@ -32,6 +32,7 @@
     "max": "Max"
   },
   "grants": {
+    "loading": "Laden...",
     "noResults": "Keine Ergebnisse",
     "noResultsDescription": "Versuchen Sie, Ihre Filter anzupassen oder nach einem anderen Begriff zu suchen",
     "resultsCount": "Zeige {count} Fördermittel von {total} (Seite {page} von {totalPages})",
@@ -75,12 +76,7 @@
     "cancel": "Abbrechen",
     "submit": "Einreichen",
     "submitting": "Einreichen...",
-    "visitSource": "Quelle besuchen",
-    "retry": "Erneut versuchen",
-    "refresh": "Aktualisieren",
-    "clearFilters": "Filter löschen",
-    "login": "Anmelden",
-    "backHome": "Zur Startseite"
+    "visitSource": "Quelle besuchen"
   },
   "footer": {
     "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
@@ -102,7 +98,16 @@
     "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
   },
   "skipLink": "Zum Hauptinhalt springen",
+  "deadline": {
+    "hot": "Endet",
+    "warm": "Bald",
+    "normal": "Langfristig",
+    "days": "Tage"
+  },
   "a11y": {
+    "opensNewTab": "(öffnet in neuem Tab)",
+    "saveGrant": "Fördermittel speichern",
+    "shareGrant": "Fördermittel teilen",
     "notifications": "Benachrichtigungen"
   },
   "notifications": {

@@ -32,6 +32,7 @@
     "max": "Max"
   },
   "grants": {
+    "loading": "Loading...",
     "noResults": "No Results",
     "noResultsDescription": "Try adjusting your filters or searching for a different term",
     "resultsCount": "Showing {count} grants of {total} (page {page} of {totalPages})",

@@ -32,6 +32,7 @@
     "max": "Max"
   },
   "grants": {
+    "loading": "Loading...",
     "noResults": "No Results",
     "noResultsDescription": "Try adjusting your filters or searching for a different term",
     "resultsCount": "Showing {count} grants of {total} (page {page} of {totalPages})",
@@ -75,12 +76,7 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "submitting": "Submitting...",
-    "visitSource": "Visit Source",
-    "retry": "Retry",
-    "refresh": "Refresh",
-    "clearFilters": "Clear Filters",
-    "login": "Log in",
-    "backHome": "Back to Home"
+    "visitSource": "Visit Source"
   },
   "footer": {
     "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
@@ -102,7 +98,16 @@
     "madeWithLove": "Made with ❤️ for the NGO community"
   },
   "skipLink": "Skip to main content",
+  "deadline": {
+    "hot": "Ending",
+    "warm": "Soon",
+    "normal": "Far",
+    "days": "days"
+  },
   "a11y": {
+    "opensNewTab": "(opens in new tab)",
+    "saveGrant": "Save grant",
+    "shareGrant": "Share grant",
     "notifications": "Notifications"
   },
   "notifications": {

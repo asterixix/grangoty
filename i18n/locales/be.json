@@ -32,6 +32,7 @@
     "max": "Макс"
   },
   "grants": {
+    "loading": "Загрузка...",
     "noResults": "Няма вынікаў",
     "noResultsDescription": "Паспрабуйце змяніць фільтры ці пошукайце іншы тэрмін",
     "resultsCount": "Паказана {count} грантаў з {total} (старонка {page} з {totalPages})",

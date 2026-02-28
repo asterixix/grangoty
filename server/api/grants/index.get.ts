@@ -6,14 +6,23 @@ import type { PaginatedResponse, Grant } from '~/app/types'
  * Sample grants for demo/fallback when Redis is empty
  */
 function getSampleGrants(): Grant[] {
+  const in7Days = new Date()
+  in7Days.setDate(in7Days.getDate() + 7)
+  const in14Days = new Date()
+  in14Days.setDate(in14Days.getDate() + 14)
+  const in30Days = new Date()
+  in30Days.setDate(in30Days.getDate() + 30)
+  const in60Days = new Date()
+  in60Days.setDate(in60Days.getDate() + 60)
+  
   return [
     {
       id: 'sample-1',
       source: 'fundusze-ngo',
-      title: 'Grant for Environmental Projects 2024',
+      title: 'Grant for Environmental Projects 2026',
       description: 'Funding available for environmental initiatives across Poland. Organizations can apply for up to 100,000 PLN for projects focused on sustainability, climate action, and environmental education.',
       amount: { min: 10000, max: 100000, currency: 'PLN' },
-      deadline: '2024-12-31',
+      deadline: in60Days.toISOString().split('T')[0],
       category: 'environment',
       region: 'Poland',
       eligibility: ['Registered NGO', 'Environmental focus', 'Minimum 1 year of operation'],
@@ -29,7 +38,7 @@ function getSampleGrants(): Grant[] {
       title: 'National Institute of Freedom - Civil Society Support',
       description: 'Support program for civil society organizations. Grants available for projects that strengthen democracy, human rights, and civic engagement.',
       amount: { min: 50000, max: 500000, currency: 'PLN' },
-      deadline: '2024-11-30',
+      deadline: in30Days.toISOString().split('T')[0],
       category: 'government',
       region: 'Poland',
       eligibility: ['Non-profit organization', 'Civic mission', 'Transparency required'],
@@ -45,7 +54,7 @@ function getSampleGrants(): Grant[] {
       title: 'Erasmus+ Youth Exchange Program',
       description: 'EU funding for youth exchange projects. Organizations can apply for grants to support international youth exchanges, training, and networking activities.',
       amount: { min: 20000, max: 150000, currency: 'EUR' },
-      deadline: '2024-10-15',
+      deadline: in14Days.toISOString().split('T')[0],
       category: 'european',
       region: 'Europe',
       eligibility: ['Youth organization', 'EU member state', 'Age 13-30 focus'],
@@ -61,7 +70,7 @@ function getSampleGrants(): Grant[] {
       title: 'Lesser Poland Regional Development Fund',
       description: 'Regional funding for projects in Lesser Poland (Małopolska). Focus on local development, culture, and social initiatives.',
       amount: { min: 5000, max: 50000, currency: 'PLN' },
-      deadline: '2024-09-30',
+      deadline: in7Days.toISOString().split('T')[0],
       category: 'regional',
       region: 'Lesser Poland',
       eligibility: ['Organization based in Lesser Poland', 'Local impact'],
@@ -77,7 +86,7 @@ function getSampleGrants(): Grant[] {
       title: 'Kraków NGO Support Grant',
       description: 'City of Kraków grants for non-governmental organizations. Supporting local initiatives that benefit the community.',
       amount: { min: 2000, max: 25000, currency: 'PLN' },
-      deadline: '2024-08-15',
+      deadline: in30Days.toISOString().split('T')[0],
       category: 'local',
       region: 'Kraków',
       eligibility: ['Registered in Kraków', 'Public benefit activities'],

@@ -32,6 +32,7 @@
     "max": "Max"
   },
   "grants": {
+    "loading": "Laden...",
     "noResults": "Keine Ergebnisse",
     "noResultsDescription": "Versuchen Sie, Ihre Filter anzupassen oder nach einem anderen Begriff zu suchen",
     "resultsCount": "Zeige {count} Fördermittel von {total} (Seite {page} von {totalPages})",

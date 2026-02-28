@@ -32,6 +32,7 @@
     "max": "Max"
   },
   "grants": {
+    "loading": "Ładowanie...",
     "noResults": "Brak wyników",
     "noResultsDescription": "Spróbuj zmienić filtry lub wyszukać inny termin",
     "resultsCount": "Wyświetlanie {count} dotacji z {total} (strona {page} z {totalPages})",
@@ -75,12 +76,7 @@
     "cancel": "Anuluj",
     "submit": "Wyślij",
     "submitting": "Wysyłanie...",
-    "visitSource": "Odwiedź źródło",
-    "retry": "Ponów",
-    "refresh": "Odśwież",
-    "clearFilters": "Wyczyść filtry",
-    "login": "Zaloguj się",
-    "backHome": "Wróć na stronę główną"
+    "visitSource": "Odwiedź źródło"
   },
   "footer": {
     "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
@@ -102,7 +98,16 @@
     "madeWithLove": "Stworzone z ❤️ dla społeczności NGO"
   },
   "skipLink": "Pomiń do głównej zawartości",
+  "deadline": {
+    "hot": "Kończy się",
+    "warm": "Wkrótce",
+    "normal": "Daleki",
+    "days": "dni"
+  },
   "a11y": {
+    "opensNewTab": "(otwiera w nowej karcie)",
+    "saveGrant": "Zapisz dotację",
+    "shareGrant": "Udostępnij dotację",
     "notifications": "Powiadomienia"
   },
   "notifications": {
