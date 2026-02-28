@@ -13,8 +13,8 @@ export { GovPlPozytekScraper } from './gov-pl-pozytek'
 export { NiwGeneratorScraper } from './niw-generator'
 
 // Tier 3: Regional/Municipal Portals
-export { MalopolskaPlScraper } from './malopolska'
-export { KrakowNgoPlScraper } from './krakow-ngo'
+// export { MalopolskaPlScraper } from './malopolska'
+// export { KrakowNgoPlScraper } from './krakow-ngo'
 export { WarsawNgoScraper } from './warsaw'
 export { WroclawNgoScraper } from './wroclaw'
 export { LodzNgoScraper } from './lodz'
@@ -43,8 +43,8 @@ import { NiwGeneratorScraper } from './niw-generator'
 import { EuFundingTendersScraper } from './eu-funding-tenders'
 import { EurodeskPlScraper } from './eurodesk'
 import { ActiveCitizensFundScraper } from './active-citizens-fund'
-import { MalopolskaPlScraper } from './malopolska'
-import { KrakowNgoPlScraper } from './krakow-ngo'
+// import { MalopolskaPlScraper } from './malopolska'
+// import { KrakowNgoPlScraper } from './krakow-ngo'
 import { WarsawNgoScraper } from './warsaw'
 import { WroclawNgoScraper } from './wroclaw'
 import { AktywniPlusScraper } from './aktywni-plus'
@@ -64,8 +64,8 @@ export const allScrapers = [
   new NiwGeneratorScraper(),
   
   // Tier 3: Regional Portals
-  new MalopolskaPlScraper(),
-  new KrakowNgoPlScraper(),
+  // new MalopolskaPlScraper(),
+  // new KrakowNgoPlScraper(),
   new WarsawNgoScraper(),
   new WroclawNgoScraper(),
   

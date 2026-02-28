@@ -5,8 +5,6 @@
  */
 import { defineNuxtPlugin } from 'nuxt/app'
 import { useNotifications } from '../composables/useNotifications'
-import { useNotifications } from '../composables/useNotifications'
-import { useNotifications } from '../composables/useNotifications'
 
 export default defineNuxtPlugin((nuxtApp: any) => {
   const notifications = useNotifications()
@@ -19,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
     }
 
     // Send to Sentry if available
-    const { $sentry } = useNuxtApp()
+    const $sentry = nuxtApp.$sentry
     $sentry?.captureException(error, {
       extra: {
         componentInfo: info,
@@ -40,7 +38,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
 
   // Nuxt lifecycle hooks (SSR hydration, navigation errors)
   nuxtApp.hook('vue:error', (error: unknown, instance: any, info: string) => {
-    const { $sentry } = useNuxtApp()
+    const $sentry = nuxtApp.$sentry
     $sentry?.captureException(error, {
       extra: {
         lifecycleInfo: info,
@@ -60,7 +58,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
       }
 
       // Send to Sentry if available
-      const { $sentry } = useNuxtApp()
+      const $sentry = nuxtApp.$sentry
       $sentry?.captureException(error)
 
       // Check if it's a network-related error
@@ -82,7 +80,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
 
     // Global error handler for synchronous errors
     window.addEventListener('error', (event) => {
-      const { $sentry } = useNuxtApp()
+      const $sentry = nuxtApp.$sentry
       $sentry?.captureException(event.error)
     })
   }

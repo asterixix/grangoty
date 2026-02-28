@@ -36,7 +36,7 @@ export class NiwGeneratorScraper {
       const $ = require('cheerio').load(html)
       
       // Find all grant/competition items
-      $('.grant-item, .competition-item, .nabór-item, article').each((_, el) => {
+      $('.grant-item, .competition-item, .nabór-item, article').each((_index: any, el: any) => {
         const $el = $(el)
         
         const title = $el.find('h2, h3, .title, .grant-title').first().text().trim()

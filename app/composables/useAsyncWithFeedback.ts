@@ -161,7 +161,7 @@ export function useAsyncWithFeedback<T>(
     execute,
     isLoading: readonly(isLoading),
     error: readonly(error),
-    data: readonly(data),
+    data: readonly(data) as Readonly<Ref<T | null, T | null>>,
     attempt: readonly(attempt),
     reset,
   }

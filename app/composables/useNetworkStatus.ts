@@ -47,41 +47,8 @@ export function useNetworkStatus(): NetworkStatusReturn {
       notifications.dismiss('network-offline')
 
       // Show "back online" message if we were previously offline
-      // Show "back online" message if we were previously offline
       if (wasOffline.value) {
         notifications.success('notifications.network.backOnline')
-      }
-        notifications.success('notifications.network.backOnline')
-
-        // Trigger background re-fetch of grants feed
-        try {
-          // Dynamic import to avoid circular dependency
-          import('~/app/stores/grants').then(({ useGrantsStore }) => {
-            const grantsStore = useGrantsStore()
-        // Show "back online" message if we were previously offline
-        if (wasOffline.value) {
-          notifications.success('notifications.network.backOnline')
-          
-          // No need to re-fetch grants as we don't have the store
-          // The user will get new data on next manual refresh
-        }
-          }).catch(() => {
-            // Store may not be initialized yet, ignore
-          })
-        } catch {
-          // Store may not be initialized yet, ignore
-        }
-        try {
-          // Dynamic import to avoid circular dependency
-          import('~/app/stores/grants').then(({ useGrantsStore }) => {
-            const grantsStore = useGrantsStore()
-            grantsStore.fetchGrants()
-          }).catch(() => {
-            // Store may not be initialized yet, ignore
-          })
-        } catch {
-          // Store may not be initialized yet, ignore
-        }
       }
     })
   }

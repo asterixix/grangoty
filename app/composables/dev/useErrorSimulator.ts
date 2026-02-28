@@ -30,7 +30,7 @@ export function useErrorSimulator() {
    * Simulate a scraper source being down
    */
   function scraperDown(source: string): void {
-    notifications.warn('notifications.grants.scraperDown', undefined, { source })
+    notifications.warn('notifications.grants.scraperDown', { source } as any)
   }
 
   /**
@@ -100,7 +100,10 @@ export function useErrorSimulator() {
    * Simulate no results filter
    */
   function noResults(): void {
-    notifications.info('notifications.grants.noResults', undefined, {
+    notifications.push({
+      level: 'info',
+      context: 'filter',
+      titleKey: 'notifications.grants.noResults',
       action: {
         labelKey: 'common.clearFilters',
         handler: () => {
@@ -108,22 +111,6 @@ export function useErrorSimulator() {
         },
       },
     })
-  }
-    notifications.info('notifications.grants.noResults', undefined, {
-      action: {
-        labelKey: 'common.clearFilters',
-        handler: () => {
-          notifications.success('notifications.grants.loadSuccess', { count: 25 })
-        },
-      },
-    })
-      action: {
-        labelKey: 'common.clearFilters',
-        handler: () => {
-          notifications.success('notifications.grants.loadSuccess', { count: 25 })
-        },
-      },
-    } as any)
   }
 
   /**
