@@ -60,7 +60,8 @@ export default defineNuxtConfig({
     },
     lazy: true,
     langDir: 'locales',
-    vueI18n: './i18n.config.ts'
+    vueI18n: './i18n.config.ts',
+    ignoreRoutes: ['api', 'api/**', '_nuxt', 'assets']
   },
 
   tailwindcss: {
