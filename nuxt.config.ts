@@ -73,8 +73,8 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
-    serverDir: 'server',
     routeRules: {
+      '/api/**': { cors: true, prerender: false },
       '/': { isr: 300 },
       '/grant/**': { isr: 600 },
       '/api/rss': { headers: { 'Content-Type': 'application/rss+xml' } }

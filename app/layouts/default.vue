@@ -76,10 +76,15 @@
 </template>
 
 <script setup lang="ts">
+import { watch, ref } from 'vue'
 const { locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
 
 const currentLocale = ref(locale.value)
+
+watch(locale, (newLocale) => {
+  currentLocale.value = newLocale
+})
 
 const switchLocale = () => {
   setLocale(currentLocale.value)

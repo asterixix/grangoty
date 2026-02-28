@@ -11,18 +11,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { parseISO, differenceInDays } from 'date-fns'
 
 const props = defineProps<{
   deadline: string
 }>()
 
-// Deadline urgency computed
+const mounted = ref(false)
+
+onMounted(() => {
+  mounted.value = true
+})
+
 const daysRemaining = computed(() => {
   try {
     const deadline = parseISO(props.deadline)
-    const now = new Date()
+    const now = mounted.value ? new Date() : new Date('2026-02-28')
     return differenceInDays(deadline, now)
   } catch {
     return null
