@@ -2,8 +2,8 @@
   "nav": {
     "title": "GRANgoTY",
     "home": "Strona główna",
-    "submit": "Zgłoś dotację",
-    "language": "Język"
+    "language": "Język",
+    "reportIssue": "Zgłoś problem"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
@@ -29,7 +29,11 @@
     "status": "Status",
     "amount": "Kwota",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "all": "Wszystkie",
+    "national": "Krajowe",
+    "regional": "Regionalne",
+    "ending": "Kończące się"
   },
   "grants": {
     "loading": "Ładowanie...",
@@ -56,6 +60,16 @@
   "submit": {
     "title": "Zgłoś dotację",
     "description": "Zaproponuj nam nową dotację, która powinna znaleźć się na naszej liście.",
+    "githubDescription": "Używamy GitHub do śledzenia zgłoszeń dotacji. Proszę utworzyć zgłoszenie ze szczegółami dotacji.",
+    "submitViaGithub": "Zgłoś dotację na GitHub",
+    "requestFeature": "Zaproponuj funkcję",
+    "whatToInclude": "Co zawrzeć:",
+    "includeTitle": "Tytuł dotacji",
+    "includeDescription": "Krótki opis",
+    "includeDeadline": "Termin składania wniosków",
+    "includeWebsite": "Link do oficjalnej strony",
+    "includeAmount": "Kwota dotacji (jeśli dostępna)",
+    "includeRegion": "Uprawniony region/kraj",
     "grantTitle": "Tytuł dotacji",
     "grantTitlePlaceholder": "Wprowadź tytuł dotacji...",
     "descriptionPlaceholder": "Szczegółowy opis dotacji...",
@@ -70,7 +84,18 @@
     "website": "Strona internetowa",
     "websitePlaceholder": "https://...",
     "email": "Email",
-    "emailPlaceholder": "kontakt (at) organizacja.pl"
+    "emailPlaceholder": "kontakt (at) organizacja.pl",
+    "featureDescription": "Masz pomysł na ulepszenie GRANgoTY? Chętnie go poznamy!",
+    "featureGithubDescription": "Proszę utworzyć prośbę o funkcję na GitHub, aby podzielić się z nami swoimi pomysłami.",
+    "submitFeature": "Zgłoś prośbę o funkcję",
+    "backToSubmit": "Wróć do zgłoszeń",
+    "popularFeatures": "Popularne pomysły funkcji:",
+    "featureNotifications": "Powiadomienia email o nowych dotacjach",
+    "featureSaved": "Zapisz/zakładka ulubionych dotacji",
+    "featureAlerts": "Alerty terminów",
+    "featureAdvancedFilters": "Zaawansowane opcje filtrowania",
+    "featureExport": "Eksport dotacji do CSV/PDF",
+    "featureApi": "Publiczny dostęp API"
   },
   "common": {
     "cancel": "Anuluj",
@@ -95,7 +120,9 @@
     "emailPlaceholder": "Twój email",
     "subscribe": "Zapisz się",
     "allRights": "Wszelkie prawa zastrzeżone.",
-    "madeWithLove": "Stworzone z ❤️ dla społeczności NGO"
+    "madeWithLove": "Stworzone z ❤️ dla społeczności NGO",
+    "reportBug": "Zgłoś błąd",
+    "featureRequest": "Prośba o funkcję"
   },
   "skipLink": "Pomiń do głównej zawartości",
   "deadline": {

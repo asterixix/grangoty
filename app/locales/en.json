@@ -2,8 +2,8 @@
   "nav": {
     "title": "GRANgoTY",
     "home": "Home",
-    "submit": "Submit Grant",
-    "language": "Language"
+    "language": "Language",
+    "reportIssue": "Report Issue"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
@@ -29,7 +29,11 @@
     "status": "Status",
     "amount": "Amount",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "all": "All",
+    "national": "National",
+    "regional": "Regional",
+    "ending": "Ending Soon"
   },
   "grants": {
     "loading": "Loading...",
@@ -56,6 +60,16 @@
   "submit": {
     "title": "Submit Grant",
     "description": "Suggest a grant that should be added to our database.",
+    "githubDescription": "We use GitHub to track grant submissions. Please open an issue with the grant details.",
+    "submitViaGithub": "Submit Grant on GitHub",
+    "requestFeature": "Request Feature",
+    "whatToInclude": "What to include:",
+    "includeTitle": "Grant title",
+    "includeDescription": "Brief description",
+    "includeDeadline": "Application deadline",
+    "includeWebsite": "Link to official website",
+    "includeAmount": "Grant amount (if available)",
+    "includeRegion": "Eligible region/country",
     "grantTitle": "Grant Title",
     "grantTitlePlaceholder": "Enter grant title...",
     "descriptionPlaceholder": "Detailed description of the grant...",
@@ -70,7 +84,18 @@
     "website": "Website",
     "websitePlaceholder": "https://...",
     "email": "Email",
-    "emailPlaceholder": "contact (at) organization.org"
+    "emailPlaceholder": "contact (at) organization.org",
+    "featureDescription": "Have an idea to improve GRANgoTY? We'd love to hear it!",
+    "featureGithubDescription": "Please open a feature request on GitHub to share your ideas with us.",
+    "submitFeature": "Submit Feature Request",
+    "backToSubmit": "Back to Submit",
+    "popularFeatures": "Popular feature ideas:",
+    "featureNotifications": "Email notifications for new grants",
+    "featureSaved": "Save/bookmark favorite grants",
+    "featureAlerts": "Deadline alerts",
+    "featureAdvancedFilters": "Advanced filtering options",
+    "featureExport": "Export grants to CSV/PDF",
+    "featureApi": "Public API access"
   },
   "common": {
     "cancel": "Cancel",
@@ -95,7 +120,9 @@
     "emailPlaceholder": "Your email",
     "subscribe": "Subscribe",
     "allRights": "All rights reserved.",
-    "madeWithLove": "Made with ❤️ for the NGO community"
+    "madeWithLove": "Made with ❤️ for the NGO community",
+    "reportBug": "Report Bug",
+    "featureRequest": "Feature Request"
   },
   "skipLink": "Skip to main content",
   "deadline": {
