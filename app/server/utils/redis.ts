@@ -164,13 +164,13 @@ export const REDIS_KEYS = {
 } as const
 
 /**
- * Grant Storage Service using Redis
+ * Grant Storage Service using Redis.
+ * Redis client is resolved lazily at call time to ensure env vars are available
+ * in Vercel's serverless Lambda environment (module-level code runs before env injection).
  */
 export class GrantStorage {
-  private redis: Redis
-
-  constructor() {
-    this.redis = getRedisClient()
+  private get redis(): Redis {
+    return getRedisClient()
   }
 
   /**
@@ -209,17 +209,22 @@ export class GrantStorage {
     }
   }
 
-  /**
-   * Get all grants — batch-fetches all grant JSON in a single mget call
-   */
   async getAllGrants(): Promise<Grant[]> {
     const grantIds = await this.redis.smembers(REDIS_KEYS.GRANTS_LIST) as string[]
     if (!grantIds || grantIds.length === 0) return []
 
     const keys = grantIds.map(id => REDIS_KEYS.GRANT_BY_ID(id))
-    const values = await this.redis.mget<string[]>(...keys)
 
-    return values
+    // Chunk mget into batches of 100 to stay within Upstash REST request size limits
+    const CHUNK_SIZE = 100
+    const allValues: (string | null)[] = []
+    for (let i = 0; i < keys.length; i += CHUNK_SIZE) {
+      const chunk = keys.slice(i, i + CHUNK_SIZE)
+      const chunkValues = await this.redis.mget<string[]>(...chunk)
+      allValues.push(...chunkValues)
+    }
+
+    return allValues
       .filter((v): v is string => v !== null && v !== undefined)
       .map(v => {
         try {
