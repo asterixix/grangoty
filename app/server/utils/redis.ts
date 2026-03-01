@@ -195,15 +195,12 @@ export class GrantStorage {
     await pipeline.exec()
   }
 
-  /**
-   * Get a grant by ID
-   */
   async getGrantById(id: string): Promise<Grant | null> {
-    const grantJson = await this.redis.get(REDIS_KEYS.GRANT_BY_ID(id))
-    if (!grantJson) return null
+    const raw = await this.redis.get(REDIS_KEYS.GRANT_BY_ID(id))
+    if (!raw) return null
     
     try {
-      return JSON.parse(grantJson as string) as Grant
+      return (typeof raw === 'string' ? JSON.parse(raw) : raw) as Grant
     } catch {
       return null
     }
@@ -217,18 +214,18 @@ export class GrantStorage {
 
     // Chunk mget into batches of 100 to stay within Upstash REST request size limits
     const CHUNK_SIZE = 100
-    const allValues: (string | null)[] = []
+    const allValues: unknown[] = []
     for (let i = 0; i < keys.length; i += CHUNK_SIZE) {
       const chunk = keys.slice(i, i + CHUNK_SIZE)
-      const chunkValues = await this.redis.mget<string[]>(...chunk)
+      const chunkValues = await this.redis.mget<unknown[]>(...chunk)
       allValues.push(...chunkValues)
     }
 
     return allValues
-      .filter((v): v is string => v !== null && v !== undefined)
+      .filter((v): v is string | object => v !== null && v !== undefined)
       .map(v => {
         try {
-          return JSON.parse(v) as Grant
+          return (typeof v === 'string' ? JSON.parse(v) : v) as Grant
         } catch {
           return null
         }
