@@ -5,7 +5,7 @@
       <!-- aria-live CRITICAL: screen readers announce new toasts -->
       <div
         role="region"
-        :aria-label="$t('a11y.notifications')"
+        :aria-label="t('a11y.notifications')"
         aria-live="polite"
         aria-atomic="false"
         class="notification-stack"
@@ -24,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n({ useScope: 'global' })
 const notifications = useNotifications()
 </script>
 

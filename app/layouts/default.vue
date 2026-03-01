@@ -5,7 +5,7 @@
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded focus:text-white"
       style="background-color: var(--color-dark-teal-500);"
     >
-      {{ $t('skipLink') }}
+      {{ t('skipLink') }}
     </a>
 
     <header class="app-header">
@@ -21,13 +21,13 @@
               <span class="text-lg">🅖</span> GRANgoTY
             </NuxtLink>
             <span class="text-xs hidden sm:inline" style="color: rgba(247,255,247,0.65);">
-              | {{ $t('footer.description').split('.')[0] }}
+              | {{ t('footer.description').split('.')[0] }}
             </span>
           </div>
 
           <div class="flex items-center gap-2 sm:gap-4">
             <div class="relative">
-              <label for="lang-select" class="sr-only">{{ $t('nav.language') }}</label>
+              <label for="lang-select" class="sr-only">{{ t('nav.language') }}</label>
               <select
                 id="lang-select"
                 v-model="currentLocale"
@@ -48,7 +48,7 @@
               class="text-xs hover:underline"
               style="color: var(--color-strong-cyan-800);"
             >
-              {{ $t('nav.reportIssue') }}
+              {{ t('nav.reportIssue') }}
             </a>
           </div>
         </nav>
@@ -68,7 +68,7 @@
               GRANgoTY
             </NuxtLink>
             <span class="mx-1">|</span>
-            <span>{{ $t('footer.madeWithLove') }}</span>
+            <span>{{ t('footer.madeWithLove') }}</span>
           </div>
           <div class="flex gap-3">
             <a href="/api/rss" class="hover:underline" target="_blank" style="color: var(--color-strong-cyan-400);">RSS</a>
@@ -79,7 +79,7 @@
               class="hover:underline"
               style="color: var(--color-strong-cyan-400);"
             >
-              {{ $t('footer.reportBug') }}
+              {{ t('footer.reportBug') }}
             </a>
             <a
               href="https://github.com/asterixix/grangoty/issues/new?template=feature_request.md"
@@ -88,7 +88,7 @@
               class="hover:underline"
               style="color: var(--color-strong-cyan-400);"
             >
-              {{ $t('footer.featureRequest') }}
+              {{ t('footer.featureRequest') }}
             </a>
           </div>
         </div>
@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue'
 
-const { locale, locales, setLocale } = useI18n({ useScope: 'global' })
+const { t, locale, locales, setLocale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const currentLocale = ref(locale.value)

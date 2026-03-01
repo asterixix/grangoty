@@ -12,14 +12,14 @@
       class="text-center py-12"
     >
       <UiIcon name="info" size="lg" class="mx-auto h-12 w-12 mb-4" style="color: var(--color-dark-teal-700);" />
-      <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">{{ $t('grants.noResults') }}</h3>
-      <p class="mt-1" style="color: var(--color-dark-teal-700);">{{ $t('grants.noResultsDescription') }}</p>
+      <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">{{ t('grants.noResults') }}</h3>
+      <p class="mt-1" style="color: var(--color-dark-teal-700);">{{ t('grants.noResultsDescription') }}</p>
       <button
         @click="clearFilters"
         class="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md transition-colors"
         style="background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500);"
       >
-        {{ $t('filters.clearAll') }}
+        {{ t('filters.clearAll') }}
       </button>
     </div>
 
@@ -78,14 +78,17 @@
 
     <!-- Results count -->
     <div v-if="!isLoading && grants.length > 0" class="mt-4 text-sm" style="color: var(--color-dark-teal-700);">
-      {{ $t('grants.resultsCount', { count: total, page, pageSize }) }}
+      {{ t('grants.resultsCount', { count: total, page, pageSize }) }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { Grant } from '~/types'
+
+const { t } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   grants: Grant[]

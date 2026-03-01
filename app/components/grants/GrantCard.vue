@@ -24,7 +24,7 @@
           color="error"
           variant="soft"
           icon="i-lucide-alert-circle"
-          :title="$t('notifications.grants.loadError')"
+          :title="t('notifications.grants.loadError')"
         >
           <template #actions>
             <UButton
@@ -33,7 +33,7 @@
               size="xs"
               @click="emit('retry')"
             >
-              {{ $t('errors.retry') }}
+              {{ t('errors.retry') }}
             </UButton>
           </template>
         </UAlert>
@@ -42,7 +42,7 @@
 
     <template v-else>
       <UButton
-        :aria-label="`${$t('a11y.saveGrant')}: ${grant.title}`"
+        :aria-label="`${t('a11y.saveGrant')}: ${grant.title}`"
         :aria-pressed="isSaved"
         color="neutral"
         variant="ghost"

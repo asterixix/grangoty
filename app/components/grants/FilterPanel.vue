@@ -1,14 +1,14 @@
 <template>
   <div class="filter-panel card">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold" style="color: var(--color-dark-teal-500);">{{ $t('filters.title') }}</h3>
+      <h3 class="text-lg font-semibold" style="color: var(--color-dark-teal-500);">{{ t('filters.title') }}</h3>
       <button
         v-if="hasActiveFilters"
         @click="clearAll"
         class="text-sm transition-colors"
         style="color: var(--color-strong-cyan-400);"
       >
-        {{ $t('filters.clearAll') }}
+        {{ t('filters.clearAll') }}
       </button>
     </div>
 
@@ -16,14 +16,14 @@
       <!-- Search -->
       <div>
         <label for="search" class="block text-sm font-medium mb-1" style="color: var(--color-dark-teal-600);">
-          {{ $t('filters.search') }}
+          {{ t('filters.search') }}
         </label>
         <div class="relative">
           <input
             id="search"
             v-model="search"
             type="text"
-            :placeholder="$t('filters.searchPlaceholder')"
+            :placeholder="t('filters.searchPlaceholder')"
             class="w-full pl-10 pr-4 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
             style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
@@ -39,7 +39,7 @@
       <!-- Category -->
       <div>
         <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
-          {{ $t('filters.category') }}
+          {{ t('filters.category') }}
         </label>
         <div class="flex flex-wrap gap-2">
           <button
@@ -59,7 +59,7 @@
       <!-- Region -->
       <div>
         <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
-          {{ $t('filters.region') }}
+          {{ t('filters.region') }}
         </label>
         <div class="flex flex-wrap gap-2">
           <button
@@ -79,7 +79,7 @@
       <!-- Status -->
       <div>
         <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
-          {{ $t('filters.status') }}
+          {{ t('filters.status') }}
         </label>
         <div class="flex flex-wrap gap-2">
           <button
@@ -91,7 +91,7 @@
               ? 'background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500); border-color: var(--color-dark-teal-500);'
               : 'background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border-color: var(--color-strong-cyan-700);'"
           >
-            {{ $t(`status.${status}`) }}
+            {{ t(`status.${status}`) }}
           </button>
         </div>
       </div>
@@ -99,13 +99,13 @@
       <!-- Amount range -->
       <div>
         <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
-          {{ $t('filters.amount') }}
+          {{ t('filters.amount') }}
         </label>
         <div class="flex gap-2">
           <input
             v-model.number="amountMin"
             type="number"
-            :placeholder="$t('filters.min')"
+            :placeholder="t('filters.min')"
             class="flex-1 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
             style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
@@ -113,7 +113,7 @@
           <input
             v-model.number="amountMax"
             type="number"
-            :placeholder="$t('filters.max')"
+            :placeholder="t('filters.max')"
             class="flex-1 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
             style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
@@ -125,7 +125,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useFilters } from '~/composables/useFilters'
+
+const { t } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   categories: string[]

@@ -22,14 +22,14 @@
 
     <div class="flex-1 min-w-0">
       <p class="text-sm font-medium" style="color: var(--color-dark-teal-500);">
-        {{ $t(notification.titleKey, notification.params) }}
+        {{ t(notification.titleKey, notification.params) }}
       </p>
       <p
         v-if="notification.messageKey"
         class="mt-1 text-sm"
         style="color: var(--color-dark-teal-600);"
       >
-        {{ $t(notification.messageKey, notification.params) }}
+        {{ t(notification.messageKey, notification.params) }}
       </p>
 
       <button
@@ -38,13 +38,13 @@
         :style="actionTextStyle"
         @click="handleAction"
       >
-        {{ $t(notification.action.labelKey) }}
+        {{ t(notification.action.labelKey) }}
       </button>
     </div>
 
     <button
       class="flex-shrink-0 p-1 rounded transition-colors"
-      :aria-label="$t('notifications.dismiss')"
+      :aria-label="t('notifications.dismiss')"
       style="color: var(--color-dark-teal-600);"
       @click="$emit('dismiss')"
     >
@@ -57,7 +57,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { Notification } from '~/types/notifications'
+
+const { t } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   notification: Notification

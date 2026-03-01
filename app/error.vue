@@ -26,7 +26,7 @@
         class="text-xs mb-8 font-mono"
         style="color: var(--color-dark-teal-700);"
       >
-        {{ $t('errors.codeLabel', { code: statusCode }) }}
+        {{ t('errors.codeLabel', { code: statusCode }) }}
       </p>
 
       <div class="flex flex-col sm:flex-row gap-3">
@@ -37,7 +37,7 @@
           @mouseleave="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-dark-teal-500)'"
           @click="handleGoHome"
         >
-          {{ $t('errors.backHome') }}
+          {{ t('errors.backHome') }}
         </button>
 
         <button
@@ -48,7 +48,7 @@
           @mouseleave="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-900)'"
           @click="handleRetry"
         >
-          {{ $t('errors.retry') }}
+          {{ t('errors.retry') }}
         </button>
 
         <a
@@ -62,7 +62,7 @@
           @mouseleave="(e) => (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'"
         >
           <UIcon name="i-lucide-bug" class="w-4 h-4" />
-          {{ $t('errors.reportBug') || 'Report Bug' }}
+          {{ t('errors.reportBug') || 'Report Bug' }}
         </a>
       </div>
 
@@ -75,7 +75,7 @@
             class="px-4 py-2 text-xs font-medium cursor-pointer select-none"
             style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-600);"
           >
-            {{ $t('errors.technicalDetails') || 'Technical details' }}
+            {{ t('errors.technicalDetails') || 'Technical details' }}
           </summary>
           <pre
             class="px-4 py-3 text-xs overflow-auto max-h-40"
