@@ -49,28 +49,22 @@
           </template>
         </UInput>
 
-        <USelect
+        <FilterDropdown
           v-model="selectedCategory"
           :placeholder="t('filters.category')"
-          size="sm"
-          class="w-40"
-          :items="categoryOptions"
+          :options="categoryOptions"
         />
 
-        <USelect
+        <FilterDropdown
           v-model="selectedRegion"
           :placeholder="t('filters.region')"
-          size="sm"
-          class="w-40"
-          :items="regionOptions"
+          :options="regionOptions"
         />
 
-        <USelect
+        <FilterDropdown
           v-model="selectedStatus"
           :placeholder="t('filters.status')"
-          size="sm"
-          class="w-40"
-          :items="statusOptions"
+          :options="statusOptions"
         />
 
         <UButton
@@ -86,73 +80,63 @@
 
       <div
         v-if="isLoading"
-        class="py-8 text-center"
+        class="space-y-2"
         role="status"
         aria-live="polite"
-        style="color: var(--color-dark-teal-600);"
       >
-        <USkeleton class="h-8 w-8 rounded-full mx-auto mb-2" />
-        <p>{{ t('grants.loading') }}</p>
+        <div
+          v-for="i in 5"
+          :key="i"
+          class="animate-pulse h-20 rounded-lg"
+          style="background-color: var(--color-strong-cyan-900);"
+        />
       </div>
 
-      <ClientOnly>
-        <template #fallback>
-          <div class="space-y-2">
-            <div
-              v-for="i in 5"
-              :key="i"
-              class="animate-pulse h-20 rounded-lg"
-              style="background-color: var(--color-strong-cyan-900);"
-            />
-          </div>
-        </template>
-
-        <ol
-          v-if="paginatedGrants.length > 0"
-          class="space-y-1"
-          role="list"
-          aria-live="polite"
+      <ol
+        v-else-if="paginatedGrants.length > 0"
+        class="space-y-1"
+        role="list"
+        aria-live="polite"
+      >
+        <li
+          v-for="(grant, index) in paginatedGrants"
+          :key="grant.id"
+          class="hn-list-item"
+          :style="currentIndex === index
+            ? 'outline: 2px solid var(--color-strong-cyan-500); border-radius: 0.5rem;'
+            : ''"
         >
-          <li
-            v-for="(grant, index) in paginatedGrants"
-            :key="grant.id"
-            class="hn-list-item"
-            :style="currentIndex === index
-              ? 'outline: 2px solid var(--color-strong-cyan-500); border-radius: 0.5rem;'
-              : ''"
-          >
-            <GrantCard
-              :grant="grant"
-              :rank="(currentPage - 1) * pageSize + index + 1"
-              :is-saved="savedGrants.includes(grant.id)"
-              @save="handleSave"
-            />
-          </li>
-        </ol>
+          <GrantCard
+            :grant="grant"
+            :rank="(currentPage - 1) * pageSize + index + 1"
+            :is-saved="savedGrants.includes(grant.id)"
+            @save="handleSave"
+          />
+        </li>
+      </ol>
 
-        <div
-          v-else-if="!isLoading"
-          class="py-12 text-center"
-          role="status"
+      <div
+        v-else
+        class="py-12 text-center"
+        role="status"
+      >
+        <UIcon name="i-lucide-search" class="w-16 h-16 mx-auto mb-4" style="color: var(--color-dark-teal-700);" />
+        <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">
+          {{ t('grants.noResults') }}
+        </h3>
+        <p class="mt-2 text-sm" style="color: var(--color-dark-teal-600);">
+          {{ t('grants.noResultsDescription') }}
+        </p>
+        <button
+          class="mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
+          style="background-color: var(--color-strong-cyan-500); color: white;"
+          @mouseenter="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-400)'"
+          @mouseleave="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-500)'"
+          @click="clearFilters"
         >
-          <UIcon name="i-lucide-search" class="w-16 h-16 mx-auto mb-4" style="color: var(--color-dark-teal-700);" />
-          <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">
-            {{ t('grants.noResults') }}
-          </h3>
-          <p class="mt-2 text-sm" style="color: var(--color-dark-teal-600);">
-            {{ t('grants.noResultsDescription') }}
-          </p>
-          <button
-            class="mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
-            style="background-color: var(--color-strong-cyan-500); color: white;"
-            @mouseenter="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-400)'"
-            @mouseleave="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-500)'"
-            @click="clearFilters"
-          >
-            {{ t('filters.clearAll') }}
-          </button>
-        </div>
-      </ClientOnly>
+          {{ t('filters.clearAll') }}
+        </button>
+      </div>
 
       <nav
         v-if="totalPages > 1"
@@ -189,41 +173,6 @@
       </nav>
     </main>
 
-    <UModal :open="showHelp" @update:open="showHelp = $event">
-      <UCard>
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold" style="color: var(--color-dark-teal-500);">
-              {{ t('help.title') || 'Keyboard Shortcuts' }}
-            </h2>
-            <UButton
-              color="neutral"
-              variant="ghost"
-              size="sm"
-              icon="i-lucide-x"
-              @click="showHelp = false"
-            />
-          </div>
-        </template>
-
-        <div class="space-y-3 text-sm">
-          <div
-            v-for="shortcut in keyboardShortcuts"
-            :key="shortcut.key"
-            class="flex justify-between items-center py-2"
-            style="border-bottom: 1px solid var(--color-strong-cyan-900);"
-          >
-            <span
-              class="font-mono px-1.5 py-0.5 rounded text-xs"
-              style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border: 1px solid var(--color-strong-cyan-700);"
-            >
-              {{ shortcut.key }}
-            </span>
-            <span style="color: var(--color-dark-teal-600);">{{ shortcut.description }}</span>
-          </div>
-        </div>
-      </UCard>
-    </UModal>
   </div>
 </template>
 
@@ -245,7 +194,7 @@ const selectedCategory = ref('')
 const selectedRegion = ref('')
 const selectedStatus = ref('')
 
-const { data: apiResponse, pending: isLoading, refresh: refreshGrants } = await useAsyncData(
+const { data: apiResponse, pending: isLoading } = await useAsyncData(
   'grants',
   () => $fetch<{ data: Grant[] }>('/api/grants'),
   { default: () => ({ data: [] as Grant[] }) }
@@ -253,17 +202,9 @@ const { data: apiResponse, pending: isLoading, refresh: refreshGrants } = await 
 
 const grants = computed(() => apiResponse.value?.data ?? [])
 
-const { showHelp } = useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
+useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
   if (event === 'save') handleSave(rank)
 })
-
-const keyboardShortcuts = [
-  { key: 'j / k', description: t('help.navigate') || 'Navigate list' },
-  { key: 's', description: t('help.save') || 'Save/Bookmark' },
-  { key: 'o / Enter', description: t('help.open') || 'Open URL' },
-  { key: '/', description: t('help.search') || 'Focus search' },
-  { key: '?', description: t('help.help') || 'Toggle help' },
-]
 
 const categories = computed(() => {
   const cats = new Set(grants.value.map(g => g.category).filter(Boolean))
@@ -356,11 +297,12 @@ function goToPage(page: number): void {
 }
 
 function handleSave(rank: number): void {
-  const grant = paginatedGrants.value[rank]
+  const index = rank - 1 - (currentPage.value - 1) * pageSize
+  const grant = paginatedGrants.value[index]
   if (!grant) return
-  const index = savedGrants.value.indexOf(grant.id)
-  if (index > -1) {
-    savedGrants.value.splice(index, 1)
+  const pos = savedGrants.value.indexOf(grant.id)
+  if (pos > -1) {
+    savedGrants.value.splice(pos, 1)
   } else {
     savedGrants.value.push(grant.id)
   }

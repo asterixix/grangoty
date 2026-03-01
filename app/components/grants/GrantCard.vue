@@ -164,6 +164,9 @@ function formatAmount(amount: NonNullable<Grant['amount']>): string {
   if (amount.min !== undefined) {
     return `${amount.min.toLocaleString()} ${amount.currency}`
   }
+  if (amount.max !== undefined) {
+    return `${amount.max.toLocaleString()} ${amount.currency}`
+  }
   return amount.currency
 }
 

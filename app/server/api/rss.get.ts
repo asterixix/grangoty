@@ -100,9 +100,16 @@ export default defineEventHandler(async (event) => {
       const dateB = new Date(b.scrapedAt || 0).getTime()
       return dateB - dateA
     })
-    
-    // Limit to 50 most recent
-    const recentGrants = grants.slice(0, 50)
+
+    // Diversify: cap at 15 grants per source so no single scraper dominates
+    const MAX_PER_SOURCE = 15
+    const MAX_TOTAL = 100
+    const countBySource: Record<string, number> = {}
+    const recentGrants = grants.filter(g => {
+      const source = g.source || 'unknown'
+      countBySource[source] = (countBySource[source] ?? 0) + 1
+      return countBySource[source] <= MAX_PER_SOURCE
+    }).slice(0, MAX_TOTAL)
 
     // Generate appropriate feed
     let xml: string
