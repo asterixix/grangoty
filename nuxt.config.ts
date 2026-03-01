@@ -67,6 +67,11 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
+    vercel: {
+      functions: {
+        maxDuration: 60
+      }
+    },
     routeRules: {
       '/api/**': { cors: true, prerender: false, cache: false },
       '/api/cron/**': { cors: false }
