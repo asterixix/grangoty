@@ -7,11 +7,22 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import { parseISO, differenceInDays } from 'date-fns'
+import { useI18n } from 'vue-i18n'
+
+function parseDate(dateString: string): Date {
+  return new Date(dateString)
+}
+
+function differenceInDays(dateLeft: Date, dateRight: Date): number {
+  const msPerDay = 1000 * 60 * 60 * 24
+  return Math.floor((dateLeft.getTime() - dateRight.getTime()) / msPerDay)
+}
 
 const props = defineProps<{
   deadline: string
 }>()
+
+const { t } = useI18n()
 
 const mounted = ref(false)
 
@@ -21,7 +32,7 @@ onMounted(() => {
 
 const daysRemaining = computed(() => {
   try {
-    const deadline = parseISO(props.deadline)
+    const deadline = parseDate(props.deadline)
     const now = mounted.value ? new Date() : new Date('2026-02-28')
     return differenceInDays(deadline, now)
   } catch {
