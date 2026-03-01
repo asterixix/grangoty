@@ -191,7 +191,14 @@
     "unexpected": "An unexpected error occurred",
     "codeLabel": "Error code: {code}",
     "backHome": "Back to Home",
-    "retry": "Try Again"
+    "retry": "Try Again",
+    "reportBug": "Report Bug",
+    "technicalDetails": "Technical details",
+    "unauthorizedDescription": "You need to log in to access this resource.",
+    "forbiddenDescription": "You don't have permission to access this resource.",
+    "serviceUnavailableDescription": "The service is temporarily down. Please try again in a few moments.",
+    "serverErrorDescription": "Something went wrong on our end. We've been notified and are working on a fix.",
+    "unexpectedDescription": "An unexpected error occurred. Please try refreshing the page."
   },
   "help": {
     "title": "Keyboard Shortcuts",

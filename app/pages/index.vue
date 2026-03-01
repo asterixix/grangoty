@@ -228,14 +228,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { Grant } from '~/types'
 import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
 
 const { t } = useI18n()
 
-const grants = ref<Grant[]>([])
-const isLoading = ref(true)
 const currentPage = ref(1)
 const pageSize = 30
 const savedGrants = ref<string[]>([])
@@ -247,7 +245,15 @@ const selectedCategory = ref('')
 const selectedRegion = ref('')
 const selectedStatus = ref('')
 
-const { showHelp, toggleHelp } = useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
+const { data: apiResponse, pending: isLoading, refresh: refreshGrants } = await useAsyncData(
+  'grants',
+  () => $fetch<{ data: Grant[] }>('/api/grants'),
+  { default: () => ({ data: [] as Grant[] }) }
+)
+
+const grants = computed(() => apiResponse.value?.data ?? [])
+
+const { showHelp } = useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
   if (event === 'save') handleSave(rank)
 })
 
@@ -269,18 +275,15 @@ const regions = computed(() => {
   return Array.from(regs).sort()
 })
 
-const categoryOptions = computed(() => [
-  { label: t('filters.category'), value: '', disabled: true },
-  ...categories.value.map(cat => ({ label: cat, value: cat }))
-])
+const categoryOptions = computed(() =>
+  categories.value.map(cat => ({ label: cat, value: cat }))
+)
 
-const regionOptions = computed(() => [
-  { label: t('filters.region'), value: '', disabled: true },
-  ...regions.value.map(reg => ({ label: reg, value: reg }))
-])
+const regionOptions = computed(() =>
+  regions.value.map(reg => ({ label: reg, value: reg }))
+)
 
 const statusOptions = computed(() => [
-  { label: t('filters.status'), value: '', disabled: true },
   { label: t('status.open'), value: 'open' },
   { label: t('status.closing_soon'), value: 'closing_soon' },
   { label: t('status.closed'), value: 'closed' }
@@ -366,23 +369,6 @@ function handleSave(rank: number): void {
 watch([searchQuery, selectedCategory, selectedRegion, selectedStatus, activeFilter], () => {
   currentPage.value = 1
 })
-
-onMounted(() => {
-  fetchGrants()
-})
-
-async function fetchGrants(): Promise<void> {
-  isLoading.value = true
-  try {
-    const response = await $fetch('/api/grants')
-    grants.value = (response as { data: Grant[] }).data || []
-  } catch (error) {
-    console.error('Failed to fetch grants:', error)
-    grants.value = []
-  } finally {
-    isLoading.value = false
-  }
-}
 
 useHead({
   title: 'GRANgoTY - ' + t('home.heroTitle'),

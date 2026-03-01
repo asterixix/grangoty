@@ -191,7 +191,14 @@
     "unexpected": "Wystąpił nieoczekiwany błąd",
     "codeLabel": "Kod błędu: {code}",
     "backHome": "Wróć na stronę główną",
-    "retry": "Spróbuj ponownie"
+    "retry": "Spróbuj ponownie",
+    "reportBug": "Zgłoś błąd",
+    "technicalDetails": "Szczegóły techniczne",
+    "unauthorizedDescription": "Musisz się zalogować, aby uzyskać dostęp do tego zasobu.",
+    "forbiddenDescription": "Nie masz uprawnień do dostępu do tego zasobu.",
+    "serviceUnavailableDescription": "Usługa jest tymczasowo niedostępna. Spróbuj ponownie za chwilę.",
+    "serverErrorDescription": "Coś poszło nie tak po naszej stronie. Zostaliśmy powiadomieni i pracujemy nad naprawą.",
+    "unexpectedDescription": "Wystąpił nieoczekiwany błąd. Spróbuj odświeżyć stronę."
   },
   "help": {
     "title": "Skróty klawiszowe",

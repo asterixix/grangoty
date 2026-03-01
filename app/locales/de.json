@@ -167,7 +167,14 @@
     "unexpected": "Ein unerwarteter Fehler ist aufgetreten",
     "codeLabel": "Fehlercode: {code}",
     "backHome": "Zur Startseite",
-    "retry": "Erneut versuchen"
+    "retry": "Erneut versuchen",
+    "reportBug": "Fehler melden",
+    "technicalDetails": "Technische Details",
+    "unauthorizedDescription": "Sie müssen sich anmelden, um auf diese Ressource zuzugreifen.",
+    "forbiddenDescription": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
+    "serviceUnavailableDescription": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.",
+    "serverErrorDescription": "Auf unserer Seite ist etwas schiefgelaufen. Wir wurden benachrichtigt und arbeiten an einer Lösung.",
+    "unexpectedDescription": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie, die Seite zu aktualisieren."
   },
   "help": {
     "title": "Tastaturkürzel",
