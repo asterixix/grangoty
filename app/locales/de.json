@@ -84,7 +84,11 @@
     "submitting": "Einreichen...",
     "visitSource": "Quelle besuchen",
     "previous": "Zurück",
-    "next": "Weiter"
+    "next": "Weiter",
+    "retry": "Erneut versuchen",
+    "loading": "Wird geladen...",
+    "hideDetails": "Details ausblenden",
+    "showDetails": "Details anzeigen"
   },
   "footer": {
     "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",

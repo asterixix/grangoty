@@ -27,12 +27,14 @@
       style="color: var(--color-dark-teal-500); background-color: var(--color-grapefruit-pink-800); border: 1px solid var(--color-grapefruit-pink-600);"
       @click="onRetry"
     >
-      {{ $t('common.retry') }}
+      {{ t('common.retry') }}
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n({ useScope: 'global' })
+
 defineProps<{
   message: string
   onRetry?: () => void

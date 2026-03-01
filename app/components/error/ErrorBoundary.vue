@@ -12,10 +12,10 @@
       </div>
       <div class="flex-1">
         <h3 class="text-lg font-semibold" style="color: var(--color-dark-teal-500);">
-          {{ $t('errors.boundaryTitle') || 'Something went wrong' }}
+          {{ t('errors.boundaryTitle') || 'Something went wrong' }}
         </h3>
         <p class="mt-2 text-sm" style="color: var(--color-dark-teal-600);">
-          {{ $t('errors.boundaryMessage') || 'An error occurred while rendering this component.' }}
+          {{ t('errors.boundaryMessage') || 'An error occurred while rendering this component.' }}
         </p>
         <div
           v-if="import.meta.dev && error"
@@ -30,7 +30,7 @@
             class="px-4 py-2 rounded-lg transition-colors text-sm font-medium"
             style="background-color: var(--color-grapefruit-pink-500); color: var(--color-mint-cream-500);"
           >
-            {{ $t('common.retry') || 'Try Again' }}
+            {{ t('common.retry') || 'Try Again' }}
           </button>
           <button
             v-if="showDetails"
@@ -38,7 +38,7 @@
             class="px-4 py-2 transition-colors text-sm"
             style="color: var(--color-grapefruit-pink-500);"
           >
-            {{ $t('common.hideDetails') || 'Hide Details' }}
+            {{ t('common.hideDetails') || 'Hide Details' }}
           </button>
           <button
             v-else-if="import.meta.dev"
@@ -46,7 +46,7 @@
             class="px-4 py-2 transition-colors text-sm"
             style="color: var(--color-grapefruit-pink-500);"
           >
-            {{ $t('common.showDetails') || 'Show Details' }}
+            {{ t('common.showDetails') || 'Show Details' }}
           </button>
         </div>
         <div
@@ -65,6 +65,7 @@
 <script setup lang="ts">
 import { ref, onErrorCaptured } from 'vue'
 
+const { t } = useI18n({ useScope: 'global' })
 const hasError = ref(false)
 const error = ref<Error | null>(null)
 const showDetails = ref(false)

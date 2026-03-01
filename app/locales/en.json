@@ -108,7 +108,11 @@
     "submitting": "Submitting...",
     "visitSource": "Visit Source",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "retry": "Try Again",
+    "loading": "Loading...",
+    "hideDetails": "Hide Details",
+    "showDetails": "Show Details"
   },
   "footer": {
     "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
