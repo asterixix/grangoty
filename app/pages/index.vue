@@ -14,7 +14,7 @@
       </div>
 
       <div class="mb-4">
-        <FilterBar
+        <GrantsFilterBar
           v-model="activeFilter"
           :filters="[
             { value: '', label: t('filters.all') || 'Wszystkie' },
@@ -49,19 +49,19 @@
           </template>
         </UInput>
 
-        <FilterDropdown
+        <UiFilterDropdown
           v-model="selectedCategory"
           :placeholder="t('filters.category')"
           :options="categoryOptions"
         />
 
-        <FilterDropdown
+        <UiFilterDropdown
           v-model="selectedRegion"
           :placeholder="t('filters.region')"
           :options="regionOptions"
         />
 
-        <FilterDropdown
+        <UiFilterDropdown
           v-model="selectedStatus"
           :placeholder="t('filters.status')"
           :options="statusOptions"
@@ -106,7 +106,7 @@
             ? 'outline: 2px solid var(--color-strong-cyan-500); border-radius: 0.5rem;'
             : ''"
         >
-          <GrantCard
+          <GrantsGrantCard
             :grant="grant"
             :rank="(currentPage - 1) * pageSize + index + 1"
             :is-saved="savedGrants.includes(grant.id)"
@@ -151,7 +151,7 @@
             style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
             @click="goToPage(currentPage - 1)"
           >
-            ‹ {{ $t('common.previous') || 'Previous' }}
+            ‹ {{ t('common.previous') }}
           </button>
 
           <span
@@ -167,7 +167,7 @@
             style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
             @click="goToPage(currentPage + 1)"
           >
-            {{ $t('common.next') || 'Next' }} ›
+            {{ t('common.next') }} ›
           </button>
         </div>
       </nav>

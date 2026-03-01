@@ -5,7 +5,7 @@
         <!-- Brand -->
         <div class="col-span-1 md:col-span-1">
           <div class="flex items-center mb-4">
-            <Logo />
+            <LayoutLogo />
           </div>
           <p class="text-sm mb-4" style="color: var(--color-strong-cyan-800);">
             {{ t('footer.description') }}

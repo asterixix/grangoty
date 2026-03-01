@@ -109,7 +109,7 @@
 
         <div v-if="grant.deadline" class="mt-2">
           <ClientOnly>
-            <DeadlineCountdown :deadline="grant.deadline" />
+            <GrantsDeadlineCountdown :deadline="grant.deadline" />
             <template #fallback>
               <USkeleton class="h-4 w-24" />
             </template>

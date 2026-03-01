@@ -6,7 +6,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 sm:h-18">
         <div class="flex items-center">
-          <Logo />
+          <LayoutLogo />
         </div>
 
         <div class="hidden md:flex items-center space-x-1 sm:space-x-2">

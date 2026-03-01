@@ -11,7 +11,7 @@
         class="notification-stack"
       >
         <TransitionGroup name="toast" tag="div" class="flex flex-col-reverse gap-2">
-          <NotificationToast
+          <UiNotificationToast
             v-for="n in notifications.queue.value"
             :key="n.id"
             :notification="n"

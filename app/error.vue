@@ -5,7 +5,7 @@
       role="main"
       aria-labelledby="error-title"
     >
-      <ErrorIllustration :code="statusCode" aria-hidden="true" />
+      <UiErrorIllustration :code="statusCode" aria-hidden="true" />
 
       <h1
         id="error-title"

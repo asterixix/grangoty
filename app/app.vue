@@ -6,7 +6,7 @@
   </NuxtErrorBoundary>
 
   <ClientOnly>
-    <NotificationCenter />
+    <UiNotificationCenter />
   </ClientOnly>
 </template>
 

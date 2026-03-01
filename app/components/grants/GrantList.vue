@@ -11,7 +11,7 @@
       v-else-if="grants.length === 0"
       class="text-center py-12"
     >
-      <Icon name="info" size="lg" class="mx-auto h-12 w-12 mb-4" style="color: var(--color-dark-teal-700);" />
+      <UiIcon name="info" size="lg" class="mx-auto h-12 w-12 mb-4" style="color: var(--color-dark-teal-700);" />
       <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">{{ $t('grants.noResults') }}</h3>
       <p class="mt-1" style="color: var(--color-dark-teal-700);">{{ $t('grants.noResultsDescription') }}</p>
       <button
@@ -27,7 +27,7 @@
       v-else
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
     >
-      <GrantCard
+      <GrantsGrantCard
         v-for="grant in grants"
         :key="grant.id"
         :grant="grant"
@@ -48,7 +48,7 @@
             ? 'border-color: var(--color-strong-cyan-800); color: var(--color-strong-cyan-700); background-color: var(--color-mint-cream-500); cursor: not-allowed;'
             : 'border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-600); background-color: var(--color-mint-cream-500);'"
         >
-          <Icon name="chevron-left" size="sm" />
+          <UiIcon name="chevron-left" size="sm" />
         </button>
 
         <span
@@ -71,7 +71,7 @@
             ? 'border-color: var(--color-strong-cyan-800); color: var(--color-strong-cyan-700); background-color: var(--color-mint-cream-500); cursor: not-allowed;'
             : 'border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-600); background-color: var(--color-mint-cream-500);'"
         >
-          <Icon name="chevron-right" size="sm" />
+          <UiIcon name="chevron-right" size="sm" />
         </button>
       </nav>
     </div>
