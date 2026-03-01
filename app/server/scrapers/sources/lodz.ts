@@ -46,12 +46,15 @@ export class LodzNgoScraper {
   private parseGrants(html: string): RawGrant[] {
     const $ = cheerio.load(html)
     const grants: RawGrant[] = []
+    const seen = new Set<string>()
 
     $('a[href*="/aktualnosci/artykul/"]').each((_, el) => {
       const title = $(el).text().trim()
       const href = $(el).attr('href') || ''
 
       if (!title || title.toLowerCase() === 'więcej') return
+      if (seen.has(href)) return
+      seen.add(href)
 
       const idMatch = href.match(/id(\d+)/)
       const id = idMatch ? `lodz-${idMatch[1]}` : `lodz-${title.slice(0, 40).replace(/\s+/g, '-')}`
