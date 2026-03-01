@@ -10,7 +10,7 @@ import type { RawGrant } from '~/app/types'
 export class EurodeskPlScraper {
   source = 'eurodesk'
   url = 'https://eurodesk.pl'
-  enabled = true
+  enabled = false
   name = 'Eurodesk.pl Scraper'
 
   async scrape(): Promise<RawGrant[]> {

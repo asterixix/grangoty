@@ -10,7 +10,7 @@ import type { RawGrant } from '~/app/types'
 export class LesznoNgoScraper {
   source = 'leszno'
   url = 'https://ngo.leszno.pl'
-  enabled = true
+  enabled = false
   name = 'Leszno NGO Scraper'
 
   async scrape(): Promise<RawGrant[]> {

@@ -12,7 +12,7 @@ import type { RawGrant } from '~/app/types'
 export class WarsawNgoScraper {
   source = 'warsaw'
   url = 'https://um.warszawa.pl'
-  enabled = true
+  enabled = false
   name = 'Warsaw NGO Scraper'
 
   async scrape(): Promise<RawGrant[]> {

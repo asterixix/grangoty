@@ -1,137 +1,84 @@
 /**
  * Łódź NGO Scraper
- * 
- * Łódź Municipal Government grants portal (Witkac-based)
- * Website: https://uml.lodz.pl
+ *
+ * Łódź Municipal Government open competitions.
+ * Website: https://uml.lodz.pl/decydujemy/wspieramy/ngo/konkursy/
+ *
+ * Articles are inside `.article-item` wrappers. Each article has two
+ * anchor links — one with the full title and one labelled "więcej"
+ * (read more). We keep only the title link by filtering out "więcej".
  */
 
+import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
+
+const BASE_URL = 'https://uml.lodz.pl'
 
 export class LodzNgoScraper {
   source = 'lodz'
-  url = 'https://uml.lodz.pl'
+  url = `${BASE_URL}/decydujemy/wspieramy/ngo/konkursy/`
   enabled = true
   name = 'Łódź NGO Scraper'
 
   async scrape(): Promise<RawGrant[]> {
-    const grants: RawGrant[] = []
-    
     try {
-      // Fetch grants page
-      const response = await fetch(`${this.url}/dotacje-dla-organizacji`)
-      
+      const response = await fetch(this.url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NGOGrantsBot/1.0)' },
+      })
+
       if (!response.ok) {
-        console.error(`Łódź NGO error: ${response.status} ${response.statusText}`)
+        console.error(`Łódź NGO: HTTP ${response.status}`)
         return []
       }
-      
+
       const html = await response.text()
-      
-      // Parse HTML with Cheerio
-      const $ = require('cheerio').load(html)
-      
-      // Find all grant items
-      $('.grant-item, .dotacja-item, .news-item, article').each((_: any, el: any) => {
-        const $el = $(el)
-        
-        const title = $el.find('h2, h3, .title, a').first().text().trim()
-        const description = $el.find('.description, .content').text().trim()
-        const link = $el.find('a').first().attr('href')
-        
-        if (!title) return
-        
-        // Extract deadline
-        const deadlineText = $el.text()
-        const deadlineMatch = deadlineText.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
-        
-        // Extract amount
-        const amountText = $el.text()
-        let amount: RawGrant['amount'] = undefined
-        if (amountText.includes('zł') || amountText.includes('PLN')) {
-          amount = this.parseAmount(amountText)
-        }
-        
-        const grant: RawGrant = {
-          id: `lodz-${this.slugify(title)}`,
-          source: this.source,
-          title: title,
-          description: description,
-          amount: amount,
-          deadline: deadlineMatch ? this.parseDate(deadlineMatch[1]) : undefined,
-          category: 'local',
-          region: 'Łódź',
-          website: link ? this.normalizeUrl(link) : undefined,
-          tags: ['local', 'lodz'],
-          status: 'open',
-          scrapedAt: new Date().toISOString(),
-        }
-        
-        grants.push(grant)
-      })
-      
-      console.log(`Łódź NGO: Scraped ${grants.length} grants`)
-      
+      const grants = this.parseGrants(html)
+
+      console.log(`Łódź NGO: scraped ${grants.length} grants`)
+      return grants
     } catch (error) {
       console.error('Łódź NGO scraper error:', error)
+      return []
     }
-    
+  }
+
+  private parseGrants(html: string): RawGrant[] {
+    const $ = cheerio.load(html)
+    const grants: RawGrant[] = []
+
+    $('a[href*="/aktualnosci/artykul/"]').each((_, el) => {
+      const title = $(el).text().trim()
+      const href = $(el).attr('href') || ''
+
+      if (!title || title.toLowerCase() === 'więcej') return
+
+      const idMatch = href.match(/id(\d+)/)
+      const id = idMatch ? `lodz-${idMatch[1]}` : `lodz-${title.slice(0, 40).replace(/\s+/g, '-')}`
+
+      const deadlineMatch = title.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+
+      grants.push({
+        id,
+        source: this.source,
+        title,
+        description: '',
+        deadline: deadlineMatch ? this.parseDate(deadlineMatch[1]) : undefined,
+        category: 'local',
+        region: 'Łódź',
+        website: `${BASE_URL}${href}`,
+        tags: ['local', 'lodz'],
+        status: 'open',
+        scrapedAt: new Date().toISOString(),
+      })
+    })
+
     return grants
   }
 
-  /**
-   * Parse amount from text
-   */
-  private parseAmount(text: string): RawGrant['amount'] {
-    const clean = text.replace(/\s+/g, '').toLowerCase()
-    
-    let currency = 'PLN'
-    if (clean.includes('eur') || clean.includes('€')) currency = 'EUR'
-    
-    const numbers = clean.match(/[\d.]+/g)
-    if (!numbers) return { currency }
-    
-    if (numbers.length === 1) {
-      const amount = parseFloat(numbers[0])
-      return { min: amount, max: amount, currency }
-    }
-    
-    const min = parseFloat(numbers[0])
-    const max = parseFloat(numbers[1])
-    
-    return { min, max, currency }
-  }
-
-  /**
-   * Parse date from various formats
-   */
   private parseDate(dateString: string): string | undefined {
-    if (!dateString) return undefined
-    
-    const isoMatch = dateString.match(/\d{4}-\d{2}-\d{2}/)
-    if (isoMatch) return isoMatch[0]
-    
-    const euMatch = dateString.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/)
-    if (euMatch) {
-      const [, day, month, year] = euMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
-    
-    return undefined
-  }
-
-  /**
-   * Normalize URL
-   */
-  private normalizeUrl(url?: string): string | undefined {
-    if (!url) return undefined
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `https://uml.lodz.pl${url}`
-  }
-
-  /**
-   * Create slug from title
-   */
-  private slugify(text: string): string {
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const match = dateString.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/)
+    if (!match) return undefined
+    const [, day, month, year] = match
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
   }
 }

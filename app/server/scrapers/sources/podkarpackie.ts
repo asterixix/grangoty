@@ -10,7 +10,7 @@ import type { RawGrant } from '~/app/types'
 export class PodkarpackieNgoScraper {
   source = 'podkarpackie'
   url = 'https://podkarpackie.pl'
-  enabled = true
+  enabled = false
   name = 'Podkarpackie NGO Scraper'
 
   async scrape(): Promise<RawGrant[]> {

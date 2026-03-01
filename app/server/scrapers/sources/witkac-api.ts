@@ -164,7 +164,7 @@ interface WitkacOffer {
 export class WitkacApiScraper {
   source = 'witkac-api'
   url = 'https://witkac.pl/Offer/OffersApiSearch'
-  enabled = true
+  enabled = false
   name = 'Witkac API Scraper'
 
   /**

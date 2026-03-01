@@ -1,170 +1,139 @@
 /**
- * Fundusze.ngo.pl Scraper
- * 
- * Largest NGO grants database in Poland (Klon/Jawor platform)
- * Website: https://fundusze.ngo.pl
- * 
- * Uses Crawlee with Playwright for dynamic content.
+ * Fundusze.ngo.pl Scraper — verified HTML structure (2026-03):
+ *   <li class="w-100 bb b--light-gray pv3">
+ *     <h4><a href="https://fundusze.ngo.pl/XXXXXX-slug.html">Title</a></h4>
+ *     <div class="lh-title f7 mid-gray">Cała Polska</div>   ← location
+ *     <time datetime="YYYY-MM-DD">DD.MM.YYYY</time>          ← deadline
+ *     <div>Łączny budżet X mln PLN</div>                    ← budget
+ *     <div>Organizator konkursu name</div>                   ← last .lh-title.f7
+ *   </li>
  */
 
+import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
+
+const BASE_URL = 'https://fundusze.ngo.pl'
+const LISTING_URL = `${BASE_URL}/aktualne`
+
+const REQUEST_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'pl-PL,pl;q=0.9,en;q=0.8',
+}
 
 export class FunduszeNgoScraper {
   source = 'fundusze-ngo'
-  url = 'https://fundusze.ngo.pl'
+  url = LISTING_URL
   enabled = true
   name = 'Fundusze.ngo.pl Scraper'
 
   async scrape(): Promise<RawGrant[]> {
-    const grants: RawGrant[] = []
-    
     try {
-      // Fetch the main page
-      const response = await fetch(this.url)
-      
+      const response = await fetch(LISTING_URL, { headers: REQUEST_HEADERS })
+
       if (!response.ok) {
-        console.error(`Fundusze.ngo.pl error: ${response.status} ${response.statusText}`)
+        console.error(`[fundusze-ngo] HTTP ${response.status} from ${LISTING_URL}`)
         return []
       }
-      
+
       const html = await response.text()
-      
-      // Parse HTML with Cheerio
-      const $ = require('cheerio').load(html)
-      
-      // Find all grant items
-      $('.grant-item, .fundusz-item, .dotacja-item, article').each((_: any, el: any) => {
-        const $el = $(el)
-        
-        const title = $el.find('h2, h3, .title, .grant-title, a').first().text().trim()
-        const description = $el.find('.description, .content, .grant-description').text().trim()
-        const link = $el.find('a').first().attr('href')
-        
-        if (!title) return
-        
-        // Extract deadline
-        const deadlineText = $el.text()
-        const deadlineMatch = deadlineText.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
-        
-        // Extract amount
-        const amountText = $el.text()
-        let amount: RawGrant['amount'] = undefined
-        if (amountText.includes('zł') || amountText.includes('PLN')) {
-          amount = this.parseAmount(amountText)
-        }
-        
-        // Extract category
-        const category = this.extractCategory($el.text())
-        
-        const grant: RawGrant = {
-          id: `fundusze-${this.slugify(title)}`,
-          source: this.source,
-          title: title,
-          description: description,
-          amount: amount,
-          deadline: deadlineMatch ? this.parseDate(deadlineMatch[1]) : undefined,
-          category: category,
-          region: 'Poland',
-          website: link ? this.normalizeUrl(link) : undefined,
-          tags: [category],
-          status: 'open',
-          scrapedAt: new Date().toISOString(),
-        }
-        
-        grants.push(grant)
-      })
-      
-      console.log(`Fundusze.ngo.pl: Scraped ${grants.length} grants`)
-      
+      const grants = this.parseGrantList(html)
+      console.log(`[fundusze-ngo] Scraped ${grants.length} grants`)
+      return grants
+
     } catch (error) {
-      console.error('Fundusze.ngo.pl scraper error:', error)
+      console.error('[fundusze-ngo] Scraper error:', error)
+      return []
     }
-    
+  }
+
+  private parseGrantList(html: string): RawGrant[] {
+    const $ = cheerio.load(html)
+    const grants: RawGrant[] = []
+
+    $('li.bb').each((_, el) => {
+      const $el = $(el)
+      const $link = $el.find('h4 a').first()
+      const title = $link.text().trim()
+      const website = $link.attr('href')
+
+      if (!title || !website) return
+
+      const deadline = $el.find('time').attr('datetime') || undefined
+      const location = $el.find('.lh-title.f7.mid-gray').first().text().trim()
+      const allText = $el.text()
+      const organizer = $el.find('.lh-title.f7').last().text().trim()
+
+      grants.push({
+        id: this.buildId(website),
+        source: this.source,
+        title,
+        description: organizer || '',
+        amount: this.parseAmountFromText(allText),
+        deadline,
+        category: this.extractCategory(allText),
+        region: this.parseRegion(location),
+        website: this.resolveUrl(website),
+        tags: [this.extractCategory(allText)],
+        status: 'open',
+        scrapedAt: new Date().toISOString(),
+      })
+    })
+
     return grants
   }
 
-  /**
-   * Extract category from text
-   */
-  private extractCategory(text: string): string {
-    const lower = text.toLowerCase()
-    
-    if (lower.includes('kultura')) return 'culture'
-    if (lower.includes('edukacja')) return 'education'
-    if (lower.includes('społeczny') || lower.includes('spoleczny')) return 'social'
-    if (lower.includes('zdrowie')) return 'healthcare'
-    if (lower.includes('środowisko') || lower.includes('srodowisko')) return 'environment'
-    if (lower.includes('dzieci') || lower.includes('młodzież') || lower.includes('mlodziez')) return 'youth'
-    if (lower.includes('badania') || lower.includes('nauka')) return 'research'
-    if (lower.includes('sport')) return 'sport'
-    if (lower.includes('karitiv')) return 'humanitarian'
-    
-    return 'general'
+  private buildId(url: string): string {
+    const match = url.match(/\/(\d+)-/)
+    return match ? `fundusze-ngo-${match[1]}` : `fundusze-ngo-${Date.now()}`
   }
 
-  /**
-   * Parse amount from text
-   */
-  private parseAmount(text: string): RawGrant['amount'] {
-    const clean = text.replace(/\s+/g, '').toLowerCase()
-    
-    let currency = 'PLN'
-    if (clean.includes('eur') || clean.includes('€')) currency = 'EUR'
-    
-    const numbers = clean.match(/[\d.]+/g)
-    if (!numbers) return { currency }
-    
-    if (numbers.length === 1) {
-      const amount = parseFloat(numbers[0])
-      return { min: amount, max: amount, currency }
-    }
-    
-    const min = parseFloat(numbers[0])
-    const max = parseFloat(numbers[1])
-    
-    return { min, max, currency }
+  private resolveUrl(url: string): string {
+    if (url.startsWith('http')) return url
+    return `${BASE_URL}${url}`
   }
 
-  /**
-   * Parse date from various formats
-   */
-  private parseDate(dateString: string): string | undefined {
-    if (!dateString) return undefined
-    
-    // Try ISO format
-    const isoMatch = dateString.match(/\d{4}-\d{2}-\d{2}/)
-    if (isoMatch) return isoMatch[0]
-    
-    // Try DD.MM.YYYY
-    const euMatch = dateString.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/)
-    if (euMatch) {
-      const [, day, month, year] = euMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+  private parseRegion(location: string): string {
+    if (!location) return 'Polska'
+    const lower = location.toLowerCase()
+    if (lower.includes('cała polska') || lower.includes('ogólnopolski')) return 'Polska'
+    return location
+  }
+
+  private parseAmountFromText(text: string): RawGrant['amount'] | undefined {
+    const budgetMatch = text.match(/budżet\s+([\d,. ]+)\s*(mln|tys)?/i)
+    if (budgetMatch) {
+      const raw = parseFloat(budgetMatch[1].replace(/\s/g, '').replace(',', '.'))
+      const multiplier = budgetMatch[2]?.toLowerCase() === 'mln' ? 1_000_000
+        : budgetMatch[2]?.toLowerCase() === 'tys' ? 1_000
+        : 1
+      return { max: raw * multiplier, currency: 'PLN' }
     }
-    
-    // Try DD/MM/YYYY
-    const ukMatch = dateString.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/)
-    if (ukMatch) {
-      const [, day, month, year] = ukMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+
+    const rangeMatch = text.match(/od\s+([\d ]+)\s*do\s+([\d ]+)\s*tys/i)
+    if (rangeMatch) {
+      return {
+        min: parseInt(rangeMatch[1].replace(/\s/g, '')) * 1_000,
+        max: parseInt(rangeMatch[2].replace(/\s/g, '')) * 1_000,
+        currency: 'PLN',
+      }
     }
-    
+
     return undefined
   }
 
-  /**
-   * Normalize URL
-   */
-  private normalizeUrl(url?: string): string | undefined {
-    if (!url) return undefined
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `https://fundusze.ngo.pl${url}`
-  }
-
-  /**
-   * Create slug from title
-   */
-  private slugify(text: string): string {
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  private extractCategory(text: string): string {
+    const lower = text.toLowerCase()
+    if (lower.includes('kultura')) return 'culture'
+    if (lower.includes('edukacja')) return 'education'
+    if (lower.includes('społeczn') || lower.includes('polityka społeczna')) return 'social'
+    if (lower.includes('zdrowie')) return 'healthcare'
+    if (lower.includes('środowisko') || lower.includes('ekolog')) return 'environment'
+    if (lower.includes('dzieci') || lower.includes('młodzież')) return 'youth'
+    if (lower.includes('badania') || lower.includes('nauka')) return 'research'
+    if (lower.includes('sport')) return 'sport'
+    if (lower.includes('humanitar')) return 'humanitarian'
+    if (lower.includes('finans') || lower.includes('wzmacnianie')) return 'capacity-building'
+    return 'general'
   }
 }

@@ -1,13 +1,17 @@
 /**
  * Gov.pl Pozytek Scraper
- * 
+ *
  * Official state-level competition board for NGOs.
  * Website: https://www.gov.pl/web/pozytek/aktualne-konkursy-i-nabory
- * 
- * This scraper handles official government grants and competitions.
+ *
+ * Scrapes article links from the main Pozytke page, filtering for
+ * competition/grant-related articles by keyword.
  */
 
+import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
+
+const GRANT_KEYWORDS = /nabor|nabór|konkurs|dotacj|ofert|grant|proo|nowefio|rohis|program|fundusz/i
 
 export class GovPlPozytekScraper {
   source = 'gov-pl-pozytek'
@@ -16,134 +20,66 @@ export class GovPlPozytekScraper {
   name = 'Gov.pl Pozytek Scraper'
 
   async scrape(): Promise<RawGrant[]> {
-    const grants: RawGrant[] = []
-    
     try {
-      // Fetch the main page
-      const response = await fetch(this.url)
-      
+      const response = await fetch(this.url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NGOGrantsBot/1.0)' },
+      })
+
       if (!response.ok) {
-        console.error(`Gov.pl Pozytek error: ${response.status} ${response.statusText}`)
+        console.error(`Gov.pl Pozytek: HTTP ${response.status}`)
         return []
       }
-      
+
       const html = await response.text()
-      
-      // Parse HTML with Cheerio
-      const $ = require('cheerio').load(html)
-      
-      // Find all grant items
-      $('.grant-item, .competition-item, .news-item, article').each((_: any, el: any) => {
-        const $el = $(el)
-        
-        const title = $el.find('h2, h3, .title, a').first().text().trim()
-        const description = $el.find('.description, .content, p').text().trim()
-        const link = $el.find('a').first().attr('href')
-        
-        if (!title) return
-        
-        // Extract deadline
-        const deadlineText = $el.text()
-        const deadlineMatch = deadlineText.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
-        
-        // Extract amount
-        const amountText = $el.text()
-        let amount: RawGrant['amount'] = undefined
-        if (amountText.includes('zł') || amountText.includes('PLN')) {
-          amount = this.parseAmount(amountText)
-        }
-        
-        const grant: RawGrant = {
-          id: `gov-pl-pozytek-${this.slugify(title)}`,
-          source: this.source,
-          title: title,
-          description: description,
-          amount: amount,
-          deadline: deadlineMatch ? this.parseDate(deadlineMatch[1]) : undefined,
-          category: 'government',
-          region: 'Poland',
-          website: link ? this.normalizeUrl(link) : undefined,
-          tags: ['official', 'government'],
-          status: 'open',
-          scrapedAt: new Date().toISOString(),
-        }
-        
-        grants.push(grant)
-      })
-      
-      console.log(`Gov.pl Pozytek: Scraped ${grants.length} grants`)
-      
+      const grants = this.parseGrants(html)
+
+      console.log(`Gov.pl Pozytek: scraped ${grants.length} grants`)
+      return grants
     } catch (error) {
       console.error('Gov.pl Pozytek scraper error:', error)
+      return []
     }
-    
+  }
+
+  private parseGrants(html: string): RawGrant[] {
+    const $ = cheerio.load(html)
+    const seen = new Set<string>()
+    const grants: RawGrant[] = []
+
+    $('a[href^="/web/pozytek/"]').each((_, el) => {
+      const href = $(el).attr('href') || ''
+      const title = $(el).text().trim()
+
+      if (!title || !GRANT_KEYWORDS.test(title)) return
+      if (seen.has(href)) return
+
+      seen.add(href)
+
+      const slug = href.split('/').pop() || ''
+      const deadlineMatch = title.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+
+      grants.push({
+        id: `gov-pl-pozytek-${slug}`,
+        source: this.source,
+        title,
+        description: '',
+        deadline: deadlineMatch ? this.parseDate(deadlineMatch[1]) : undefined,
+        category: 'government',
+        region: 'Poland',
+        website: `https://www.gov.pl${href}`,
+        tags: ['official', 'government', 'poland'],
+        status: 'open',
+        scrapedAt: new Date().toISOString(),
+      })
+    })
+
     return grants
   }
 
-  /**
-   * Parse amount from text
-   */
-  private parseAmount(text: string): RawGrant['amount'] {
-    const clean = text.replace(/\s+/g, '').toLowerCase()
-    
-    let currency = 'PLN'
-    if (clean.includes('eur') || clean.includes('€')) currency = 'EUR'
-    else if (clean.includes('usd') || clean.includes('$')) currency = 'USD'
-    
-    const numbers = clean.match(/[\d.]+/g)
-    if (!numbers) return { currency }
-    
-    if (numbers.length === 1) {
-      const amount = parseFloat(numbers[0])
-      return { min: amount, max: amount, currency }
-    }
-    
-    const min = parseFloat(numbers[0])
-    const max = parseFloat(numbers[1])
-    
-    return { min, max, currency }
-  }
-
-  /**
-   * Parse date from various formats
-   */
   private parseDate(dateString: string): string | undefined {
-    if (!dateString) return undefined
-    
-    // Try ISO format
-    const isoMatch = dateString.match(/\d{4}-\d{2}-\d{2}/)
-    if (isoMatch) return isoMatch[0]
-    
-    // Try DD.MM.YYYY
-    const euMatch = dateString.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/)
-    if (euMatch) {
-      const [, day, month, year] = euMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
-    
-    // Try DD/MM/YYYY
-    const ukMatch = dateString.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/)
-    if (ukMatch) {
-      const [, day, month, year] = ukMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
-    
-    return undefined
-  }
-
-  /**
-   * Normalize URL
-   */
-  private normalizeUrl(url?: string): string | undefined {
-    if (!url) return undefined
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `https://www.gov.pl${url}`
-  }
-
-  /**
-   * Create slug from title
-   */
-  private slugify(text: string): string {
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const match = dateString.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/)
+    if (!match) return undefined
+    const [, day, month, year] = match
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
   }
 }

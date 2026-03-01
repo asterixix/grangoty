@@ -12,7 +12,7 @@ import type { RawGrant } from '~/app/types'
 export class AktywniPlusScraper {
   source = 'aktywni-plus'
   url = 'https://gov.pl/web/pozytek/aktywni-plus'
-  enabled = true
+  enabled = false
   name = 'Aktywni+ Scraper'
 
   async scrape(): Promise<RawGrant[]> {

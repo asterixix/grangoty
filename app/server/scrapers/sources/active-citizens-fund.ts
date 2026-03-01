@@ -12,7 +12,7 @@ import type { RawGrant } from '~/app/types'
 export class ActiveCitizensFundScraper {
   source = 'active-citizens-fund'
   url = 'https://activecitizensfund.pl'
-  enabled = true
+  enabled = false
   name = 'Active Citizens Fund Scraper'
 
   async scrape(): Promise<RawGrant[]> {

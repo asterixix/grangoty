@@ -12,7 +12,7 @@ import type { RawGrant } from '~/app/types'
 export class EuFundingTendersScraper {
   source = 'eu-funding-tenders'
   url = 'https://ec.europa.eu/info/funding-tenders/opportunities/data/api/search/opportunities.json'
-  enabled = true
+  enabled = false
   name = 'EU Funding Tenders Scraper'
 
   async scrape(): Promise<RawGrant[]> {

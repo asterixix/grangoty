@@ -15,7 +15,7 @@ import type { RawGrant } from '~/app/types'
 export class NiwGeneratorScraper {
   source = 'niw-generator'
   url = 'https://generator.niw.gov.pl/nabory'
-  enabled = true
+  enabled = false
   name = 'NIW Generator Scraper'
 
   async scrape(): Promise<RawGrant[]> {
