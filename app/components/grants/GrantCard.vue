@@ -4,7 +4,6 @@
     :aria-busy="isLoading"
     class="grant-card hn-list-item flex flex-col sm:flex-row gap-3 sm:gap-4 group"
   >
-    <!-- Loading skeleton state -->
     <template v-if="isLoading">
       <div class="flex-shrink-0 mt-1">
         <USkeleton class="w-5 h-5 rounded" />
@@ -19,7 +18,6 @@
       </div>
     </template>
 
-    <!-- Error state -->
     <template v-else-if="error">
       <div class="flex-1">
         <UAlert
@@ -42,7 +40,6 @@
       </div>
     </template>
 
-    <!-- Normal content -->
     <template v-else>
       <UButton
         :aria-label="`${$t('a11y.saveGrant')}: ${grant.title}`"
@@ -52,55 +49,62 @@
         size="sm"
         :icon="isSaved ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'"
         class="flex-shrink-0 mt-1"
+        :style="isSaved
+          ? 'color: var(--color-strong-cyan-500);'
+          : 'color: var(--color-dark-teal-700);'"
         @click="handleSave"
       />
 
       <div class="grant-body flex-1 min-w-0">
-        <span class="text-hn-gray mr-2 font-mono text-sm">{{ rank }}.</span>
-        
-        <UButton
-          :to="grant.website"
+        <span class="mr-2 font-mono text-sm" style="color: var(--color-dark-teal-700);">{{ rank }}.</span>
+
+        <a
+          :href="grant.website"
           target="_blank"
-          color="neutral"
-          variant="link"
-          class="font-medium text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 p-0"
-          trailing-icon="i-lucide-external-link"
+          rel="noopener noreferrer"
+          class="font-medium hover:underline transition-colors duration-150"
+          style="color: var(--color-dark-teal-500);"
+          @mouseenter="(e) => (e.target as HTMLElement).style.color = 'var(--color-strong-cyan-400)'"
+          @mouseleave="(e) => (e.target as HTMLElement).style.color = 'var(--color-dark-teal-500)'"
         >
-          {{ grant.title }}
-        </UButton>
+          {{ grant.title }} ↗
+        </a>
 
         <div class="grant-meta flex flex-wrap items-center gap-x-3 gap-y-1 text-xs mt-1">
-          <span v-if="grant.amount" class="font-medium text-success">
+          <span v-if="grant.amount" class="font-semibold" style="color: var(--color-strong-cyan-400);">
             {{ formatAmount(grant.amount) }}
           </span>
-          
-          <span v-if="grant.source" class="text-neutral-500 dark:text-neutral-400">
+
+          <span v-if="grant.source" style="color: var(--color-dark-teal-600);">
             {{ grant.source }}
           </span>
-          
-          <span v-if="grant.region" class="text-neutral-500 dark:text-neutral-400">
+
+          <span v-if="grant.region" style="color: var(--color-dark-teal-600);">
             {{ grant.region }}
           </span>
 
-          <span v-if="grant.scrapedAt" class="text-neutral-400 dark:text-neutral-500">
+          <span v-if="grant.scrapedAt" style="color: var(--color-dark-teal-700);">
             {{ scrapedAtText }}
           </span>
         </div>
 
-        <p v-if="grant.description" class="text-sm text-neutral-600 dark:text-neutral-300 mt-1 line-clamp-2">
+        <p
+          v-if="grant.description"
+          class="text-sm mt-1 line-clamp-2"
+          style="color: var(--color-dark-teal-600);"
+        >
           {{ truncateText(grant.description, 200) }}
         </p>
 
         <div v-if="grant.tags?.length" class="flex flex-wrap gap-1 mt-2">
-          <UBadge
+          <span
             v-for="tag in grant.tags.slice(0, 5)"
             :key="tag"
-            color="neutral"
-            variant="subtle"
-            size="xs"
+            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+            style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border: 1px solid var(--color-strong-cyan-700);"
           >
             {{ tag }}
-          </UBadge>
+          </span>
         </div>
 
         <div v-if="grant.deadline" class="mt-2">
@@ -138,23 +142,24 @@ const emit = defineEmits<{
   (e: 'retry'): void
 }>()
 
+const { t } = useI18n()
+
 const scrapedAtText = computed(() => {
   if (!props.grant.scrapedAt) return ''
   const date = new Date(props.grant.scrapedAt)
   const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 0) return 'today'
-  if (diffDays === 1) return '1 day ago'
-  if (diffDays < 7) return `${diffDays} days ago`
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-  return `${Math.floor(diffDays / 30)} months ago`
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) return t('grants.scrapedToday')
+  if (diffDays === 1) return t('grants.scrapedDayAgo')
+  if (diffDays < 7) return t('grants.scrapedDaysAgo', { n: diffDays })
+  if (diffDays < 30) return t('grants.scrapedWeeksAgo', { n: Math.floor(diffDays / 7) })
+  return t('grants.scrapedMonthsAgo', { n: Math.floor(diffDays / 30) })
 })
 
 function formatAmount(amount: NonNullable<Grant['amount']>): string {
   if (amount.min !== undefined && amount.max !== undefined) {
-    return `${amount.min.toLocaleString()} - ${amount.max.toLocaleString()} ${amount.currency}`
+    return `${amount.min.toLocaleString()} – ${amount.max.toLocaleString()} ${amount.currency}`
   }
   if (amount.min !== undefined) {
     return `${amount.min.toLocaleString()} ${amount.currency}`
@@ -168,7 +173,7 @@ function handleSave(): void {
 
 function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
-  return text.slice(0, maxLength) + '...'
+  return text.slice(0, maxLength) + '…'
 }
 </script>
 
@@ -177,9 +182,5 @@ function truncateText(text: string, maxLength: number): string {
 
 .grant-card {
   @apply transition-colors duration-200;
-}
-
-.grant-meta a {
-  @apply text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400;
 }
 </style>

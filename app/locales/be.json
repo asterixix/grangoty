@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Галоўная",
     "submit": "Падаць грант",
-    "language": "Мова"
+    "language": "Мова",
+    "reportIssue": "Паведаміць аб праблеме"
   },
   "home": {
     "heroTitle": "Знайдзіце гранты для вашай арганізацыі",
@@ -51,7 +52,12 @@
     "phone": "Тэлефон",
     "address": "Адрас",
     "lastVerified": "Апошняя праверка: {date}",
-    "visitWebsite": "Наведаць сайт"
+    "visitWebsite": "Наведаць сайт",
+    "scrapedToday": "сёння",
+    "scrapedDayAgo": "1 дзень таму",
+    "scrapedDaysAgo": "{n} дзён таму",
+    "scrapedWeeksAgo": "{n} тыд. таму",
+    "scrapedMonthsAgo": "{n} мес. таму"
   },
   "submit": {
     "title": "Падаць грант",
@@ -76,7 +82,9 @@
     "cancel": "Скасаваць",
     "submit": "Падаць",
     "submitting": "Падача...",
-    "visitSource": "Наведаць крыніцу"
+    "visitSource": "Наведаць крыніцу",
+    "previous": "Папярэдняя",
+    "next": "Наступная"
   },
   "footer": {
     "description": "GRANgoTY - Агрэгатар грантаў для грамадскіх арганізацый у Польшчы і Еўропе. Злучае НКА з крыніцамі фінансавання.",
@@ -95,7 +103,9 @@
     "emailPlaceholder": "Ваша электронная пошта",
     "subscribe": "Падпісацца",
     "allRights": "Усе правы абаронены.",
-    "madeWithLove": "Зроблена з ❤️ для супольнасці НКА"
+    "madeWithLove": "Зроблена з ❤️ для супольнасці НКА",
+    "reportBug": "Паведаміць аб памылцы",
+    "featureRequest": "Запыт функцыі"
   },
   "skipLink": "Перайсці да асноўнага зместу",
   "deadline": {
@@ -103,7 +113,12 @@
     "warm": "Незабаром",
     "normal": "Аддалены",
     "days": "дзён",
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "noDeadline": "Без тэрміну",
+    "ended": "Завершаны",
+    "today": "Сёння",
+    "oneDayLeft": "1 дзень",
+    "daysLeft": "{n} дзён"
   },
   "a11y": {
     "opensNewTab": "(адкрываецца ў новай укладцы)",
@@ -153,5 +168,13 @@
     "codeLabel": "Код памылкі: {code}",
     "backHome": "На галоўную",
     "retry": "Паспрабаваць зноў"
+  },
+  "help": {
+    "title": "Гарачыя клавішы",
+    "navigate": "Навігацыя спісам (j/k)",
+    "save": "Захаваць грант (s)",
+    "open": "Адкрыць URL (o / Enter)",
+    "search": "Пошук (/)",
+    "help": "Перамкнуць даведку (?)"
   }
 }

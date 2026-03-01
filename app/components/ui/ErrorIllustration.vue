@@ -3,7 +3,8 @@
     <!-- 404 - Not Found -->
     <svg
       v-if="code === 404"
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -20,7 +21,8 @@
     <!-- 503 - Service Unavailable -->
     <svg
       v-else-if="code === 503"
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -37,7 +39,8 @@
     <!-- 403/401 - Forbidden/Unauthorized -->
     <svg
       v-else-if="code === 403 || code === 401"
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -54,7 +57,8 @@
     <!-- 500 - Server Error -->
     <svg
       v-else-if="code >= 500"
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -71,7 +75,8 @@
     <!-- 400 - Bad Request -->
     <svg
       v-else-if="code >= 400 && code < 500"
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -88,7 +93,8 @@
     <!-- Default - Generic Error -->
     <svg
       v-else
-      class="w-32 h-32 text-slate-300 dark:text-slate-600"
+      class="w-32 h-32"
+      style="color: var(--color-dark-teal-700);"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -103,7 +109,7 @@
     </svg>
 
     <!-- Status code display -->
-    <div class="mt-4 text-6xl font-bold text-slate-200 dark:text-slate-700">
+    <div class="mt-4 text-6xl font-bold" style="color: var(--color-grapefruit-pink-500);">
       {{ code }}
     </div>
   </div>

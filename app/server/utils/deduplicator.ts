@@ -1,4 +1,4 @@
-import { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/app/types'
 
 /**
  * Deduplicate grants based on multiple factors

@@ -47,6 +47,11 @@ import { ActiveCitizensFundScraper } from './active-citizens-fund'
 // import { KrakowNgoPlScraper } from './krakow-ngo'
 import { WarsawNgoScraper } from './warsaw'
 import { WroclawNgoScraper } from './wroclaw'
+import { LodzNgoScraper } from './lodz'
+import { PoznanNgoScraper } from './poznan'
+import { PodkarpackieNgoScraper } from './podkarpackie'
+import { GdanskNgoScraper } from './gdansk'
+import { LesznoNgoScraper } from './leszno'
 import { AktywniPlusScraper } from './aktywni-plus'
 
 /**
@@ -57,23 +62,28 @@ export const allScrapers = [
   // Tier 1: Primary National Portals
   new FunduszeNgoScraper(),
   new GrantowoPlScraper(),
-  
+
   // Tier 2: Government & Official Systems
   new WitkacApiScraper(),
   new GovPlPozytekScraper(),
   new NiwGeneratorScraper(),
-  
+
   // Tier 3: Regional Portals
   // new MalopolskaPlScraper(),
   // new KrakowNgoPlScraper(),
   new WarsawNgoScraper(),
   new WroclawNgoScraper(),
-  
+  new LodzNgoScraper(),
+  new PoznanNgoScraper(),
+  new PodkarpackieNgoScraper(),
+  new GdanskNgoScraper(),
+  new LesznoNgoScraper(),
+
   // Tier 4: European & International
   new EuFundingTendersScraper(),
   new EurodeskPlScraper(),
   new ActiveCitizensFundScraper(),
-  
+
   // Tier 5: Sector-Specific
   new AktywniPlusScraper(),
 ]

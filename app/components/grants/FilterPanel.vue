@@ -1,11 +1,12 @@
 <template>
   <div class="filter-panel card">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold">{{ $t('filters.title') }}</h3>
+      <h3 class="text-lg font-semibold" style="color: var(--color-dark-teal-500);">{{ $t('filters.title') }}</h3>
       <button
         v-if="hasActiveFilters"
         @click="clearAll"
-        class="text-sm text-primary-600 hover:text-primary-700"
+        class="text-sm transition-colors"
+        style="color: var(--color-strong-cyan-400);"
       >
         {{ $t('filters.clearAll') }}
       </button>
@@ -14,7 +15,7 @@
     <div class="space-y-4">
       <!-- Search -->
       <div>
-        <label for="search" class="block text-sm font-medium text-slate-700 mb-1">
+        <label for="search" class="block text-sm font-medium mb-1" style="color: var(--color-dark-teal-600);">
           {{ $t('filters.search') }}
         </label>
         <div class="relative">
@@ -23,19 +24,21 @@
             v-model="search"
             type="text"
             :placeholder="$t('filters.searchPlaceholder')"
-            class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="w-full pl-10 pr-4 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+            style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
           <Icon
             name="search"
             size="sm"
-            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            class="absolute left-3 top-1/2 -translate-y-1/2"
+            style="color: var(--color-dark-teal-700);"
           />
         </div>
       </div>
 
       <!-- Category -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+        <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
           {{ $t('filters.category') }}
         </label>
         <div class="flex flex-wrap gap-2">
@@ -43,12 +46,10 @@
             v-for="category in categories"
             :key="category"
             @click="toggleCategory(category)"
-            :class="[
-              'px-3 py-1.5 rounded-full text-sm transition-colors',
-              filters.category === category
-                ? 'bg-primary-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            ]"
+            class="px-3 py-1.5 rounded-full text-sm transition-colors border"
+            :style="filters.category === category
+              ? 'background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500); border-color: var(--color-dark-teal-500);'
+              : 'background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border-color: var(--color-strong-cyan-700);'"
           >
             {{ category }}
           </button>
@@ -57,7 +58,7 @@
 
       <!-- Region -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+        <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
           {{ $t('filters.region') }}
         </label>
         <div class="flex flex-wrap gap-2">
@@ -65,12 +66,10 @@
             v-for="region in regions"
             :key="region"
             @click="toggleRegion(region)"
-            :class="[
-              'px-3 py-1.5 rounded-full text-sm transition-colors',
-              filters.region === region
-                ? 'bg-primary-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            ]"
+            class="px-3 py-1.5 rounded-full text-sm transition-colors border"
+            :style="filters.region === region
+              ? 'background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500); border-color: var(--color-dark-teal-500);'
+              : 'background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border-color: var(--color-strong-cyan-700);'"
           >
             {{ region }}
           </button>
@@ -79,7 +78,7 @@
 
       <!-- Status -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+        <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
           {{ $t('filters.status') }}
         </label>
         <div class="flex flex-wrap gap-2">
@@ -87,12 +86,10 @@
             v-for="status in ['open', 'closing_soon', 'closed', 'archived']"
             :key="status"
             @click="toggleStatus(status)"
-            :class="[
-              'px-3 py-1.5 rounded-full text-sm transition-colors',
-              filters.status === status
-                ? 'bg-primary-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            ]"
+            class="px-3 py-1.5 rounded-full text-sm transition-colors border"
+            :style="filters.status === status
+              ? 'background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500); border-color: var(--color-dark-teal-500);'
+              : 'background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border-color: var(--color-strong-cyan-700);'"
           >
             {{ $t(`status.${status}`) }}
           </button>
@@ -101,7 +98,7 @@
 
       <!-- Amount range -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+        <label class="block text-sm font-medium mb-2" style="color: var(--color-dark-teal-600);">
           {{ $t('filters.amount') }}
         </label>
         <div class="flex gap-2">
@@ -109,14 +106,16 @@
             v-model.number="amountMin"
             type="number"
             :placeholder="$t('filters.min')"
-            class="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="flex-1 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+            style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
-          <span class="flex items-center text-slate-500">-</span>
+          <span class="flex items-center text-sm" style="color: var(--color-dark-teal-700);">-</span>
           <input
             v-model.number="amountMax"
             type="number"
             :placeholder="$t('filters.max')"
-            class="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="flex-1 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
+            style="border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-500); background-color: var(--color-mint-cream-500);"
           />
         </div>
       </div>

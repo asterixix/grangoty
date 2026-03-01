@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Головна",
     "submit": "Подати грант",
-    "language": "Мова"
+    "language": "Мова",
+    "reportIssue": "Повідомити про проблему"
   },
   "home": {
     "heroTitle": "Знайдіть гранти для вашої організації",
@@ -51,7 +52,12 @@
     "phone": "Телефон",
     "address": "Адреса",
     "lastVerified": "Остання перевірка: {date}",
-    "visitWebsite": "Відвідати сайт"
+    "visitWebsite": "Відвідати сайт",
+    "scrapedToday": "сьогодні",
+    "scrapedDayAgo": "1 день тому",
+    "scrapedDaysAgo": "{n} днів тому",
+    "scrapedWeeksAgo": "{n} тиж. тому",
+    "scrapedMonthsAgo": "{n} міс. тому"
   },
   "submit": {
     "title": "Подати грант",
@@ -76,7 +82,9 @@
     "cancel": "Скасувати",
     "submit": "Подати",
     "submitting": "Подання...",
-    "visitSource": "Відвідати джерело"
+    "visitSource": "Відвідати джерело",
+    "previous": "Попередня",
+    "next": "Наступна"
   },
   "footer": {
     "description": "GRANgoTY - Агрегатор грантів для громадських організацій в Польщі та Європі. З'єднує НКО з джерелами фінансування.",
@@ -95,7 +103,9 @@
     "emailPlaceholder": "Ваша електронна пошта",
     "subscribe": "Підписатися",
     "allRights": "Усі права захищено.",
-    "madeWithLove": "Зроблено з ❤️ для спільноти НКО"
+    "madeWithLove": "Зроблено з ❤️ для спільноти НКО",
+    "reportBug": "Повідомити про помилку",
+    "featureRequest": "Запит функції"
   },
   "skipLink": "Перейти до основного вмісту",
   "deadline": {
@@ -103,7 +113,12 @@
     "warm": "Незабаром",
     "normal": "Віддалений",
     "days": "днів",
-    "loading": "Завантаження..."
+    "loading": "Завантаження...",
+    "noDeadline": "Без терміну",
+    "ended": "Завершено",
+    "today": "Сьогодні",
+    "oneDayLeft": "1 день",
+    "daysLeft": "{n} днів"
   },
   "a11y": {
     "opensNewTab": "(відкривається в новій вкладці)",
@@ -153,5 +168,13 @@
     "codeLabel": "Код помилки: {code}",
     "backHome": "На головну",
     "retry": "Спробувати знову"
+  },
+  "help": {
+    "title": "Гарячі клавіші",
+    "navigate": "Навігація списком (j/k)",
+    "save": "Зберегти грант (s)",
+    "open": "Відкрити URL (o / Enter)",
+    "search": "Пошук (/)",
+    "help": "Перемкнути довідку (?)"
   }
 }

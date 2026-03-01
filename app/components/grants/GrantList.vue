@@ -4,19 +4,20 @@
       v-if="isLoading"
       class="flex items-center justify-center py-12"
     >
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2" style="border-color: var(--color-strong-cyan-400);"></div>
     </div>
 
     <div
       v-else-if="grants.length === 0"
       class="text-center py-12"
     >
-      <Icon name="info" size="lg" class="mx-auto h-12 w-12 text-slate-400 mb-4" />
-      <h3 class="text-lg font-medium text-slate-900">{{ $t('grants.noResults') }}</h3>
-      <p class="mt-1 text-slate-500">{{ $t('grants.noResultsDescription') }}</p>
+      <Icon name="info" size="lg" class="mx-auto h-12 w-12 mb-4" style="color: var(--color-dark-teal-700);" />
+      <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">{{ $t('grants.noResults') }}</h3>
+      <p class="mt-1" style="color: var(--color-dark-teal-700);">{{ $t('grants.noResultsDescription') }}</p>
       <button
         @click="clearFilters"
-        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
+        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md transition-colors"
+        style="background-color: var(--color-dark-teal-500); color: var(--color-mint-cream-500);"
       >
         {{ $t('filters.clearAll') }}
       </button>
@@ -42,10 +43,10 @@
         <button
           :disabled="page === 1"
           @click="$emit('change-page', page - 1)"
-          :class="[
-            'relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 bg-white text-sm font-medium',
-            page === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-slate-50'
-          ]"
+          class="relative inline-flex items-center px-2 py-2 rounded-l-md border text-sm font-medium transition-colors"
+          :style="page === 1
+            ? 'border-color: var(--color-strong-cyan-800); color: var(--color-strong-cyan-700); background-color: var(--color-mint-cream-500); cursor: not-allowed;'
+            : 'border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-600); background-color: var(--color-mint-cream-500);'"
         >
           <Icon name="chevron-left" size="sm" />
         </button>
@@ -54,12 +55,10 @@
           v-for="pageNum in totalPages <= 5 ? Array.from({ length: totalPages }, (_, i) => i + 1) : getPageNumbers()"
           :key="pageNum"
           @click="$emit('change-page', pageNum)"
-          :class="[
-            'relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium',
-            page === pageNum
-              ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
-              : 'text-slate-500 hover:bg-slate-50'
-          ]"
+          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer transition-colors"
+          :style="page === pageNum
+            ? 'z-index: 10; background-color: var(--color-strong-cyan-900); border-color: var(--color-strong-cyan-500); color: var(--color-dark-teal-500);'
+            : 'border-color: var(--color-strong-cyan-800); color: var(--color-dark-teal-700); background-color: var(--color-mint-cream-500);'"
         >
           {{ pageNum }}
         </span>
@@ -67,10 +66,10 @@
         <button
           :disabled="page === totalPages"
           @click="$emit('change-page', page + 1)"
-          :class="[
-            'relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 bg-white text-sm font-medium',
-            page === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-slate-50'
-          ]"
+          class="relative inline-flex items-center px-2 py-2 rounded-r-md border text-sm font-medium transition-colors"
+          :style="page === totalPages
+            ? 'border-color: var(--color-strong-cyan-800); color: var(--color-strong-cyan-700); background-color: var(--color-mint-cream-500); cursor: not-allowed;'
+            : 'border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-600); background-color: var(--color-mint-cream-500);'"
         >
           <Icon name="chevron-right" size="sm" />
         </button>
@@ -78,7 +77,7 @@
     </div>
 
     <!-- Results count -->
-    <div v-if="!isLoading && grants.length > 0" class="mt-4 text-sm text-slate-500">
+    <div v-if="!isLoading && grants.length > 0" class="mt-4 text-sm" style="color: var(--color-dark-teal-700);">
       {{ $t('grants.resultsCount', { count: total, page, pageSize }) }}
     </div>
   </div>

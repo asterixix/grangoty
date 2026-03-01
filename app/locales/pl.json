@@ -55,7 +55,12 @@
     "phone": "Telefon",
     "address": "Adres",
     "lastVerified": "Ostatnio weryfikowano: {date}",
-    "visitWebsite": "Odwiedź stronę"
+    "visitWebsite": "Odwiedź stronę",
+    "scrapedToday": "dziś",
+    "scrapedDayAgo": "1 dzień temu",
+    "scrapedDaysAgo": "{n} dni temu",
+    "scrapedWeeksAgo": "{n} tyg. temu",
+    "scrapedMonthsAgo": "{n} mies. temu"
   },
   "submit": {
     "title": "Zgłoś dotację",
@@ -101,7 +106,9 @@
     "cancel": "Anuluj",
     "submit": "Wyślij",
     "submitting": "Wysyłanie...",
-    "visitSource": "Odwiedź źródło"
+    "visitSource": "Odwiedź źródło",
+    "previous": "Poprzednia",
+    "next": "Następna"
   },
   "footer": {
     "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
@@ -130,7 +137,12 @@
     "warm": "Wkrótce",
     "normal": "Daleki",
     "days": "dni",
-    "loading": "Ładowanie..."
+    "loading": "Ładowanie...",
+    "noDeadline": "Brak terminu",
+    "ended": "Zakończony",
+    "today": "Dzisiaj",
+    "oneDayLeft": "1 dzień",
+    "daysLeft": "{n} dni"
   },
   "a11y": {
     "opensNewTab": "(otwiera w nowej karcie)",
@@ -180,5 +192,13 @@
     "codeLabel": "Kod błędu: {code}",
     "backHome": "Wróć na stronę główną",
     "retry": "Spróbuj ponownie"
+  },
+  "help": {
+    "title": "Skróty klawiszowe",
+    "navigate": "Nawiguj listę (j/k)",
+    "save": "Zapisz dotację (s)",
+    "open": "Otwórz URL (o / Enter)",
+    "search": "Szukaj (/)",
+    "help": "Przełącz pomoc (?)"
   }
 }

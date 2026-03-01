@@ -55,7 +55,12 @@
     "phone": "Phone",
     "address": "Address",
     "lastVerified": "Last Verified: {date}",
-    "visitWebsite": "Visit Website"
+    "visitWebsite": "Visit Website",
+    "scrapedToday": "today",
+    "scrapedDayAgo": "1 day ago",
+    "scrapedDaysAgo": "{n} days ago",
+    "scrapedWeeksAgo": "{n}w ago",
+    "scrapedMonthsAgo": "{n}mo ago"
   },
   "submit": {
     "title": "Submit Grant",
@@ -101,7 +106,9 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "submitting": "Submitting...",
-    "visitSource": "Visit Source"
+    "visitSource": "Visit Source",
+    "previous": "Previous",
+    "next": "Next"
   },
   "footer": {
     "description": "GRANgoTY - Grant aggregator for non-profit organizations in Poland and Europe. Connecting NGOs with funding sources.",
@@ -130,7 +137,12 @@
     "warm": "Soon",
     "normal": "Far",
     "days": "days",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "noDeadline": "No deadline",
+    "ended": "Ended",
+    "today": "Today",
+    "oneDayLeft": "1 day",
+    "daysLeft": "{n} days"
   },
   "a11y": {
     "opensNewTab": "(opens in new tab)",
@@ -180,5 +192,13 @@
     "codeLabel": "Error code: {code}",
     "backHome": "Back to Home",
     "retry": "Try Again"
+  },
+  "help": {
+    "title": "Keyboard Shortcuts",
+    "navigate": "Navigate list (j/k)",
+    "save": "Save grant (s)",
+    "open": "Open URL (o / Enter)",
+    "search": "Search (/)",
+    "help": "Toggle help (?)"
   }
 }

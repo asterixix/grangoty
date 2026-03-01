@@ -1,12 +1,7 @@
 <template>
-  <div
-    class="deadline-countdown inline-flex items-center"
-    :class="deadlineClass"
-  >
+  <div class="deadline-countdown inline-flex items-center" :class="urgencyClass">
     <UIcon :name="deadlineIcon" class="w-4 h-4 mr-1.5" />
-    <span class="font-medium">
-      {{ deadlineText }}
-    </span>
+    <span class="font-medium">{{ deadlineText }}</span>
   </div>
 </template>
 
@@ -34,11 +29,11 @@ const daysRemaining = computed(() => {
   }
 })
 
-const deadlineClass = computed(() => {
-  if (daysRemaining.value === null) return 'text-neutral-500'
-  if (daysRemaining.value <= 7) return 'text-error'
-  if (daysRemaining.value <= 21) return 'text-warning'
-  return 'text-success'
+const urgencyClass = computed(() => {
+  if (daysRemaining.value === null) return 'deadline--neutral'
+  if (daysRemaining.value <= 7) return 'deadline--hot'
+  if (daysRemaining.value <= 21) return 'deadline--warm'
+  return 'deadline--normal'
 })
 
 const deadlineIcon = computed(() => {
@@ -49,18 +44,32 @@ const deadlineIcon = computed(() => {
 })
 
 const deadlineText = computed(() => {
-  if (daysRemaining.value === null) return 'No deadline'
-  if (daysRemaining.value < 0) return 'Ended'
-  if (daysRemaining.value === 0) return 'Today'
-  if (daysRemaining.value === 1) return '1 day left'
-  return `${daysRemaining.value} days left`
+  if (daysRemaining.value === null) return t('deadline.noDeadline')
+  if (daysRemaining.value < 0) return t('deadline.ended')
+  if (daysRemaining.value === 0) return t('deadline.today')
+  if (daysRemaining.value === 1) return t('deadline.oneDayLeft')
+  return t('deadline.daysLeft', { n: daysRemaining.value })
 })
 </script>
 
 <style scoped>
-@reference "tailwindcss";
-
 .deadline-countdown {
-  @apply inline-flex items-center text-sm;
+  font-size: 0.8125rem;
+}
+
+.deadline--hot {
+  color: var(--color-grapefruit-pink-500);
+}
+
+.deadline--warm {
+  color: var(--color-royal-gold-300);
+}
+
+.deadline--normal {
+  color: var(--color-strong-cyan-400);
+}
+
+.deadline--neutral {
+  color: var(--color-dark-teal-700);
 }
 </style>

@@ -130,6 +130,9 @@ function createMockRedis(): Redis {
         return 'OK'
       },
     },
+    mget: async (...keys: string[]) => {
+      return keys.map(key => store.get(key) ?? null)
+    },
     scan: async (_cursor: number, _options?: any) => {
       const keys = Array.from(store.keys())
       return [0, keys]
@@ -198,19 +201,25 @@ export class GrantStorage {
   }
 
   /**
-   * Get all grants
+   * Get all grants — batch-fetches all grant JSON in a single mget call
    */
   async getAllGrants(): Promise<Grant[]> {
     const grantIds = await this.redis.smembers(REDIS_KEYS.GRANTS_LIST) as string[]
     if (!grantIds || grantIds.length === 0) return []
-    
-    const grants: Grant[] = []
-    for (const id of grantIds) {
-      const grant = await this.getGrantById(id)
-      if (grant) grants.push(grant)
-    }
-    
-    return grants
+
+    const keys = grantIds.map(id => REDIS_KEYS.GRANT_BY_ID(id))
+    const values = await this.redis.mget<string[]>(...keys)
+
+    return values
+      .filter((v): v is string => v !== null && v !== undefined)
+      .map(v => {
+        try {
+          return JSON.parse(v) as Grant
+        } catch {
+          return null
+        }
+      })
+      .filter((g): g is Grant => g !== null)
   }
 
   /**

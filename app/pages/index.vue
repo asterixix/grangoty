@@ -1,18 +1,18 @@
 <template>
   <div class="grants-page">
-    <!-- Skip link target -->
     <main id="main-content" role="main">
-      <!-- Page Title -->
-      <div class="mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-800">
-        <h1 class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">
+      <div
+        class="mb-4 pb-2"
+        style="border-bottom: 1px solid var(--color-strong-cyan-800);"
+      >
+        <h1 class="text-xl sm:text-2xl font-bold" style="color: var(--color-dark-teal-500);">
           {{ t('home.openGrants') }}
         </h1>
-        <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+        <p class="text-sm mt-1" style="color: var(--color-dark-teal-600);">
           {{ t('grants.resultsCount', { count: filteredGrants.length, total: totalGrants, page: currentPage, totalPages }) }}
         </p>
       </div>
 
-      <!-- Filter Bar -->
       <div class="mb-4">
         <FilterBar
           v-model="activeFilter"
@@ -26,7 +26,6 @@
         />
       </div>
 
-      <!-- Search and Filters -->
       <div class="mb-4 flex flex-wrap items-center gap-2 text-sm">
         <UInput
           id="search"
@@ -44,8 +43,8 @@
               variant="ghost"
               size="xs"
               icon="i-lucide-x"
-              @click="searchQuery = ''"
               class="pointer-events-auto"
+              @click="searchQuery = ''"
             />
           </template>
         </UInput>
@@ -55,7 +54,7 @@
           :placeholder="t('filters.category')"
           size="sm"
           class="w-40"
-          :options="categoryOptions"
+          :items="categoryOptions"
         />
 
         <USelect
@@ -63,7 +62,7 @@
           :placeholder="t('filters.region')"
           size="sm"
           class="w-40"
-          :options="regionOptions"
+          :items="regionOptions"
         />
 
         <USelect
@@ -71,35 +70,43 @@
           :placeholder="t('filters.status')"
           size="sm"
           class="w-40"
-          :options="statusOptions"
+          :items="statusOptions"
         />
 
         <UButton
           v-if="hasFilters"
-          color="neutral"
           variant="ghost"
           size="sm"
+          style="color: var(--color-grapefruit-pink-500);"
           @click="clearFilters"
         >
           {{ t('filters.clearAll') }}
         </UButton>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="isLoading" class="py-8 text-center" role="status" aria-live="polite">
+      <div
+        v-if="isLoading"
+        class="py-8 text-center"
+        role="status"
+        aria-live="polite"
+        style="color: var(--color-dark-teal-600);"
+      >
         <USkeleton class="h-8 w-8 rounded-full mx-auto mb-2" />
-        <p class="text-neutral-500 dark:text-neutral-400">{{ t('grants.loading') }}</p>
+        <p>{{ t('grants.loading') }}</p>
       </div>
 
-      <!-- Grant List -->
       <ClientOnly>
         <template #fallback>
           <div class="space-y-2">
-            <div v-for="i in 5" :key="i" class="animate-pulse">
-              <div class="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg"></div>
-            </div>
+            <div
+              v-for="i in 5"
+              :key="i"
+              class="animate-pulse h-20 rounded-lg"
+              style="background-color: var(--color-strong-cyan-900);"
+            />
           </div>
         </template>
+
         <ol
           v-if="paginatedGrants.length > 0"
           class="space-y-1"
@@ -110,7 +117,9 @@
             v-for="(grant, index) in paginatedGrants"
             :key="grant.id"
             class="hn-list-item"
-            :class="{ 'ring-2 ring-primary-500 rounded-lg': currentIndex === index }"
+            :style="currentIndex === index
+              ? 'outline: 2px solid var(--color-strong-cyan-500); border-radius: 0.5rem;'
+              : ''"
           >
             <GrantCard
               :grant="grant"
@@ -121,60 +130,70 @@
           </li>
         </ol>
 
-        <!-- Empty State -->
-        <div v-else-if="!isLoading" class="py-12 text-center" role="status">
-          <UIcon name="i-lucide-search" class="w-16 h-16 text-neutral-400 mx-auto mb-4" />
-          <h3 class="text-lg font-medium text-neutral-900 dark:text-white">{{ t('grants.noResults') }}</h3>
-          <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ t('grants.noResultsDescription') }}</p>
-          <UButton
-            color="primary"
-            size="sm"
-            class="mt-4"
+        <div
+          v-else-if="!isLoading"
+          class="py-12 text-center"
+          role="status"
+        >
+          <UIcon name="i-lucide-search" class="w-16 h-16 mx-auto mb-4" style="color: var(--color-dark-teal-700);" />
+          <h3 class="text-lg font-medium" style="color: var(--color-dark-teal-500);">
+            {{ t('grants.noResults') }}
+          </h3>
+          <p class="mt-2 text-sm" style="color: var(--color-dark-teal-600);">
+            {{ t('grants.noResultsDescription') }}
+          </p>
+          <button
+            class="mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
+            style="background-color: var(--color-strong-cyan-500); color: white;"
+            @mouseenter="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-400)'"
+            @mouseleave="(e) => (e.target as HTMLElement).style.backgroundColor = 'var(--color-strong-cyan-500)'"
             @click="clearFilters"
           >
             {{ t('filters.clearAll') }}
-          </UButton>
+          </button>
         </div>
       </ClientOnly>
 
-      <!-- Pagination -->
-      <nav v-if="totalPages > 1" class="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800" aria-label="Pagination">
+      <nav
+        v-if="totalPages > 1"
+        class="mt-6 pt-4"
+        style="border-top: 1px solid var(--color-strong-cyan-800);"
+        aria-label="Pagination"
+      >
         <div class="flex justify-center items-center gap-2 text-sm">
-          <UButton
-            color="neutral"
-            variant="outline"
-            size="sm"
+          <button
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-40"
             :disabled="currentPage === 1"
+            style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
             @click="goToPage(currentPage - 1)"
           >
-            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
-            {{ $t('common.previous') || 'Previous' }}
-          </UButton>
+            ‹ {{ $t('common.previous') || 'Previous' }}
+          </button>
 
-          <span class="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-700 dark:text-neutral-300">
+          <span
+            class="px-3 py-1.5 rounded-lg text-sm font-medium"
+            style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500);"
+          >
             {{ currentPage }} / {{ totalPages }}
           </span>
 
-          <UButton
-            color="neutral"
-            variant="outline"
-            size="sm"
+          <button
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-40"
             :disabled="currentPage === totalPages"
+            style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
             @click="goToPage(currentPage + 1)"
           >
-            {{ $t('common.next') || 'Next' }}
-            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
-          </UButton>
+            {{ $t('common.next') || 'Next' }} ›
+          </button>
         </div>
       </nav>
     </main>
 
-    <!-- Help Modal -->
-    <UModal v-model="showHelp" :ui="{ content: 'max-w-md' }">
+    <UModal :open="showHelp" @update:open="showHelp = $event">
       <UCard>
         <template #header>
           <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold">
+            <h2 class="text-xl font-bold" style="color: var(--color-dark-teal-500);">
               {{ t('help.title') || 'Keyboard Shortcuts' }}
             </h2>
             <UButton
@@ -188,25 +207,19 @@
         </template>
 
         <div class="space-y-3 text-sm">
-          <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span class="font-mono">j / k</span>
-            <span class="text-neutral-500">{{ t('help.navigate') || 'Navigate list' }}</span>
-          </div>
-          <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span class="font-mono">s</span>
-            <span class="text-neutral-500">{{ t('help.save') || 'Save/Bookmark' }}</span>
-          </div>
-          <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span class="font-mono">o / Enter</span>
-            <span class="text-neutral-500">{{ t('help.open') || 'Open URL' }}</span>
-          </div>
-          <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span class="font-mono">/</span>
-            <span class="text-neutral-500">{{ t('help.search') || 'Focus search' }}</span>
-          </div>
-          <div class="flex justify-between items-center py-2">
-            <span class="font-mono">?</span>
-            <span class="text-neutral-500">{{ t('help.help') || 'Toggle help' }}</span>
+          <div
+            v-for="shortcut in keyboardShortcuts"
+            :key="shortcut.key"
+            class="flex justify-between items-center py-2"
+            style="border-bottom: 1px solid var(--color-strong-cyan-900);"
+          >
+            <span
+              class="font-mono px-1.5 py-0.5 rounded text-xs"
+              style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-500); border: 1px solid var(--color-strong-cyan-700);"
+            >
+              {{ shortcut.key }}
+            </span>
+            <span style="color: var(--color-dark-teal-600);">{{ shortcut.description }}</span>
           </div>
         </div>
       </UCard>
@@ -220,9 +233,7 @@ import type { Grant } from '~/types'
 import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 
-// State
 const grants = ref<Grant[]>([])
 const isLoading = ref(true)
 const currentPage = ref(1)
@@ -231,18 +242,23 @@ const savedGrants = ref<string[]>([])
 const activeFilter = ref('')
 const currentIndex = ref(0)
 
-// Filters
 const searchQuery = ref('')
 const selectedCategory = ref('')
 const selectedRegion = ref('')
 const selectedStatus = ref('')
 
-// Keyboard shortcuts
 const { showHelp, toggleHelp } = useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
   if (event === 'save') handleSave(rank)
 })
 
-// Computed
+const keyboardShortcuts = [
+  { key: 'j / k', description: t('help.navigate') || 'Navigate list' },
+  { key: 's', description: t('help.save') || 'Save/Bookmark' },
+  { key: 'o / Enter', description: t('help.open') || 'Open URL' },
+  { key: '/', description: t('help.search') || 'Focus search' },
+  { key: '?', description: t('help.help') || 'Toggle help' },
+]
+
 const categories = computed(() => {
   const cats = new Set(grants.value.map(g => g.category).filter(Boolean))
   return Array.from(cats).sort()
@@ -270,9 +286,9 @@ const statusOptions = computed(() => [
   { label: t('status.closed'), value: 'closed' }
 ])
 
-const hasFilters = computed(() => {
-  return searchQuery.value || selectedCategory.value || selectedRegion.value || selectedStatus.value || activeFilter.value
-})
+const hasFilters = computed(() =>
+  !!(searchQuery.value || selectedCategory.value || selectedRegion.value || selectedStatus.value || activeFilter.value)
+)
 
 const filteredGrants = computed(() => {
   let result = grants.value
@@ -282,7 +298,7 @@ const filteredGrants = computed(() => {
     result = result.filter(g =>
       g.title.toLowerCase().includes(query) ||
       g.description?.toLowerCase().includes(query) ||
-      g.tags?.some(t => t.toLowerCase().includes(query))
+      g.tags?.some(tag => tag.toLowerCase().includes(query))
     )
   }
 
@@ -303,19 +319,16 @@ const filteredGrants = computed(() => {
       const sevenDaysFromNow = new Date()
       sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7)
       result = result.filter(g => g.deadline && new Date(g.deadline) <= sevenDaysFromNow)
-    } else if (activeFilter.value) {
+    } else {
       result = result.filter(g => g.region.toLowerCase().includes(activeFilter.value.toLowerCase()))
     }
   }
 
-  // Sort by deadline (closing soon first)
-  result = [...result].sort((a, b) => {
+  return [...result].sort((a, b) => {
     if (!a.deadline) return 1
     if (!b.deadline) return -1
     return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
   })
-
-  return result
 })
 
 const totalGrants = computed(() => filteredGrants.value.length)
@@ -326,8 +339,7 @@ const paginatedGrants = computed(() => {
   return filteredGrants.value.slice(start, start + pageSize)
 })
 
-// Methods
-const clearFilters = () => {
+function clearFilters(): void {
   searchQuery.value = ''
   selectedCategory.value = ''
   selectedRegion.value = ''
@@ -336,56 +348,34 @@ const clearFilters = () => {
   currentPage.value = 1
 }
 
-const goToPage = (page: number) => {
+function goToPage(page: number): void {
   currentPage.value = Math.max(1, Math.min(page, totalPages.value))
 }
 
-const handleSave = (rank: number) => {
+function handleSave(rank: number): void {
   const grant = paginatedGrants.value[rank]
-  if (grant) {
-    const index = savedGrants.value.indexOf(grant.id)
-    if (index > -1) {
-      savedGrants.value.splice(index, 1)
-    } else {
-      savedGrants.value.push(grant.id)
-    }
+  if (!grant) return
+  const index = savedGrants.value.indexOf(grant.id)
+  if (index > -1) {
+    savedGrants.value.splice(index, 1)
+  } else {
+    savedGrants.value.push(grant.id)
   }
 }
 
-const formatSource = (url: string) => {
-  try {
-    const hostname = new URL(url).hostname.replace('www.', '')
-    return hostname.length > 30 ? hostname.slice(0, 30) + '...' : hostname
-  } catch {
-    return url.slice(0, 30)
-  }
-}
+watch([searchQuery, selectedCategory, selectedRegion, selectedStatus, activeFilter], () => {
+  currentPage.value = 1
+})
 
-const formatAmount = (amount: NonNullable<Grant['amount']>) => {
-  if (amount.min !== undefined && amount.max !== undefined) {
-    return `${amount.min.toLocaleString()} - ${amount.max.toLocaleString()} ${amount.currency}`
-  }
-  if (amount.min !== undefined) {
-    return `${amount.min.toLocaleString()} ${amount.currency}`
-  }
-  return amount.currency
-}
+onMounted(() => {
+  fetchGrants()
+})
 
-const formatDate = (dateStr: string) => {
-  try {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })
-  } catch {
-    return dateStr
-  }
-}
-
-// Fetch grants
-const fetchGrants = async () => {
+async function fetchGrants(): Promise<void> {
   isLoading.value = true
   try {
     const response = await $fetch('/api/grants')
-    grants.value = response.data || []
+    grants.value = (response as { data: Grant[] }).data || []
   } catch (error) {
     console.error('Failed to fetch grants:', error)
     grants.value = []
@@ -394,22 +384,9 @@ const fetchGrants = async () => {
   }
 }
 
-// Reset page when filters change
-watch([searchQuery, selectedCategory, selectedRegion, selectedStatus, activeFilter], () => {
-  currentPage.value = 1
-})
-
-// Fetch on mount
-onMounted(() => {
-  fetchGrants()
-})
-
-// SEO
 useHead({
   title: 'GRANgoTY - ' + t('home.heroTitle'),
-  meta: [
-    { name: 'description', content: t('home.heroDescription') }
-  ]
+  meta: [{ name: 'description', content: t('home.heroDescription') }]
 })
 </script>
 
@@ -417,6 +394,13 @@ useHead({
 @reference "tailwindcss";
 
 .hn-list-item {
-  @apply py-2 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors duration-200;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-strong-cyan-900);
+  transition: background-color 0.15s;
+}
+
+.hn-list-item:hover {
+  background-color: var(--color-strong-cyan-900);
 }
 </style>

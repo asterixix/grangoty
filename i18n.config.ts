@@ -2,7 +2,6 @@
 export default {
   localeDir: 'locales',
   keySeparator: '.',
-  messageCompiler: 'icu',
   legacy: false,
   compositionOnly: true,
   silentTranslationWarn: false,

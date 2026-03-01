@@ -1,10 +1,11 @@
 <template>
   <div
-    class="inline-error flex items-center gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+    class="inline-error flex items-center gap-3 p-4 rounded-lg border"
     role="alert"
+    style="background-color: var(--color-grapefruit-pink-900); border-color: var(--color-grapefruit-pink-700);"
   >
     <!-- Error icon -->
-    <div class="flex-shrink-0 text-red-500 dark:text-red-400" aria-hidden="true">
+    <div class="flex-shrink-0" aria-hidden="true" style="color: var(--color-grapefruit-pink-500);">
       <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path
           fill-rule="evenodd"
@@ -15,14 +16,15 @@
     </div>
 
     <!-- Message -->
-    <p class="flex-1 text-sm text-red-700 dark:text-red-300">
+    <p class="flex-1 text-sm" style="color: var(--color-dark-teal-500);">
       {{ message }}
     </p>
 
     <!-- Retry button -->
     <button
       v-if="onRetry"
-      class="flex-shrink-0 px-3 py-1 text-sm font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-800 rounded-md hover:bg-red-200 dark:hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+      class="flex-shrink-0 px-3 py-1 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+      style="color: var(--color-dark-teal-500); background-color: var(--color-grapefruit-pink-800); border: 1px solid var(--color-grapefruit-pink-600);"
       @click="onRetry"
     >
       {{ $t('common.retry') }}

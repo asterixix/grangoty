@@ -1,13 +1,14 @@
 import { defineEventHandler } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
-import { getSampleGrants } from '../grants/seed'
-import type { ScrapeResult } from '~/app/types'
+import { runAllScrapers } from '~/server/scrapers/sources'
+import { deduplicateGrants, validateGrant } from '~/server/scrapers/base-scraper'
+import type { ScrapeResult, Grant } from '~/app/types'
 
 export default defineEventHandler(async (): Promise<ScrapeResult> => {
   const requestStart = performance.now()
-  
+
   const result: ScrapeResult = {
-    source: 'cron-seed',
+    source: 'cron-scrape',
     count: 0,
     newGrants: 0,
     updatedGrants: 0,
@@ -16,41 +17,70 @@ export default defineEventHandler(async (): Promise<ScrapeResult> => {
     timestamp: new Date().toISOString()
   }
 
-  console.log('[Cron] Seed job started')
+  console.log('[Cron] Scrape job started')
 
   try {
+    // Run all enabled scrapers
+    const rawGrants = await runAllScrapers()
+    console.log(`[Cron] Scraped ${rawGrants.length} raw grants total`)
+
+    // Deduplicate and validate
+    const validGrants = deduplicateGrants(rawGrants).filter(validateGrant)
+    console.log(`[Cron] ${validGrants.length} valid unique grants after deduplication`)
+
+    // Get existing grant IDs to track new vs updated
     const existingGrants = await grantStorage.getAllGrants()
-    
-    if (existingGrants.length === 0) {
-      console.log('[Cron] No grants in database, seeding sample data')
-      
-      const sampleGrants = getSampleGrants()
-      
-      for (const grant of sampleGrants) {
-        try {
-          await grantStorage.saveGrant(grant)
-          result.newGrants++
-          result.count++
-        } catch (error) {
-          console.error('[Cron] Failed to save grant:', grant.title, error)
-          result.failed++
+    const existingIds = new Set(existingGrants.map(g => g.id))
+
+    for (const raw of validGrants) {
+      try {
+        // Build a full Grant from RawGrant
+        const grant: Grant = {
+          id: raw.id || `${raw.source}-${Buffer.from(raw.title || '').toString('base64').slice(0, 16)}-${Date.now()}`,
+          source: raw.source,
+          title: raw.title || 'Untitled',
+          description: raw.description || '',
+          amount: typeof raw.amount === 'object' ? raw.amount : undefined,
+          deadline: raw.deadline,
+          category: raw.category || 'other',
+          region: raw.region || 'national',
+          eligibility: raw.eligibility || [],
+          website: raw.website,
+          contact: raw.contact,
+          tags: raw.tags || [],
+          status: raw.status || 'open',
+          scrapedAt: raw.scrapedAt || new Date().toISOString(),
+          lastVerifiedAt: new Date().toISOString(),
         }
+
+        await grantStorage.saveGrant(grant)
+
+        if (existingIds.has(grant.id)) {
+          result.updatedGrants++
+        } else {
+          result.newGrants++
+        }
+        result.count++
+      } catch (error) {
+        console.error('[Cron] Failed to save grant:', raw.title, error)
+        result.failed++
+        result.errors?.push({
+          source: raw.source || 'unknown',
+          type: 'system',
+          message: error instanceof Error ? error.message : 'Unknown error'
+        })
       }
-      
-      console.log(`[Cron] Seeded ${result.newGrants} sample grants`)
-    } else {
-      console.log(`[Cron] Database already has ${existingGrants.length} grants, skipping seed`)
     }
 
     const totalDuration = Math.round(performance.now() - requestStart)
-    console.log(`[Cron] Seed job completed in ${totalDuration}ms`)
+    console.log(`[Cron] Scrape job completed: ${result.newGrants} new, ${result.updatedGrants} updated, ${result.failed} failed — ${totalDuration}ms`)
 
     return result
   } catch (error) {
-    console.error('[Cron] Seed job failed:', error)
+    console.error('[Cron] Scrape job failed:', error)
     result.failed = 1
     result.errors?.push({
-      source: 'cron-seed',
+      source: 'cron-scrape',
       type: 'system',
       message: error instanceof Error ? error.message : 'Unknown error'
     })

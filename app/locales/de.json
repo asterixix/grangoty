@@ -3,7 +3,8 @@
     "title": "GRANgoTY",
     "home": "Startseite",
     "submit": "Fördermittel einreichen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "reportIssue": "Problem melden"
   },
   "home": {
     "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
@@ -51,7 +52,12 @@
     "phone": "Telefon",
     "address": "Adresse",
     "lastVerified": "Zuletzt überprüft: {date}",
-    "visitWebsite": "Webseite besuchen"
+    "visitWebsite": "Webseite besuchen",
+    "scrapedToday": "heute",
+    "scrapedDayAgo": "vor 1 Tag",
+    "scrapedDaysAgo": "vor {n} Tagen",
+    "scrapedWeeksAgo": "vor {n} Wo.",
+    "scrapedMonthsAgo": "vor {n} Mo."
   },
   "submit": {
     "title": "Fördermittel einreichen",
@@ -76,7 +82,9 @@
     "cancel": "Abbrechen",
     "submit": "Einreichen",
     "submitting": "Einreichen...",
-    "visitSource": "Quelle besuchen"
+    "visitSource": "Quelle besuchen",
+    "previous": "Zurück",
+    "next": "Weiter"
   },
   "footer": {
     "description": "GRANgoTY - Fördermittel-Aggregator für gemeinnützige Organisationen in Polen und Europa. Verbindet NGOs mit Finanzierungsquellen.",
@@ -95,7 +103,9 @@
     "emailPlaceholder": "Ihre E-Mail",
     "subscribe": "Abonnieren",
     "allRights": "Alle Rechte vorbehalten.",
-    "madeWithLove": "Gemacht mit ❤️ für die NGO-Community"
+    "madeWithLove": "Gemacht mit ❤️ für die NGO-Community",
+    "reportBug": "Fehler melden",
+    "featureRequest": "Funktionsanfrage"
   },
   "skipLink": "Zum Hauptinhalt springen",
   "deadline": {
@@ -103,7 +113,12 @@
     "warm": "Bald",
     "normal": "Langfristig",
     "days": "Tage",
-    "loading": "Laden..."
+    "loading": "Laden...",
+    "noDeadline": "Kein Fristdatum",
+    "ended": "Beendet",
+    "today": "Heute",
+    "oneDayLeft": "1 Tag",
+    "daysLeft": "{n} Tage"
   },
   "a11y": {
     "opensNewTab": "(öffnet in neuem Tab)",
@@ -153,5 +168,13 @@
     "codeLabel": "Fehlercode: {code}",
     "backHome": "Zur Startseite",
     "retry": "Erneut versuchen"
+  },
+  "help": {
+    "title": "Tastaturkürzel",
+    "navigate": "Liste navigieren (j/k)",
+    "save": "Fördermittel speichern (s)",
+    "open": "URL öffnen (o / Enter)",
+    "search": "Suchen (/)",
+    "help": "Hilfe umschalten (?)"
   }
 }

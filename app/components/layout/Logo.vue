@@ -13,7 +13,7 @@
       </div>
       <!-- Wordmark -->
       <div class="logo-wordmark">
-        <span class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-tight">
+        <span class="text-lg sm:text-xl font-bold leading-tight" style="color: var(--color-dark-teal-500);">
           GRANgoTY
         </span>
       </div>
