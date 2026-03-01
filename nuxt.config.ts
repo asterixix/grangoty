@@ -63,11 +63,6 @@ export default defineNuxtConfig({
     ignoreRoutes: ['api', 'api/**', '_nuxt', 'assets']
   },
 
-  // tailwindcss: {
-  //   cssPath: '~/assets/styles/tailwind.css',
-  //   configPath: 'tailwind.config.ts',
-  // },
-
   nitro: {
     preset: 'vercel',
     routeRules: {
@@ -91,10 +86,6 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    css: {
-      preprocessorOptions: {
-      }
-    }
   },
 
   // Runtime config for environment variables
@@ -111,12 +102,4 @@ export default defineNuxtConfig({
       sentryDsn: process.env.SENTRY_DSN,
     }
   },
-
-  // sentry: {
-  //   sourceMapsUploadOptions: {
-  //     org: process.env.SENTRY_ORG,
-  //     project: 'granthub-pl',
-  //     authToken: process.env.SENTRY_AUTH_TOKEN,
-  //   },
-  // },
 })

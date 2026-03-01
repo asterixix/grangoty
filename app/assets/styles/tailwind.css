@@ -1,5 +1,9 @@
-/* Tailwind CSS v4 */
+/* Tailwind CSS v4 - CSS-first configuration */
 @import "tailwindcss";
+
+@source "../**/*.{vue,ts,js}";
+@source "../../app.vue";
+@source "../../error.vue";
 
 /* Custom Theme Configuration */
 @theme {
