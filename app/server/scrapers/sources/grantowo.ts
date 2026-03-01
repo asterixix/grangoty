@@ -26,7 +26,10 @@ export class GrantowoPlScraper {
 
   async scrape(): Promise<RawGrant[]> {
     try {
-      const response = await fetch(BASE_URL, { headers: REQUEST_HEADERS })
+      const response = await fetch(BASE_URL, {
+        headers: REQUEST_HEADERS,
+        signal: AbortSignal.timeout(8000),
+      })
 
       if (!response.ok) {
         console.error(`[grantowo] HTTP ${response.status} from ${BASE_URL}`)

@@ -24,6 +24,7 @@ export class LodzNgoScraper {
     try {
       const response = await fetch(this.url, {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NGOGrantsBot/1.0)' },
+        signal: AbortSignal.timeout(8000),
       })
 
       if (!response.ok) {

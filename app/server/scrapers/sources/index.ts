@@ -110,26 +110,43 @@ export function getScrapersByTier(tier: 'primary' | 'government' | 'regional' | 
   return allScrapers.filter(scraper => tierMap[tier].includes(scraper.source))
 }
 
+const SCRAPER_TIMEOUT_MS = 12_000
+
+function runScraperWithTimeout(scraper: { source: string; scrape: () => Promise<RawGrant[]> }): Promise<RawGrant[]> {
+  const timeout = new Promise<RawGrant[]>((resolve) =>
+    setTimeout(() => {
+      console.warn(`[scrapers] ${scraper.source} timed out after ${SCRAPER_TIMEOUT_MS}ms`)
+      resolve([])
+    }, SCRAPER_TIMEOUT_MS)
+  )
+
+  const scrape = scraper.scrape().catch((error: unknown) => {
+    console.error(`[scrapers] ${scraper.source} failed:`, error)
+    return [] as RawGrant[]
+  })
+
+  return Promise.race([scrape, timeout])
+}
+
 /**
- * Run all scrapers and return combined results
+ * Run all enabled scrapers in parallel, each with a per-scraper timeout.
  */
 export async function runAllScrapers(): Promise<RawGrant[]> {
+  const enabled = getEnabledScrapers()
+  console.log(`[scrapers] Running ${enabled.length} enabled scrapers`)
+
   const results = await Promise.allSettled(
-    getEnabledScrapers().map(scraper => 
-      scraper.scrape().catch((error: unknown) => {
-        console.error(`Scraper ${scraper.source} failed:`, error)
-        return [] as RawGrant[]
-      })
-    )
+    enabled.map(scraper => runScraperWithTimeout(scraper))
   )
-  
+
   const allGrants: RawGrant[] = []
-  
+
   for (const result of results) {
     if (result.status === 'fulfilled') {
       allGrants.push(...result.value)
     }
   }
-  
+
+  console.log(`[scrapers] Total raw grants collected: ${allGrants.length}`)
   return allGrants
 }

@@ -29,7 +29,10 @@ export class FunduszeNgoScraper {
 
   async scrape(): Promise<RawGrant[]> {
     try {
-      const response = await fetch(LISTING_URL, { headers: REQUEST_HEADERS })
+      const response = await fetch(LISTING_URL, {
+        headers: REQUEST_HEADERS,
+        signal: AbortSignal.timeout(8000),
+      })
 
       if (!response.ok) {
         console.error(`[fundusze-ngo] HTTP ${response.status} from ${LISTING_URL}`)

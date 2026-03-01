@@ -11,7 +11,7 @@
 import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
 
-const GRANT_KEYWORDS = /nabor|nabór|konkurs|dotacj|ofert|grant|proo|nowefio|rohis|program|fundusz/i
+const GRANT_KEYWORDS = /nabor|nabór|konkurs|dotacj|ofert|grant/i
 
 export class GovPlPozytekScraper {
   source = 'gov-pl-pozytek'
@@ -23,6 +23,7 @@ export class GovPlPozytekScraper {
     try {
       const response = await fetch(this.url, {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NGOGrantsBot/1.0)' },
+        signal: AbortSignal.timeout(8000),
       })
 
       if (!response.ok) {

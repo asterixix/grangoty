@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "app/server/api/cron/seed.get.ts": {
+      "maxDuration": 60
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/seed",
