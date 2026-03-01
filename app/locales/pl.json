@@ -38,7 +38,7 @@
   "grants": {
     "loading": "Ładowanie...",
     "noResults": "Brak wyników",
-    "noResultsDescription": "Spróbuj zmienić filtry lub wyszukać inny termin",
+    "noResultsDescription": "Spróbuj zmienić filtry, aby wyszukać inny termin.",
     "resultsCount": "Wyświetlanie {count} dotacji z {total} (strona {page} z {totalPages})",
     "notFound": "Dotacja nie znaleziona",
     "notFoundDescription": "Przepraszamy, ale ta dotacja nie istnieje lub została usunięta.",
@@ -115,7 +115,7 @@
     "showDetails": "Pokaż szczegóły"
   },
   "footer": {
-    "description": "GRANgoTY - Agregator dotacji dla organizacji pozarządowych w Polsce i Europie. Łączymy NGO z źródłami finansowania.",
+    "description": "GRangoty - agregator dotacji dla organizacji pozar and awareness in Poland.",
     "resources": "Zasoby",
     "grantSearch": "Wyszukiwarka dotacji",
     "tutorials": "Poradniki",
