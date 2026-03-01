@@ -50,7 +50,7 @@ export default defineNuxtConfig({
       { code: 'pl', name: 'Polski', language: 'pl-PL', file: 'pl.json' },
       { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
       { code: 'uk', name: 'Українська', language: 'uk-UA', file: 'uk.json' },
-      { code: 'be', name: 'Беларуская', language: 'be-BY', file: 'be.json' },
+      { code: 'be', name: 'Белaruska', language: 'be-BY', file: 'be.json' },
       { code: 'de', name: 'Deutsch', language: 'de-DE', file: 'de.json' }
     ],
     defaultLocale: 'pl',
