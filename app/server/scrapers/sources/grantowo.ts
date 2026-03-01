@@ -28,7 +28,7 @@ export class GrantowoPlScraper {
     try {
       const response = await fetch(BASE_URL, {
         headers: REQUEST_HEADERS,
-        signal: AbortSignal.timeout(8000),
+        signal: AbortSignal.timeout(5000),
       })
 
       if (!response.ok) {

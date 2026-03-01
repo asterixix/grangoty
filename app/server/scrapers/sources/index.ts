@@ -110,7 +110,7 @@ export function getScrapersByTier(tier: 'primary' | 'government' | 'regional' | 
   return allScrapers.filter(scraper => tierMap[tier].includes(scraper.source))
 }
 
-const SCRAPER_TIMEOUT_MS = 12_000
+const SCRAPER_TIMEOUT_MS = 8_000
 
 function runScraperWithTimeout(scraper: { source: string; scrape: () => Promise<RawGrant[]> }): Promise<RawGrant[]> {
   const timeout = new Promise<RawGrant[]>((resolve) =>
@@ -130,14 +130,27 @@ function runScraperWithTimeout(scraper: { source: string; scrape: () => Promise<
 
 /**
  * Run all enabled scrapers in parallel, each with a per-scraper timeout.
+ * The entire run is capped at 45s so Redis writes have time before the
+ * Vercel 60s Lambda limit is reached.
  */
 export async function runAllScrapers(): Promise<RawGrant[]> {
   const enabled = getEnabledScrapers()
   console.log(`[scrapers] Running ${enabled.length} enabled scrapers`)
 
-  const results = await Promise.allSettled(
+  const TOTAL_TIMEOUT_MS = 45_000
+
+  const scrapeAll = Promise.allSettled(
     enabled.map(scraper => runScraperWithTimeout(scraper))
   )
+
+  const totalTimeout = new Promise<PromiseSettledResult<RawGrant[]>[]>((resolve) =>
+    setTimeout(() => {
+      console.warn('[scrapers] Total timeout reached — returning partial results')
+      resolve([])
+    }, TOTAL_TIMEOUT_MS)
+  )
+
+  const results = await Promise.race([scrapeAll, totalTimeout]) as PromiseSettledResult<RawGrant[]>[]
 
   const allGrants: RawGrant[] = []
 
