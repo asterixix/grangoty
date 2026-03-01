@@ -16,44 +16,46 @@ async function runScrapeAndStore(): Promise<{ saved: number; newCount: number; u
   const existingGrants = await grantStorage.getAllGrants()
   const existingIds = new Set(existingGrants.map(g => g.id))
 
+  const grantsToSave: Grant[] = validGrants.map(raw => ({
+    id: raw.id || `${raw.source}-${Buffer.from(raw.title || '').toString('base64').slice(0, 16)}-${Date.now()}`,
+    source: raw.source,
+    title: raw.title || 'Untitled',
+    description: raw.description || '',
+    amount: typeof raw.amount === 'object' ? raw.amount : undefined,
+    deadline: raw.deadline,
+    category: raw.category || 'other',
+    region: raw.region || 'national',
+    eligibility: raw.eligibility || [],
+    website: raw.website,
+    contact: raw.contact,
+    tags: raw.tags || [],
+    status: raw.status || 'open',
+    scrapedAt: raw.scrapedAt || new Date().toISOString(),
+    lastVerifiedAt: new Date().toISOString(),
+  }))
+
+  const saveResults = await Promise.allSettled(
+    grantsToSave.map(grant => grantStorage.saveGrant(grant))
+  )
+
   let saved = 0
   let newCount = 0
   let updated = 0
   let failed = 0
 
-  for (const raw of validGrants) {
-    try {
-      const grant: Grant = {
-        id: raw.id || `${raw.source}-${Buffer.from(raw.title || '').toString('base64').slice(0, 16)}-${Date.now()}`,
-        source: raw.source,
-        title: raw.title || 'Untitled',
-        description: raw.description || '',
-        amount: typeof raw.amount === 'object' ? raw.amount : undefined,
-        deadline: raw.deadline,
-        category: raw.category || 'other',
-        region: raw.region || 'national',
-        eligibility: raw.eligibility || [],
-        website: raw.website,
-        contact: raw.contact,
-        tags: raw.tags || [],
-        status: raw.status || 'open',
-        scrapedAt: raw.scrapedAt || new Date().toISOString(),
-        lastVerifiedAt: new Date().toISOString(),
-      }
-
-      await grantStorage.saveGrant(grant)
+  saveResults.forEach((result, i) => {
+    if (result.status === 'fulfilled') {
       saved++
-
-      if (existingIds.has(grant.id)) {
+      if (existingIds.has(grantsToSave[i].id)) {
         updated++
       } else {
         newCount++
       }
-    } catch (error) {
-      console.error('[Cron] Failed to save grant:', raw.title, error)
+    } else {
+      console.error('[Cron] Failed to save grant:', grantsToSave[i].title, result.reason)
       failed++
     }
-  }
+  })
 
   console.log(`[Cron] Done: saved=${saved}, new=${newCount}, updated=${updated}, failed=${failed}`)
   return { saved, newCount, updated, failed }
