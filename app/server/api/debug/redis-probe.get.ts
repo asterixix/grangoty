@@ -13,16 +13,33 @@ export default defineEventHandler(async () => {
   const count = grantIds.length
 
   let firstGrant: unknown = null
+  let mgetResult: unknown = null
+  let mgetType: string = 'n/a'
+
   if (grantIds.length > 0) {
-    firstGrant = await redis.get(REDIS_KEYS.GRANT_BY_ID(grantIds[0]))
+    const firstId = grantIds[0]
+    const firstKey = REDIS_KEYS.GRANT_BY_ID(firstId)
+
+    firstGrant = await redis.get(firstKey)
+
+    const mgetRaw = await redis.mget<unknown[]>(firstKey)
+    mgetResult = mgetRaw[0]
+    mgetType = typeof mgetResult
+
+    if (mgetResult !== null && mgetType === 'object') {
+      mgetType = 'object (already parsed by @upstash/redis auto-deserialize)'
+    }
   }
 
   return {
     hasEnvVars,
     grantsIndexCount: count,
     firstGrantId: grantIds[0] ?? null,
-    firstGrantPreview: firstGrant
-      ? (typeof firstGrant === 'string' ? JSON.parse(firstGrant) : firstGrant)
+    firstKey: grantIds.length > 0 ? REDIS_KEYS.GRANT_BY_ID(grantIds[0]) : null,
+    firstGrantViaGet: firstGrant
+      ? (typeof firstGrant === 'string' ? JSON.parse(firstGrant as string) : firstGrant)
       : null,
+    firstGrantViaMget: mgetResult,
+    mgetValueType: mgetType,
   }
 })
