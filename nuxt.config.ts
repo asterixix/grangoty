@@ -33,6 +33,8 @@ export default defineNuxtConfig({
   // Source directory
   srcDir: 'app/',
 
+  serverDir: './app/server',
+
   css: ['~/assets/styles/tailwind.css'],
 
   modules: [
@@ -67,8 +69,7 @@ export default defineNuxtConfig({
     preset: 'vercel',
     routeRules: {
       '/api/**': { cors: true, prerender: false, cache: false },
-      '/api/cron/**': { cors: false },
-      '/**': { isr: 300 }
+      '/api/cron/**': { cors: false }
     }
   },
 
