@@ -1,145 +1,37 @@
 import type { Grant } from '~/app/types'
 
+/**
+ * Get sample grants for development and testing
+ * NOTE: This should only be used for development/testing purposes
+ * In production, all data should come from real scrapers
+ */
 export function getSampleGrants(): Grant[] {
-  const in7Days = new Date()
-  in7Days.setDate(in7Days.getDate() + 7)
-  const in14Days = new Date()
-  in14Days.setDate(in14Days.getDate() + 14)
-  const in30Days = new Date()
-  in30Days.setDate(in30Days.getDate() + 30)
-  const in60Days = new Date()
-  in60Days.setDate(in60Days.getDate() + 60)
-  const in90Days = new Date()
-  in90Days.setDate(in90Days.getDate() + 90)
-  
+  // Return empty array in production - no sample data allowed
+  if (process.env.NODE_ENV === 'production') {
+    return []
+  }
+
+  // In development, return minimal test data for UI development
+  const now = new Date()
+  const futureDate = new Date()
+  futureDate.setDate(now.getDate() + 30)
+
   return [
     {
-      id: 'sample-1',
-      source: 'fundusze-ngo',
-      title: 'Grant na projekty środowiskowe 2026',
-      description: 'Fundusze dostępne dla inicjatyw środowiskowych w całej Polsce. Organizacje mogą ubiegać się o do 100 000 zł na projekty związane z zrównoważonym rozwojem, działaniami klimatycznymi i edukacją ekologiczną.',
-      amount: { min: 10000, max: 100000, currency: 'PLN' },
-      deadline: in60Days.toISOString().split('T')[0],
-      category: 'środowiskowe',
-      region: 'Polska',
-      eligibility: ['Zarejestrowana NGO', 'Nastawienie środowiskowe', 'Minimum 1 rok działalności'],
-      website: 'https://fundusze.ngo.pl',
-      tags: ['środowisko', 'klimat', 'zrównoważony rozwój'],
+      id: 'dev-test-1',
+      source: 'development',
+      title: 'Development Test Grant',
+      description: 'This is a test grant for development purposes only.',
+      amount: { min: 1000, max: 5000, currency: 'PLN' },
+      deadline: futureDate.toISOString().split('T')[0],
+      category: 'development',
+      region: 'Test Region',
+      eligibility: ['Test eligibility'],
+      website: 'https://example.com',
+      tags: ['test', 'development'],
       status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-2',
-      source: 'niw',
-      title: 'Narodowy Instytut Wolności - Wsparcie społeczeństwa obywatelskiego',
-      description: 'Program wsparcia dla organizacji społeczeństwa obywatelskiego. Granty dostępne na projekty wzmacniające demokrację, prawa człowieka i zaangażowanie obywatelskie.',
-      amount: { min: 50000, max: 500000, currency: 'PLN' },
-      deadline: in30Days.toISOString().split('T')[0],
-      category: 'rządowe',
-      region: 'Polska',
-      eligibility: ['Organizacja non-profit', 'Misja obywatelska', 'Wymagana transparentność'],
-      website: 'https://niw.gov.pl',
-      tags: ['społeczeństwo obywatelskie', 'demokracja', 'prawa człowieka'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-3',
-      source: 'eurodesk',
-      title: 'Erasmus+ Program Wymiany Młodzieży',
-      description: 'Fundusze UE na projekty wymiany młodzieży. Organizacje mogą ubiegać się o granty na międzynarodowe wymiany młodzieży, szkolenia i działania sieciowe.',
-      amount: { min: 20000, max: 150000, currency: 'EUR' },
-      deadline: in14Days.toISOString().split('T')[0],
-      category: 'europejskie',
-      region: 'Europa',
-      eligibility: ['Organizacja młodzieżowa', 'Państwo członkowskie UE', 'Grupa wiekowa 13-30'],
-      website: 'https://eurodesk.pl',
-      tags: ['młodzież', 'europejskie', 'edukacja', 'wymiana'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-4',
-      source: 'malopolska',
-      title: 'Małopolski Fundusz Rozwoju Regionalnego',
-      description: 'Fundusze regionalne na projekty w Małopolsce. Skupienie na rozwoju lokalnym, kulturze i inicjatywach społecznych.',
-      amount: { min: 5000, max: 50000, currency: 'PLN' },
-      deadline: in7Days.toISOString().split('T')[0],
-      category: 'regionalne',
-      region: 'Małopolska',
-      eligibility: ['Organizacja z Małopolski', 'Wpływ lokalny'],
-      website: 'https://malopolska.pl',
-      tags: ['regionalne', 'rozwój lokalny', 'kultura'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-5',
-      source: 'krakow-ngo',
-      title: 'Grant wsparcia NGO Krakowa',
-      description: 'Granty Miasta Krakowa dla organizacji pozarządowych. Wsparcie lokalnych inicjatyw przynoszących korzyści społeczności.',
-      amount: { min: 2000, max: 25000, currency: 'PLN' },
-      deadline: in30Days.toISOString().split('T')[0],
-      category: 'lokalne',
-      region: 'Kraków',
-      eligibility: ['Rejestracja w Krakowie', 'Działalność pożytku publicznego'],
-      website: 'https://ngo.krakow.pl',
-      tags: ['lokalne', 'kraków', 'społeczność'],
-      status: 'closing_soon',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-6',
-      source: 'warsaw-ngo',
-      title: 'Fundusz Inicjatyw Lokalnych Warszawy',
-      description: 'Program grantowy Miasta Stołecznego Warszawy dla organizacji pozarządowych realizujących projekty społeczne.',
-      amount: { min: 5000, max: 100000, currency: 'PLN' },
-      deadline: in90Days.toISOString().split('T')[0],
-      category: 'lokalne',
-      region: 'Warszawa',
-      eligibility: ['Działalność w Warszawie', 'Status OPP lub NGO'],
-      website: 'https://ngo.warszawa.pl',
-      tags: ['lokalne', 'warszawa', 'społeczne'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-7',
-      source: 'wroclaw-ngo',
-      title: 'Wrocławski Fundusz Grantowy',
-      description: 'Granty dla organizacji pozarządowych działających na terenie Wrocławia. Wsparcie projektów społecznych, kulturalnych i edukacyjnych.',
-      amount: { min: 3000, max: 50000, currency: 'PLN' },
-      deadline: in60Days.toISOString().split('T')[0],
-      category: 'lokalne',
-      region: 'Wrocław',
-      eligibility: ['Rejestracja we Wrocławiu', 'Projekt społeczny'],
-      website: 'https://ngo.wroclaw.pl',
-      tags: ['lokalne', 'wrocław', 'społeczne'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
-    {
-      id: 'sample-8',
-      source: 'eu-funding',
-      title: 'Fundusze Europejskie na Rozwój Regionalny',
-      description: 'Program Funduszy Europejskich dla rozwoju regionalnego. Wsparcie projektów innowacyjnych i rozwojowych organizacji pozarządowych.',
-      amount: { min: 50000, max: 500000, currency: 'EUR' },
-      deadline: in90Days.toISOString().split('T')[0],
-      category: 'europejskie',
-      region: 'Unia Europejska',
-      eligibility: ['Organizacja z kraju UE', 'Projekt innowacyjny'],
-      website: 'https://funduszeuropejskie.gov.pl',
-      tags: ['europejskie', 'regionalne', 'innowacje'],
-      status: 'open',
-      scrapedAt: new Date().toISOString(),
-      lastVerifiedAt: new Date().toISOString(),
-    },
+      scrapedAt: now.toISOString(),
+      lastVerifiedAt: now.toISOString(),
+    }
   ]
 }

@@ -108,5 +108,79 @@ export interface ScrapeResult {
   }>
 }
 
+// Debug and monitoring types
+export interface ScraperHealth {
+  source: string
+  status: 'healthy' | 'degraded' | 'unhealthy'
+  lastRun: string
+  count: number
+  errorCount: number
+  error?: string
+  responseTime?: number
+}
+
+export interface ScraperMetrics {
+  totalGrants: number
+  activeScrapers: number
+  failedScrapers: number
+  lastUpdate: string
+  averageResponseTime: number
+  errorRate: number
+}
+
+export interface ScraperLogs {
+  timestamp: string
+  source: string
+  level: string
+  limit: number
+  entries: Array<{
+    timestamp: string
+    level: string
+    source: string
+    message: string
+    metadata?: Record<string, any>
+  }>
+}
+
+export interface ScraperTestResult {
+  source: string
+  timestamp: string
+  dryRun: boolean
+  success: boolean
+  grants: Array<{
+    id: string
+    title: string
+    description: string
+    source: string
+    scrapedAt: string
+  }>
+  errors?: Array<{
+    type: string
+    message: string
+    recoverable: boolean
+    timestamp: string
+  }>
+  metadata: {
+    duration: number
+    requestCount: number
+    bytesProcessed: number
+  }
+}
+
+export interface DebugInfo {
+  version: string
+  uptime: number
+  environment: string
+  scrapers: ScraperHealth[]
+  metrics: ScraperMetrics
+  logs: Array<{
+    timestamp: string
+    level: string
+    source: string
+    message: string
+    error?: string
+  }>
+}
+
 // Notification types
 export * from './notifications'

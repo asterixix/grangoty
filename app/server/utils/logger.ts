@@ -1,6 +1,6 @@
 /**
  * Server-side structured logging with Pino
- * @see docs: https://www.dash0.com/guides/logging-in-node-js-with-pino
+ * @see docs: docs-mcp-server/src/utils/errors.ts
  */
 import pino from 'pino'
 
@@ -36,7 +36,7 @@ function createLogger(config: LoggerConfig = {}) {
         '*.token',
         '*.secret',
       ],
-      censor: '[REDACTTED]',
+      censor: '[REDACTED]',
     },
 
     // Base context for all logs

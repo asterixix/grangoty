@@ -28,57 +28,67 @@
 
       <!-- Search and Filters -->
       <div class="mb-4 flex flex-wrap items-center gap-2 text-sm">
-        <label for="search" class="sr-only">{{ t('filters.search') }}</label>
-        <input
+        <UInput
           id="search"
           v-model="searchQuery"
           type="search"
           :placeholder="t('filters.searchPlaceholder')"
-          class="border border-neutral-300 dark:border-neutral-700 px-3 py-2 rounded-lg w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-white transition-colors duration-200"
+          size="sm"
+          class="w-full sm:w-64"
+          :ui="{ icon: { trailing: { pointer: '' } } }"
+        >
+          <template #trailing>
+            <UButton
+              v-if="searchQuery"
+              color="neutral"
+              variant="ghost"
+              size="xs"
+              icon="i-lucide-x"
+              @click="searchQuery = ''"
+              class="pointer-events-auto"
+            />
+          </template>
+        </UInput>
+
+        <USelect
+          v-model="selectedCategory"
+          :placeholder="t('filters.category')"
+          size="sm"
+          class="w-40"
+          :options="categoryOptions"
         />
 
-        <select
-          v-model="selectedCategory"
-          class="border border-neutral-300 dark:border-neutral-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-white transition-colors duration-200"
-          :aria-label="t('filters.category')"
-        >
-          <option value="">{{ t('filters.category') }}</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
-        </select>
-
-        <select
+        <USelect
           v-model="selectedRegion"
-          class="border border-neutral-300 dark:border-neutral-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-white transition-colors duration-200"
-          :aria-label="t('filters.region')"
-        >
-          <option value="">{{ t('filters.region') }}</option>
-          <option v-for="reg in regions" :key="reg" :value="reg">{{ reg }}</option>
-        </select>
+          :placeholder="t('filters.region')"
+          size="sm"
+          class="w-40"
+          :options="regionOptions"
+        />
 
-        <select
+        <USelect
           v-model="selectedStatus"
-          class="border border-neutral-300 dark:border-neutral-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-white transition-colors duration-200"
-          :aria-label="t('filters.status')"
-        >
-          <option value="">{{ t('filters.status') }}</option>
-          <option value="open">{{ t('status.open') }}</option>
-          <option value="closing_soon">{{ t('status.closing_soon') }}</option>
-          <option value="closed">{{ t('status.closed') }}</option>
-        </select>
+          :placeholder="t('filters.status')"
+          size="sm"
+          class="w-40"
+          :options="statusOptions"
+        />
 
-        <button
+        <UButton
           v-if="hasFilters"
+          color="neutral"
+          variant="ghost"
+          size="sm"
           @click="clearFilters"
-          class="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-medium transition-colors duration-200"
         >
           {{ t('filters.clearAll') }}
-        </button>
+        </UButton>
       </div>
 
       <!-- Loading State -->
       <div v-if="isLoading" class="py-8 text-center" role="status" aria-live="polite">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-        <p class="mt-2 text-neutral-500 dark:text-neutral-400">{{ t('grants.loading') }}</p>
+        <USkeleton class="h-8 w-8 rounded-full mx-auto mb-2" />
+        <p class="text-neutral-500 dark:text-neutral-400">{{ t('grants.loading') }}</p>
       </div>
 
       <!-- Grant List -->
@@ -113,93 +123,94 @@
 
         <!-- Empty State -->
         <div v-else-if="!isLoading" class="py-12 text-center" role="status">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 mb-4">
-            <UIcon name="i-lucide-search" class="w-8 h-8 text-neutral-400" />
-          </div>
+          <UIcon name="i-lucide-search" class="w-16 h-16 text-neutral-400 mx-auto mb-4" />
           <h3 class="text-lg font-medium text-neutral-900 dark:text-white">{{ t('grants.noResults') }}</h3>
           <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{ t('grants.noResultsDescription') }}</p>
-          <button
+          <UButton
+            color="primary"
+            size="sm"
+            class="mt-4"
             @click="clearFilters"
-            class="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200"
           >
             {{ t('filters.clearAll') }}
-          </button>
+          </UButton>
         </div>
       </ClientOnly>
 
       <!-- Pagination -->
       <nav v-if="totalPages > 1" class="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800" aria-label="Pagination">
         <div class="flex justify-center items-center gap-2 text-sm">
-          <button
-            @click="goToPage(currentPage - 1)"
+          <UButton
+            color="neutral"
+            variant="outline"
+            size="sm"
             :disabled="currentPage === 1"
-            class="px-3 py-1.5 border border-neutral-300 dark:border-neutral-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors duration-200"
-            :aria-label="'Previous page'"
+            @click="goToPage(currentPage - 1)"
           >
-            < prev
-          </button>
+            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+            {{ $t('common.previous') || 'Previous' }}
+          </UButton>
 
           <span class="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-neutral-700 dark:text-neutral-300">
             {{ currentPage }} / {{ totalPages }}
           </span>
 
-          <button
-            @click="goToPage(currentPage + 1)"
+          <UButton
+            color="neutral"
+            variant="outline"
+            size="sm"
             :disabled="currentPage === totalPages"
-            class="px-3 py-1.5 border border-neutral-300 dark:border-neutral-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors duration-200"
-            :aria-label="'Next page'"
+            @click="goToPage(currentPage + 1)"
           >
-            next >
-          </button>
+            {{ $t('common.next') || 'Next' }}
+            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+          </UButton>
         </div>
       </nav>
     </main>
 
     <!-- Help Modal -->
-    <div
-      v-if="showHelp"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="help-title"
-      @click.self="showHelp = false"
-    >
-      <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl max-w-md w-full p-6 animate-slide-in-right">
-        <div class="flex justify-between items-center mb-4">
-          <h2 id="help-title" class="text-xl font-bold text-neutral-900 dark:text-white">
-            {{ t('help.title') || 'Keyboard Shortcuts' }}
-          </h2>
-          <button
-            @click="showHelp = false"
-            class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
-          >
-            <UIcon name="i-lucide-x" class="w-6 h-6" />
-          </button>
-        </div>
-        <div class="space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
+    <UModal v-model="showHelp" :ui="{ content: 'max-w-md' }">
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold">
+              {{ t('help.title') || 'Keyboard Shortcuts' }}
+            </h2>
+            <UButton
+              color="neutral"
+              variant="ghost"
+              size="sm"
+              icon="i-lucide-x"
+              @click="showHelp = false"
+            />
+          </div>
+        </template>
+
+        <div class="space-y-3 text-sm">
           <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span>j / k</span>
+            <span class="font-mono">j / k</span>
             <span class="text-neutral-500">{{ t('help.navigate') || 'Navigate list' }}</span>
           </div>
           <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span>s</span>
+            <span class="font-mono">s</span>
             <span class="text-neutral-500">{{ t('help.save') || 'Save/Bookmark' }}</span>
           </div>
           <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span>o / Enter</span>
+            <span class="font-mono">o / Enter</span>
             <span class="text-neutral-500">{{ t('help.open') || 'Open URL' }}</span>
           </div>
           <div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-            <span>/</span>
+            <span class="font-mono">/</span>
             <span class="text-neutral-500">{{ t('help.search') || 'Focus search' }}</span>
           </div>
           <div class="flex justify-between items-center py-2">
-            <span>?</span>
+            <span class="font-mono">?</span>
             <span class="text-neutral-500">{{ t('help.help') || 'Toggle help' }}</span>
           </div>
         </div>
-      </div>
-    </div>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
@@ -241,6 +252,23 @@ const regions = computed(() => {
   const regs = new Set(grants.value.map(g => g.region).filter(Boolean))
   return Array.from(regs).sort()
 })
+
+const categoryOptions = computed(() => [
+  { label: t('filters.category'), value: '', disabled: true },
+  ...categories.value.map(cat => ({ label: cat, value: cat }))
+])
+
+const regionOptions = computed(() => [
+  { label: t('filters.region'), value: '', disabled: true },
+  ...regions.value.map(reg => ({ label: reg, value: reg }))
+])
+
+const statusOptions = computed(() => [
+  { label: t('filters.status'), value: '', disabled: true },
+  { label: t('status.open'), value: 'open' },
+  { label: t('status.closing_soon'), value: 'closing_soon' },
+  { label: t('status.closed'), value: 'closed' }
+])
 
 const hasFilters = computed(() => {
   return searchQuery.value || selectedCategory.value || selectedRegion.value || selectedStatus.value || activeFilter.value

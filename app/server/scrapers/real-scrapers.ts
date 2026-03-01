@@ -15,6 +15,16 @@ import { PodkarpackieNgoScraper } from './sources/podkarpackie'
 import { GdanskNgoScraper } from './sources/gdansk'
 import { LesznoNgoScraper } from './sources/leszno'
 import { AktywniPlusScraper } from './sources/aktywni-plus'
+import {
+  ScraperError,
+  ScraperErrorType,
+  withRetry,
+  CircuitBreaker,
+  RateLimiter,
+  safeExtract,
+  validateScrapedData
+} from '../utils/scraper-helpers'
+import { scraperLogger } from '../utils/logger'
 
 /**
  * Base configuration for scrapers
@@ -164,9 +174,12 @@ export class RealScraper {
 }
 
 /**
- * Fundusze.ngo.pl Scraper - Dynamic JS site
+ * Fundusze.ngo.pl Scraper - Dynamic JS site with enhanced error handling
  */
 export class FunduszeNgoScraper extends RealScraper {
+  private circuitBreaker = new CircuitBreaker(3, 300000)
+  private rateLimiter = new RateLimiter(2, 1) // 2 requests per second
+
   constructor() {
     super({
       name: 'fundusze-ngo',
@@ -177,69 +190,151 @@ export class FunduszeNgoScraper extends RealScraper {
   }
 
   async scrape(): Promise<RawGrant[]> {
+    return await this.circuitBreaker.execute(async () => {
+      return await withRetry(
+        () => this.performScrape(),
+        { source: this._config.name, operation: 'scrape' },
+        { maxRetries: 2, baseDelay: 3000 }
+      )
+    })
+  }
+
+  private async performScrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     const router = createPlaywrightRouter()
 
     // Handle grant listing pages
     router.addHandler('grantList', async ({ page, enqueueLinks }) => {
+      try {
+        await this.rateLimiter.acquire()
 
-      // Extract grant links
-      const grantLinks = await page.$$eval('a[href*="/grant"], a[href*="/fundusz"], a[href*="/dotacja"]', 
-        (links) => links.map(link => link.getAttribute('href')).filter(Boolean)
-      )
+        // Extract grant links with safe extraction
+        const grantLinks = await safeExtract(
+          () => page.$eval('a[href*="/grant"], a[href*="/fundusz"], a[href*="/dotacja"]',
+            (links: any[]) => links.map((link: any) => link.getAttribute('href')).filter(Boolean)
+          ),
+          [],
+          { source: this._config.name, field: 'grantLinks' }
+        )
 
-      // Enqueue grant detail pages
-      for (const href of grantLinks.slice(0, 20)) {
-        if (href) {
-          await enqueueLinks({
-            urls: [href.startsWith('http') ? href : `${this._config.baseUrl}${href}`],
-            label: 'grantDetail',
-          })
+        // Enqueue grant detail pages with validation
+        for (const href of grantLinks.slice(0, 20)) {
+          if (href && typeof href === 'string') {
+            try {
+              await enqueueLinks({
+                urls: [href.startsWith('http') ? href : `${this._config.baseUrl}${href}`],
+                label: 'grantDetail',
+              })
+            } catch (enqueueError) {
+              scraperLogger.warn({
+                source: this._config.name,
+                url: href,
+                error: enqueueError instanceof Error ? enqueueError.message : String(enqueueError)
+              }, 'Failed to enqueue grant URL')
+            }
+          }
         }
+      } catch (error) {
+        scraperLogger.error({
+          source: this._config.name,
+          error: error instanceof Error ? error.message : String(error)
+        }, 'Failed to handle grant list page')
+        throw new ScraperError(
+          `Grant list extraction failed: ${error instanceof Error ? error.message : String(error)}`,
+          ScraperErrorType.ParseError,
+          false,
+          error instanceof Error ? error : undefined
+        )
       }
     })
 
     // Handle grant detail pages
     router.addHandler('grantDetail', async ({ page, request }) => {
       try {
-        await page.waitForSelector('h1, .title, .grant-title', { timeout: 5000 })
+        await this.rateLimiter.acquire()
+
+        await safeExtract(
+          () => page.waitForSelector('h1, .title, .grant-title', { timeout: 5000 }),
+          undefined,
+          { source: this._config.name, field: 'waitForSelector' }
+        )
 
         const grant: Partial<RawGrant> = {
           source: this._config.name,
           website: request.url,
         }
 
-        // Extract title
-        grant.title = await page.$eval('h1, .grant-title, .title', el => el.textContent?.trim() || '')
-
-        // Extract description
-        grant.description = await page.$eval('.description, .content, .grant-description, article', 
-          el => el.textContent?.trim() || ''
+        // Extract title with safe extraction
+        grant.title = await safeExtract(
+          () => page.$eval('h1, .grant-title, .title', el => el.textContent?.trim() || ''),
+          '',
+          { source: this._config.name, field: 'title' }
         )
 
-        // Extract amount
-        const amountText = await page.$eval('.amount, .kwota, [class*="amount"]', 
-          el => el.textContent?.trim() || ''
-        ).catch(() => '')
-        grant.amount = this.parseAmount(amountText)
+        // Extract description
+        grant.description = await safeExtract(
+          () => page.$eval('.description, .content, .grant-description, article',
+            el => el.textContent?.trim() || ''
+          ),
+          '',
+          { source: this._config.name, field: 'description' }
+        )
+
+        // Extract amount with validation
+        const amountText = await safeExtract(
+          () => page.$eval('.amount, .kwota, [class*="amount"]',
+            el => el.textContent?.trim() || ''
+          ),
+          '',
+          { source: this._config.name, field: 'amount' }
+        )
+        if (amountText) {
+          grant.amount = this.parseAmount(amountText)
+        }
 
         // Extract deadline
-        const deadlineText = await page.$eval('.deadline, [class*="termin"], [class*="date"]', 
-          el => el.textContent?.trim() || ''
-        ).catch(() => '')
-        grant.deadline = this.parseDate(deadlineText)
+        const deadlineText = await safeExtract(
+          () => page.$eval('.deadline, [class*="termin"], [class*="date"]',
+            el => el.textContent?.trim() || ''
+          ),
+          '',
+          { source: this._config.name, field: 'deadline' }
+        )
+        if (deadlineText) {
+          grant.deadline = this.parseDate(deadlineText)
+        }
 
         // Extract category
-        grant.category = await page.$eval('.category, [class*="kategoria"]', 
-          el => el.textContent?.trim() || 'general'
-        ).catch(() => 'general')
+        grant.category = await safeExtract(
+          () => page.$eval('.category, [class*="kategoria"]',
+            el => el.textContent?.trim() || 'general'
+          ),
+          'general',
+          { source: this._config.name, field: 'category' }
+        )
 
-        if (grant.title) {
+        // Validate extracted data
+        const validation = validateScrapedData(grant, ['title'])
+        if (!validation.valid) {
+          scraperLogger.warn({
+            source: this._config.name,
+            url: request.url,
+            missingFields: validation.missingFields
+          }, 'Grant data validation failed, skipping')
+          return
+        }
+
+        if (grant.title && grant.title.length > 0) {
           grants.push(this.normalize(grant))
         }
       } catch (error) {
-        console.error(`Error scraping ${request.url}:`, error)
+        scraperLogger.error({
+          source: this._config.name,
+          url: request.url,
+          error: error instanceof Error ? error.message : String(error)
+        }, 'Failed to scrape grant detail page')
+        // Don't throw here - continue with other grants
       }
     })
 
@@ -249,6 +344,14 @@ export class FunduszeNgoScraper extends RealScraper {
         maxRequestsPerCrawl: this._config.maxRequestsPerCrawl,
         requestHandlerTimeoutSecs: this._config.requestHandlerTimeoutSecs || 30,
         headless: true,
+        // Add error handling for crawler failures
+        failedRequestHandler: ({ request, error }) => {
+          scraperLogger.error({
+            source: this._config.name,
+            url: request.url,
+            error: error.message
+          }, 'Crawler request failed')
+        }
       })
 
       await crawler.run([
@@ -257,17 +360,35 @@ export class FunduszeNgoScraper extends RealScraper {
         { url: `${this._config.baseUrl}/fundusze`, label: 'grantList' },
       ])
     } catch (error) {
-      console.error('FunduszeNgoScraper error:', error)
+      scraperLogger.error({
+        source: this._config.name,
+        error: error instanceof Error ? error.message : String(error)
+      }, 'Crawler execution failed')
+
+      throw new ScraperError(
+        `Crawler failed: ${error instanceof Error ? error.message : String(error)}`,
+        ScraperErrorType.NetworkError,
+        true,
+        error instanceof Error ? error : undefined
+      )
     }
+
+    scraperLogger.info({
+      source: this._config.name,
+      grantsFound: grants.length
+    }, 'FunduszeNgoScraper completed')
 
     return grants
   }
 }
 
 /**
- * NIW.gov.pl Scraper - Static HTML site
+ * NIW.gov.pl Scraper - Static HTML site with enhanced error handling
  */
 export class NiwGovPlScraper extends RealScraper {
+  private circuitBreaker = new CircuitBreaker(5, 600000)
+  private rateLimiter = new RateLimiter(1, 2) // 1 request per 2 seconds
+
   constructor() {
     super({
       name: 'niw',
@@ -277,45 +398,135 @@ export class NiwGovPlScraper extends RealScraper {
   }
 
   async scrape(): Promise<RawGrant[]> {
+    return await this.circuitBreaker.execute(async () => {
+      return await withRetry(
+        () => this.performScrape(),
+        { source: this._config.name, operation: 'scrape' }
+      )
+    })
+  }
+
+  private async performScrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     try {
-      // Fetch main grants page
-      const response = await fetch(`${this._config.baseUrl}/o-niw/programy-i-fundusze`)
+      await this.rateLimiter.acquire()
+
+      // Fetch main grants page with timeout and error handling
+      const response = await withRetry(
+        () => fetch(`${this._config.baseUrl}/o-niw/programy-i-fundusze`, {
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; NGO Grants Aggregator)'
+          }
+        }),
+        { source: this._config.name, operation: 'fetch' },
+        { maxRetries: 2, baseDelay: 2000 }
+      )
+
+      if (!response.ok) {
+        throw new ScraperError(
+          `HTTP ${response.status}: ${response.statusText}`,
+          response.status >= 500 ? ScraperErrorType.ServerError : ScraperErrorType.NotFoundError,
+          response.status >= 500
+        )
+      }
+
       const html = await response.text()
       const $ = cheerio.load(html)
 
-      // Find grant items
-      $('.grant-item, .program-item, .fundusz-item, article, .content-item').each((_, el) => {
-        const $el = $(el)
-        
-        const grant: Partial<RawGrant> = {
-          source: this._config.name,
-          title: $el.find('h2, h3, .title').text().trim(),
-          description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this._config.baseUrl,
-          category: 'government',
-          region: 'Poland',
-        }
+      // Find grant items with safe selectors
+      const grantSelectors = [
+        '.grant-item',
+        '.program-item',
+        '.fundusz-item',
+        'article',
+        '.content-item'
+      ]
 
-        // Try to extract amount
-        const amountText = $el.text()
-        if (amountText.includes('zł') || amountText.includes('PLN')) {
-          grant.amount = this.parseAmount(amountText)
-        }
+      let itemsFound = 0
+      for (const selector of grantSelectors) {
+        $(selector).each((_, el) => {
+          try {
+            const $el = $(el)
 
-        // Try to extract deadline
-        const deadlineMatch = $el.text().match(/termin.*?(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/i)
-        if (deadlineMatch) {
-          grant.deadline = this.parseDate(deadlineMatch[1])
-        }
+            const grant: Partial<RawGrant> = {
+              source: this._config.name,
+              title: safeExtract(
+                () => $el.find('h2, h3, .title').text().trim(),
+                '',
+                { source: this._config.name, field: 'title' }
+              ),
+              description: safeExtract(
+                () => $el.find('.description, .content, p').text().trim(),
+                '',
+                { source: this._config.name, field: 'description' }
+              ),
+              website: safeExtract(
+                () => {
+                  const href = $el.find('a').attr('href')
+                  return href ? (href.startsWith('http') ? href : `${this._config.baseUrl}${href}`) : this._config.baseUrl
+                },
+                this._config.baseUrl,
+                { source: this._config.name, field: 'website' }
+              ),
+              category: 'government',
+              region: 'Poland',
+            }
 
-        if (grant.title) {
-          grants.push(this.normalize(grant))
-        }
-      })
+            // Try to extract amount from text content
+            const textContent = $el.text()
+            if (textContent.includes('zł') || textContent.includes('PLN')) {
+              grant.amount = this.parseAmount(textContent)
+            }
+
+            // Try to extract deadline
+            const deadlineMatch = textContent.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+            if (deadlineMatch) {
+              grant.deadline = this.parseDate(deadlineMatch[1])
+            }
+
+            // Validate and add grant
+            const validation = validateScrapedData(grant, ['title'])
+            if (validation.valid && grant.title && grant.title.length > 0) {
+              grants.push(this.normalize(grant))
+              itemsFound++
+            }
+          } catch (elementError) {
+            scraperLogger.warn({
+              source: this._config.name,
+              selector,
+              error: elementError instanceof Error ? elementError.message : String(elementError)
+            }, 'Failed to process grant element')
+          }
+        })
+
+        // If we found items with this selector, stop trying others
+        if (itemsFound > 0) break
+      }
+
+      scraperLogger.info({
+        source: this._config.name,
+        grantsFound: grants.length,
+        selectorsTried: grantSelectors.length
+      }, 'NIW.gov.pl scraping completed')
+
     } catch (error) {
-      console.error('NiwGovPlScraper error:', error)
+      const classified = error instanceof ScraperError ? error :
+        new ScraperError(
+          `NIW scraping failed: ${error instanceof Error ? error.message : String(error)}`,
+          ScraperErrorType.NetworkError,
+          true,
+          error instanceof Error ? error : undefined
+        )
+
+      scraperLogger.error({
+        source: this._config.name,
+        errorType: classified.type,
+        error: classified.message
+      }, 'NIW.gov.pl scraper failed')
+
+      throw classified
     }
 
     return grants
@@ -323,9 +534,12 @@ export class NiwGovPlScraper extends RealScraper {
 }
 
 /**
- * Malopolska.pl Scraper - Static HTML site
+ * Malopolska.pl Scraper - Static HTML site with enhanced error handling
  */
 export class MalopolskaPlScraper extends RealScraper {
+  private circuitBreaker = new CircuitBreaker(3, 300000)
+  private rateLimiter = new RateLimiter(1, 1) // 1 request per second
+
   constructor() {
     super({
       name: 'malopolska',
@@ -335,33 +549,131 @@ export class MalopolskaPlScraper extends RealScraper {
   }
 
   async scrape(): Promise<RawGrant[]> {
+    return await this.circuitBreaker.execute(async () => {
+      return await withRetry(
+        () => this.performScrape(),
+        { source: this._config.name, operation: 'scrape' },
+        { maxRetries: 2, baseDelay: 3000 }
+      )
+    })
+  }
+
+  private async performScrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     try {
-      // Fetch grants/dotacje page
-      const response = await fetch(`${this._config.baseUrl}/dotacje-dla-ngo`)
+      await this.rateLimiter.acquire()
+
+      const response = await withRetry(
+        () => fetch(`${this._config.baseUrl}/dotacje-dla-ngo`, {
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; NGO Grants Aggregator)'
+          }
+        }),
+        { source: this._config.name, operation: 'fetch' },
+        { maxRetries: 2, baseDelay: 2000 }
+      )
+
+      if (!response.ok) {
+        throw new ScraperError(
+          `HTTP ${response.status}: ${response.statusText}`,
+          response.status >= 500 ? ScraperErrorType.ServerError : ScraperErrorType.NotFoundError,
+          response.status >= 500
+        )
+      }
+
       const html = await response.text()
       const $ = cheerio.load(html)
 
-      // Find grant items
-      $('.grant, .dotacja, .funding, article, .news-item, .list-item').each((_, el) => {
-        const $el = $(el)
-        
-        const grant: Partial<RawGrant> = {
-          source: this._config.name,
-          title: $el.find('h2, h3, h4, .title, a').first().text().trim(),
-          description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this._config.baseUrl,
-          category: 'regional',
-          region: 'Lesser Poland',
-        }
+      const grantSelectors = [
+        '.grant',
+        '.dotacja',
+        '.funding',
+        'article',
+        '.news-item',
+        '.list-item'
+      ]
 
-        if (grant.title) {
-          grants.push(this.normalize(grant))
-        }
-      })
+      let itemsFound = 0
+      for (const selector of grantSelectors) {
+        $(selector).each((_, el) => {
+          try {
+            const $el = $(el)
+
+            const grant: Partial<RawGrant> = {
+              source: this._config.name,
+              title: safeExtract(
+                () => $el.find('h2, h3, h4, .title, a').first().text().trim(),
+                '',
+                { source: this._config.name, field: 'title' }
+              ),
+              description: safeExtract(
+                () => $el.find('.description, .content, p').text().trim(),
+                '',
+                { source: this._config.name, field: 'description' }
+              ),
+              website: safeExtract(
+                () => {
+                  const href = $el.find('a').attr('href')
+                  return href ? (href.startsWith('http') ? href : `${this._config.baseUrl}${href}`) : this._config.baseUrl
+                },
+                this._config.baseUrl,
+                { source: this._config.name, field: 'website' }
+              ),
+              category: 'regional',
+              region: 'Lesser Poland',
+            }
+
+            const textContent = $el.text()
+            if (textContent.includes('zł') || textContent.includes('PLN')) {
+              grant.amount = this.parseAmount(textContent)
+            }
+
+            const deadlineMatch = textContent.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+            if (deadlineMatch) {
+              grant.deadline = this.parseDate(deadlineMatch[1])
+            }
+
+            const validation = validateScrapedData(grant, ['title'])
+            if (validation.valid && grant.title && grant.title.length > 0) {
+              grants.push(this.normalize(grant))
+              itemsFound++
+            }
+          } catch (elementError) {
+            scraperLogger.warn({
+              source: this._config.name,
+              selector,
+              error: elementError instanceof Error ? elementError.message : String(elementError)
+            }, 'Failed to process grant element')
+          }
+        })
+
+        if (itemsFound > 0) break
+      }
+
+      scraperLogger.info({
+        source: this._config.name,
+        grantsFound: grants.length,
+        selectorsTried: grantSelectors.length
+      }, 'Malopolska.pl scraping completed')
+
     } catch (error) {
-      console.error('MalopolskaPlScraper error:', error)
+      const classified = error instanceof ScraperError ? error :
+        new ScraperError(
+          `Malopolska scraping failed: ${error instanceof Error ? error.message : String(error)}`,
+          ScraperErrorType.NetworkError,
+          true,
+          error instanceof Error ? error : undefined
+        )
+
+      scraperLogger.error({
+        source: this._config.name,
+        errorType: classified.type,
+        error: classified.message
+      }, 'Malopolska.pl scraper failed')
+
+      throw classified
     }
 
     return grants
@@ -369,9 +681,12 @@ export class MalopolskaPlScraper extends RealScraper {
 }
 
 /**
- * NGO.Krakow.pl Scraper - Static HTML site
+ * NGO.Krakow.pl Scraper - Static HTML site with enhanced error handling
  */
 export class KrakowNgoPlScraper extends RealScraper {
+  private circuitBreaker = new CircuitBreaker(3, 300000)
+  private rateLimiter = new RateLimiter(1, 1) // 1 request per second
+
   constructor() {
     super({
       name: 'krakow-ngo',
@@ -381,33 +696,131 @@ export class KrakowNgoPlScraper extends RealScraper {
   }
 
   async scrape(): Promise<RawGrant[]> {
+    return await this.circuitBreaker.execute(async () => {
+      return await withRetry(
+        () => this.performScrape(),
+        { source: this._config.name, operation: 'scrape' },
+        { maxRetries: 2, baseDelay: 3000 }
+      )
+    })
+  }
+
+  private async performScrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     try {
-      // Fetch main page
-      const response = await fetch(`${this._config.baseUrl}/`)
+      await this.rateLimiter.acquire()
+
+      const response = await withRetry(
+        () => fetch(`${this._config.baseUrl}/`, {
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; NGO Grants Aggregator)'
+          }
+        }),
+        { source: this._config.name, operation: 'fetch' },
+        { maxRetries: 2, baseDelay: 2000 }
+      )
+
+      if (!response.ok) {
+        throw new ScraperError(
+          `HTTP ${response.status}: ${response.statusText}`,
+          response.status >= 500 ? ScraperErrorType.ServerError : ScraperErrorType.NotFoundError,
+          response.status >= 500
+        )
+      }
+
       const html = await response.text()
       const $ = cheerio.load(html)
 
-      // Find grant/dotacje items
-      $('.grant, .dotacja, article, .news-item, .post, .entry').each((_, el) => {
-        const $el = $(el)
-        
-        const grant: Partial<RawGrant> = {
-          source: this._config.name,
-          title: $el.find('h2, h3, .title, .entry-title').text().trim(),
-          description: $el.find('.content, .entry-content, p').text().trim(),
-          website: $el.find('a').attr('href') || this._config.baseUrl,
-          category: 'local',
-          region: 'Kraków',
-        }
+      const grantSelectors = [
+        '.grant',
+        '.dotacja',
+        'article',
+        '.news-item',
+        '.post',
+        '.entry'
+      ]
 
-        if (grant.title) {
-          grants.push(this.normalize(grant))
-        }
-      })
+      let itemsFound = 0
+      for (const selector of grantSelectors) {
+        $(selector).each((_, el) => {
+          try {
+            const $el = $(el)
+
+            const grant: Partial<RawGrant> = {
+              source: this._config.name,
+              title: safeExtract(
+                () => $el.find('h2, h3, .title, .entry-title').text().trim(),
+                '',
+                { source: this._config.name, field: 'title' }
+              ),
+              description: safeExtract(
+                () => $el.find('.content, .entry-content, p').text().trim(),
+                '',
+                { source: this._config.name, field: 'description' }
+              ),
+              website: safeExtract(
+                () => {
+                  const href = $el.find('a').attr('href')
+                  return href ? (href.startsWith('http') ? href : `${this._config.baseUrl}${href}`) : this._config.baseUrl
+                },
+                this._config.baseUrl,
+                { source: this._config.name, field: 'website' }
+              ),
+              category: 'local',
+              region: 'Kraków',
+            }
+
+            const textContent = $el.text()
+            if (textContent.includes('zł') || textContent.includes('PLN')) {
+              grant.amount = this.parseAmount(textContent)
+            }
+
+            const deadlineMatch = textContent.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+            if (deadlineMatch) {
+              grant.deadline = this.parseDate(deadlineMatch[1])
+            }
+
+            const validation = validateScrapedData(grant, ['title'])
+            if (validation.valid && grant.title && grant.title.length > 0) {
+              grants.push(this.normalize(grant))
+              itemsFound++
+            }
+          } catch (elementError) {
+            scraperLogger.warn({
+              source: this._config.name,
+              selector,
+              error: elementError instanceof Error ? elementError.message : String(elementError)
+            }, 'Failed to process grant element')
+          }
+        })
+
+        if (itemsFound > 0) break
+      }
+
+      scraperLogger.info({
+        source: this._config.name,
+        grantsFound: grants.length,
+        selectorsTried: grantSelectors.length
+      }, 'NGO.Krakow.pl scraping completed')
+
     } catch (error) {
-      console.error('KrakowNgoPlScraper error:', error)
+      const classified = error instanceof ScraperError ? error :
+        new ScraperError(
+          `Krakow NGO scraping failed: ${error instanceof Error ? error.message : String(error)}`,
+          ScraperErrorType.NetworkError,
+          true,
+          error instanceof Error ? error : undefined
+        )
+
+      scraperLogger.error({
+        source: this._config.name,
+        errorType: classified.type,
+        error: classified.message
+      }, 'NGO.Krakow.pl scraper failed')
+
+      throw classified
     }
 
     return grants
@@ -415,9 +828,12 @@ export class KrakowNgoPlScraper extends RealScraper {
 }
 
 /**
- * Eurodesk.pl Scraper - Static HTML site
+ * Eurodesk.pl Scraper - Static HTML site with enhanced error handling
  */
 export class EurodeskPlScraper extends RealScraper {
+  private circuitBreaker = new CircuitBreaker(3, 300000)
+  private rateLimiter = new RateLimiter(1, 1) // 1 request per second
+
   constructor() {
     super({
       name: 'eurodesk',
@@ -427,33 +843,130 @@ export class EurodeskPlScraper extends RealScraper {
   }
 
   async scrape(): Promise<RawGrant[]> {
+    return await this.circuitBreaker.execute(async () => {
+      return await withRetry(
+        () => this.performScrape(),
+        { source: this._config.name, operation: 'scrape' },
+        { maxRetries: 2, baseDelay: 3000 }
+      )
+    })
+  }
+
+  private async performScrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     try {
-      // Fetch opportunities page
-      const response = await fetch(`${this._config.baseUrl}/opportunities`)
+      await this.rateLimiter.acquire()
+
+      const response = await withRetry(
+        () => fetch(`${this._config.baseUrl}/opportunities`, {
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; NGO Grants Aggregator)'
+          }
+        }),
+        { source: this._config.name, operation: 'fetch' },
+        { maxRetries: 2, baseDelay: 2000 }
+      )
+
+      if (!response.ok) {
+        throw new ScraperError(
+          `HTTP ${response.status}: ${response.statusText}`,
+          response.status >= 500 ? ScraperErrorType.ServerError : ScraperErrorType.NotFoundError,
+          response.status >= 500
+        )
+      }
+
       const html = await response.text()
       const $ = cheerio.load(html)
 
-      // Find grant/EU funding items
-      $('.opportunity, .grant, .eu-funding, article, .item').each((_, el) => {
-        const $el = $(el)
-        
-        const grant: Partial<RawGrant> = {
-          source: this._config.name,
-          title: $el.find('h2, h3, .title, a').text().trim(),
-          description: $el.find('.description, .content, p').text().trim(),
-          website: $el.find('a').attr('href') || this._config.baseUrl,
-          category: 'european',
-          region: 'Europe',
-        }
+      const grantSelectors = [
+        '.opportunity',
+        '.grant',
+        '.eu-funding',
+        'article',
+        '.item'
+      ]
 
-        if (grant.title) {
-          grants.push(this.normalize(grant))
-        }
-      })
+      let itemsFound = 0
+      for (const selector of grantSelectors) {
+        $(selector).each((_, el) => {
+          try {
+            const $el = $(el)
+
+            const grant: Partial<RawGrant> = {
+              source: this._config.name,
+              title: safeExtract(
+                () => $el.find('h2, h3, .title, a').text().trim(),
+                '',
+                { source: this._config.name, field: 'title' }
+              ),
+              description: safeExtract(
+                () => $el.find('.description, .content, p').text().trim(),
+                '',
+                { source: this._config.name, field: 'description' }
+              ),
+              website: safeExtract(
+                () => {
+                  const href = $el.find('a').attr('href')
+                  return href ? (href.startsWith('http') ? href : `${this._config.baseUrl}${href}`) : this._config.baseUrl
+                },
+                this._config.baseUrl,
+                { source: this._config.name, field: 'website' }
+              ),
+              category: 'european',
+              region: 'Europe',
+            }
+
+            const textContent = $el.text()
+            if (textContent.includes('€') || textContent.includes('EUR')) {
+              grant.amount = this.parseAmount(textContent)
+            }
+
+            const deadlineMatch = textContent.match(/(\d{1,2}[.\-/]\d{1,2}[.\-/]\d{4})/)
+            if (deadlineMatch) {
+              grant.deadline = this.parseDate(deadlineMatch[1])
+            }
+
+            const validation = validateScrapedData(grant, ['title'])
+            if (validation.valid && grant.title && grant.title.length > 0) {
+              grants.push(this.normalize(grant))
+              itemsFound++
+            }
+          } catch (elementError) {
+            scraperLogger.warn({
+              source: this._config.name,
+              selector,
+              error: elementError instanceof Error ? elementError.message : String(elementError)
+            }, 'Failed to process grant element')
+          }
+        })
+
+        if (itemsFound > 0) break
+      }
+
+      scraperLogger.info({
+        source: this._config.name,
+        grantsFound: grants.length,
+        selectorsTried: grantSelectors.length
+      }, 'Eurodesk.pl scraping completed')
+
     } catch (error) {
-      console.error('EurodeskPlScraper error:', error)
+      const classified = error instanceof ScraperError ? error :
+        new ScraperError(
+          `Eurodesk scraping failed: ${error instanceof Error ? error.message : String(error)}`,
+          ScraperErrorType.NetworkError,
+          true,
+          error instanceof Error ? error : undefined
+        )
+
+      scraperLogger.error({
+        source: this._config.name,
+        errorType: classified.type,
+        error: classified.message
+      }, 'Eurodesk.pl scraper failed')
+
+      throw classified
     }
 
     return grants

@@ -3,7 +3,7 @@ import { grantStorage } from '~/server/utils/redis'
 import { getSampleGrants } from '../grants/seed'
 import type { ScrapeResult } from '~/app/types'
 
-export default defineEventHandler(async (event): Promise<ScrapeResult> => {
+export default defineEventHandler(async (): Promise<ScrapeResult> => {
   const requestStart = performance.now()
   
   const result: ScrapeResult = {

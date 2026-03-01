@@ -1,4 +1,4 @@
-import { defineEventHandler, getQuery } from 'h3'
+import { defineEventHandler, getQuery, createError } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
 import { getSampleGrants } from './seed'
 import type { PaginatedResponse, Grant } from '~/app/types'
@@ -20,14 +20,28 @@ export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant
   try {
     let grants = await grantStorage.getAllGrants()
 
-    if (grants.length === 0) {
-      console.log('[GRANgoTY] No grants in Redis, using sample data.')
+    // Only use sample data in development if no real data exists
+    if (grants.length === 0 && process.env.NODE_ENV !== 'production') {
+      console.log('[GRANgoTY] No real grants found, using minimal development data.')
       grants = getSampleGrants()
+    }
+
+    // In production, if no real data exists, return empty result
+    if (grants.length === 0 && process.env.NODE_ENV === 'production') {
+      return {
+        data: [],
+        meta: {
+          total: 0,
+          page: 1,
+          pageSize,
+          totalPages: 0
+        }
+      }
     }
 
     if (searchQuery) {
       const queryLower = searchQuery.toLowerCase()
-      grants = grants.filter(g => 
+      grants = grants.filter(g =>
         g.title.toLowerCase().includes(queryLower) ||
         g.description?.toLowerCase().includes(queryLower) ||
         g.tags?.some(t => t.toLowerCase().includes(queryLower))
@@ -68,15 +82,24 @@ export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant
     }
   } catch (error) {
     console.error('Error fetching grants:', error)
-    
+
+    // In production, don't fallback to sample data on errors
+    if (process.env.NODE_ENV === 'production') {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Database error'
+      })
+    }
+
+    // Only in development, return sample data as last resort
     const sampleGrants = getSampleGrants()
     return {
       data: sampleGrants.slice(0, pageSize),
-      meta: { 
-        total: sampleGrants.length, 
-        page: 1, 
-        pageSize, 
-        totalPages: 1 
+      meta: {
+        total: sampleGrants.length,
+        page: 1,
+        pageSize,
+        totalPages: 1
       }
     }
   }

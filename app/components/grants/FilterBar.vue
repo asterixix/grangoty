@@ -5,25 +5,19 @@
     class="filter-bar"
   >
     <div class="filter-scroll-container">
-      <div class="filter-scroll-content">
-        <!-- Filter buttons - keyboard navigable -->
-        <button
+      <UButtonGroup class="filter-scroll-content">
+        <UButton
           v-for="filter in filters"
           :key="filter.value"
-          :aria-pressed="activeFilter === filter.value"
-          :class="[
-            'filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-            activeFilter === filter.value
-              ? 'bg-primary-500 text-white shadow-md'
-              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
-          ]"
+          :color="activeFilter === filter.value ? 'primary' : 'neutral'"
+          :variant="activeFilter === filter.value ? 'solid' : 'soft'"
+          size="sm"
+          class="filter-btn"
           @click="selectFilter(filter.value)"
-          @keydown.enter="selectFilter(filter.value)"
-          @keydown.space="selectFilter(filter.value)"
         >
           {{ filter.label }}
-        </button>
-      </div>
+        </UButton>
+      </UButtonGroup>
       <!-- Scroll hint for mobile -->
       <div class="scroll-hint" aria-hidden="true"></div>
     </div>
@@ -75,10 +69,6 @@ function selectFilter(value: string | null): void {
 
 .filter-scroll-content {
   @apply flex items-center gap-2 min-w-max px-2;
-}
-
-.filter-btn {
-  @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
 }
 
 .scroll-hint {

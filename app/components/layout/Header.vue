@@ -9,105 +9,72 @@
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-1 sm:space-x-2">
-          <NuxtLink
+          <UButton
             to="/"
-            :class="[
-              'px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200',
-              currentRoute.name === 'index'
-                ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-                : 'text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800'
-            ]"
+            color="neutral"
+            :variant="currentRoute.name === 'index' ? 'soft' : 'ghost'"
+            size="sm"
           >
             {{ t('nav.home') }}
-          </NuxtLink>
-          <NuxtLink
-            to="/submit"
-            :class="[
-              'px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200',
-              currentRoute.name === 'submit'
-                ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-                : 'text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800'
-            ]"
+          </UButton>
+          
+          <UButton
+            to="https://github.com/asterixix/grangoty/issues"
+            target="_blank"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            trailing-icon="i-lucide-external-link"
           >
-            {{ t('nav.submit') }}
-          </NuxtLink>
+            {{ t('nav.reportIssue') }}
+          </UButton>
           
           <!-- Theme toggle -->
-          <button
-            @click="toggleTheme"
-            class="p-2 rounded-md text-neutral-600 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:text-primary-400 dark:hover:bg-neutral-800 transition-colors duration-200"
+          <UButton
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
             :aria-label="`Switch to ${isDark ? 'light' : 'dark'} mode`"
-          >
-            <UIcon
-              v-if="isDark"
-              name="i-lucide-sun"
-              class="w-5 h-5"
-            />
-            <UIcon
-              v-else
-              name="i-lucide-moon"
-              class="w-5 h-5"
-            />
-          </button>
+            @click="toggleTheme"
+          />
 
           <!-- Language selector -->
-          <div class="relative group">
-            <button
-              class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800 transition-colors duration-200"
-              :aria-label="t('nav.language')"
+          <UDropdownMenu
+            :items="languageItems"
+            :ui="{ content: 'w-48' }"
+          >
+            <UButton
+              color="neutral"
+              variant="ghost"
+              size="sm"
+              trailing-icon="i-lucide-chevron-down"
             >
-              <span class="mr-1">{{ getLocaleName(currentLocale) }}</span>
-              <UIcon name="i-lucide-chevron-down" class="w-4 h-4 text-neutral-400" />
-            </button>
-            <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-md shadow-lg py-1 hidden group-hover:block animate-fade-in">
-              <button
-                v-for="locale in availableLocales"
-                :key="locale.code"
-                @click="setLocale(locale.code)"
-                class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 w-full text-left transition-colors duration-200"
-              >
-                {{ locale.name }}
-              </button>
-            </div>
-          </div>
+              {{ getLocaleName(currentLocale) }}
+            </UButton>
+          </UDropdownMenu>
         </div>
 
         <!-- Mobile menu button -->
         <div class="flex items-center md:hidden space-x-2">
-          <button
-            @click="toggleTheme"
-            class="p-2 rounded-md text-neutral-600 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:text-primary-400 dark:hover:bg-neutral-800 transition-colors duration-200"
+          <UButton
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
             :aria-label="`Switch to ${isDark ? 'light' : 'dark'} mode`"
-          >
-            <UIcon
-              v-if="isDark"
-              name="i-lucide-sun"
-              class="w-5 h-5"
-            />
-            <UIcon
-              v-else
-              name="i-lucide-moon"
-              class="w-5 h-5"
-            />
-          </button>
+            @click="toggleTheme"
+          />
 
-          <button
-            @click="toggleMobileMenu"
-            class="inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800 focus:outline-none transition-colors duration-200"
+          <UButton
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
             :aria-expanded="isMobileMenuOpen"
             :aria-label="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
-          >
-            <UIcon
-              v-if="!isMobileMenuOpen"
-              name="i-lucide-menu"
-              class="w-6 h-6"
-            />
-            <UIcon
-              v-else
-              name="i-lucide-x"
-              class="w-6 h-6"
-            />
-          </button>
+            @click="toggleMobileMenu"
+          />
         </div>
       </div>
     </div>
@@ -118,47 +85,44 @@
       class="md:hidden bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 animate-fade-in"
     >
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <NuxtLink
+        <UButton
           to="/"
-          :class="[
-            'block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200',
-            currentRoute.name === 'index'
-              ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-              : 'text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800'
-          ]"
+          color="neutral"
+          :variant="currentRoute.name === 'index' ? 'soft' : 'ghost'"
+          block
+          class="justify-start"
         >
           {{ t('nav.home') }}
-        </NuxtLink>
-        <NuxtLink
-          to="/submit"
-          :class="[
-            'block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200',
-            currentRoute.name === 'submit'
-              ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-              : 'text-neutral-700 hover:text-primary-600 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:text-primary-400 dark:hover:bg-neutral-800'
-          ]"
+        </UButton>
+        
+        <UButton
+          to="https://github.com/asterixix/grangoty/issues"
+          target="_blank"
+          color="neutral"
+          variant="ghost"
+          block
+          class="justify-start"
+          trailing-icon="i-lucide-external-link"
         >
-          {{ t('nav.submit') }}
-        </NuxtLink>
+          {{ t('nav.reportIssue') }}
+        </UButton>
 
         <div class="px-3 py-2">
           <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
             {{ t('nav.language') }}
           </label>
           <div class="space-y-1">
-            <button
+            <UButton
               v-for="locale in availableLocales"
               :key="locale.code"
+              color="neutral"
+              :variant="currentLocale === locale.code ? 'soft' : 'ghost'"
+              block
+              class="justify-start"
               @click="setLocale(locale.code)"
-              :class="[
-                'block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200',
-                currentLocale === locale.code
-                  ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-                  : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-800'
-              ]"
             >
               {{ locale.name }}
-            </button>
+            </UButton>
           </div>
         </div>
       </div>
@@ -181,6 +145,14 @@ const currentRoute = computed(() => route)
 
 // Theme management
 const isDark = ref(false)
+
+// Language dropdown items
+const languageItems = computed(() => [
+  availableLocales.value.map(locale => ({
+    label: locale.name,
+    click: () => setLocale(locale.code)
+  }))
+])
 
 function toggleTheme(): void {
   isDark.value = !isDark.value
