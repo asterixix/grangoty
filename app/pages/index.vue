@@ -181,7 +181,7 @@ import { computed, ref, watch } from 'vue'
 import type { Grant } from '~/types'
 import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 
 const currentPage = ref(1)
 const pageSize = 30

@@ -139,7 +139,7 @@ import { useLocaleStore } from '~/stores/locale'
 const route = useRoute()
 const uiStore = useUiStore()
 const localeStore = useLocaleStore()
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 
 // Reactive store state via storeToRefs — plain destructure breaks reactivity
 const { isMobileMenuOpen } = storeToRefs(uiStore)

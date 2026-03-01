@@ -94,7 +94,7 @@ const props = defineProps<{
   error: NuxtError
 }>()
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const statusCode = computed(() => props.error.statusCode ?? 0)

@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue'
 
-const { locale, locales, setLocale } = useI18n()
+const { locale, locales, setLocale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const currentLocale = ref(locale.value)

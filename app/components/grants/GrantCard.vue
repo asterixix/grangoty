@@ -142,7 +142,7 @@ const emit = defineEmits<{
   (e: 'retry'): void
 }>()
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 
 const scrapedAtText = computed(() => {
   if (!props.grant.scrapedAt) return ''

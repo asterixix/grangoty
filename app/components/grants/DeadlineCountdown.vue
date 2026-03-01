@@ -22,7 +22,7 @@ const props = defineProps<{
   deadline: string
 }>()
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 
 const mounted = ref(false)
 
