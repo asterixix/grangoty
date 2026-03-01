@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "node -e \"const fs=require('fs');const p='node_modules/.cache/nuxt';if(fs.existsSync(p)){fs.rmSync(p,{recursive:true,force:true});console.log('Cleared Nuxt build cache')}\"",
     "build": "nuxt build --force",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
