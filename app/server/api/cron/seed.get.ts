@@ -1,20 +1,24 @@
 import { defineEventHandler } from 'h3'
-import { grantStorage } from '~/server/utils/redis'
+import { getRedisClient, REDIS_KEYS } from '~/server/utils/redis'
 import { runAllScrapers } from '~/server/scrapers/sources'
 import { deduplicateGrants, validateGrant } from '~/server/scrapers/base-scraper'
 import type { Grant } from '~/app/types'
 
-async function runScrapeAndStore(): Promise<{ saved: number; newCount: number; updated: number; failed: number }> {
+async function runScrapeAndStore(): Promise<{ saved: number; failed: number; scraped: number }> {
+  const t0 = Date.now()
   console.log('[Cron] Scrape job started')
 
   const rawGrants = await runAllScrapers()
-  console.log(`[Cron] Scraped ${rawGrants.length} raw grants total`)
+  const t1 = Date.now()
+  console.log(`[Cron] Scraped ${rawGrants.length} raw grants in ${t1 - t0}ms`)
 
   const validGrants = deduplicateGrants(rawGrants).filter(validateGrant)
   console.log(`[Cron] ${validGrants.length} valid unique grants after deduplication`)
 
-  const existingGrants = await grantStorage.getAllGrants()
-  const existingIds = new Set(existingGrants.map(g => g.id))
+  if (validGrants.length === 0) {
+    console.warn('[Cron] No valid grants to save — aborting')
+    return { saved: 0, failed: 0, scraped: 0 }
+  }
 
   const grantsToSave: Grant[] = validGrants.map(raw => ({
     id: raw.id || `${raw.source}-${Buffer.from(raw.title || '').toString('base64').slice(0, 16)}-${Date.now()}`,
@@ -34,31 +38,33 @@ async function runScrapeAndStore(): Promise<{ saved: number; newCount: number; u
     lastVerifiedAt: new Date().toISOString(),
   }))
 
-  const saveResults = await Promise.allSettled(
-    grantsToSave.map(grant => grantStorage.saveGrant(grant))
-  )
+  // Single mega-pipeline: all grants' Redis writes in one HTTP request to Upstash
+  const redis = getRedisClient()
+  const pipeline = redis.pipeline()
+
+  for (const grant of grantsToSave) {
+    pipeline.set(REDIS_KEYS.GRANT_BY_ID(grant.id), JSON.stringify(grant))
+    pipeline.sadd(REDIS_KEYS.GRANTS_LIST, grant.id)
+    pipeline.sadd(REDIS_KEYS.GRANTS_BY_SOURCE(grant.source), grant.id)
+    if (grant.category) pipeline.sadd(REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category), grant.id)
+    if (grant.region) pipeline.sadd(REDIS_KEYS.GRANTS_BY_REGION(grant.region), grant.id)
+  }
 
   let saved = 0
-  let newCount = 0
-  let updated = 0
   let failed = 0
 
-  saveResults.forEach((result, i) => {
-    if (result.status === 'fulfilled') {
-      saved++
-      if (existingIds.has(grantsToSave[i].id)) {
-        updated++
-      } else {
-        newCount++
-      }
-    } else {
-      console.error('[Cron] Failed to save grant:', grantsToSave[i].title, result.reason)
-      failed++
-    }
-  })
+  try {
+    await pipeline.exec()
+    saved = grantsToSave.length
+  } catch (err) {
+    console.error('[Cron] Pipeline exec failed:', err)
+    failed = grantsToSave.length
+  }
 
-  console.log(`[Cron] Done: saved=${saved}, new=${newCount}, updated=${updated}, failed=${failed}`)
-  return { saved, newCount, updated, failed }
+  const t2 = Date.now()
+  console.log(`[Cron] Redis pipeline done in ${t2 - t1}ms`)
+  console.log(`[Cron] Done: saved=${saved}, failed=${failed}, total_ms=${t2 - t0}`)
+  return { saved, failed, scraped: rawGrants.length }
 }
 
 export default defineEventHandler(async (_event) => {

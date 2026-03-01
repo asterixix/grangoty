@@ -138,6 +138,15 @@ function createMockRedis(): Redis {
       return [0, keys]
     },
     ping: async () => 'PONG',
+    pipeline: () => {
+      const commands: Array<() => Promise<any>> = []
+      const pipe = {
+        set: (key: string, value: any, _opts?: any) => { commands.push(() => { store.set(key, value); return Promise.resolve('OK') }); return pipe },
+        sadd: (key: string, ...members: any[]) => { commands.push(() => { const s = store.get(key) || new Set(); members.forEach(m => s.add(m)); store.set(key, s); return Promise.resolve(members.length) }); return pipe },
+        exec: async () => { const results = []; for (const cmd of commands) results.push(await cmd()); return results },
+      }
+      return pipe
+    },
   } as unknown as Redis
 }
 
@@ -165,25 +174,25 @@ export class GrantStorage {
   }
 
   /**
-   * Store a grant in Redis
+   * Store a grant in Redis using a pipeline (single HTTP round trip)
    */
   async saveGrant(grant: Grant): Promise<void> {
     const grantJson = JSON.stringify(grant)
-    
-    // Store grant by ID
-    await this.redis.set(REDIS_KEYS.GRANT_BY_ID(grant.id), grantJson)
-    
-    // Add to indexes
-    await this.redis.sadd(REDIS_KEYS.GRANTS_LIST, grant.id)
-    await this.redis.sadd(REDIS_KEYS.GRANTS_BY_SOURCE(grant.source), grant.id)
-    
+    const pipeline = this.redis.pipeline()
+
+    pipeline.set(REDIS_KEYS.GRANT_BY_ID(grant.id), grantJson)
+    pipeline.sadd(REDIS_KEYS.GRANTS_LIST, grant.id)
+    pipeline.sadd(REDIS_KEYS.GRANTS_BY_SOURCE(grant.source), grant.id)
+
     if (grant.category) {
-      await this.redis.sadd(REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category), grant.id)
+      pipeline.sadd(REDIS_KEYS.GRANTS_BY_CATEGORY(grant.category), grant.id)
     }
-    
+
     if (grant.region) {
-      await this.redis.sadd(REDIS_KEYS.GRANTS_BY_REGION(grant.region), grant.id)
+      pipeline.sadd(REDIS_KEYS.GRANTS_BY_REGION(grant.region), grant.id)
     }
+
+    await pipeline.exec()
   }
 
   /**

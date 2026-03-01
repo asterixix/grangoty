@@ -21,7 +21,9 @@ const REQUEST_HEADERS = {
 export class GrantowoPlScraper {
   source = 'grantowo'
   url = BASE_URL
-  enabled = true
+  // Disabled: grantowo.pl consistently exceeds the fetch timeout from Vercel
+  // egress (>8s latency). Re-enable once a local proxy or caching layer is added.
+  enabled = false
   name = 'Grantowo.pl Scraper'
 
   async scrape(): Promise<RawGrant[]> {
