@@ -53,8 +53,14 @@ function selectFilter(value: string | null): void {
 @reference "tailwindcss";
 
 .filter-bar {
-  @apply w-full overflow-x-auto scrollbar-hide py-2;
+  @apply w-full overflow-x-auto py-2;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.filter-bar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .filter-scroll-container {
