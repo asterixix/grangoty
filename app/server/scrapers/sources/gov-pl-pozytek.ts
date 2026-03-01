@@ -12,6 +12,7 @@ import * as cheerio from 'cheerio'
 import type { RawGrant } from '~/app/types'
 
 const GRANT_KEYWORDS = /nabor|nabór|konkurs|dotacj|ofert|grant/i
+const MAX_GRANTS = 60
 
 export class GovPlPozytekScraper {
   source = 'gov-pl-pozytek'
@@ -48,6 +49,8 @@ export class GovPlPozytekScraper {
     const grants: RawGrant[] = []
 
     $('a[href^="/web/pozytek/"]').each((_, el) => {
+      if (grants.length >= MAX_GRANTS) return
+
       const href = $(el).attr('href') || ''
       const title = $(el).text().trim()
 
