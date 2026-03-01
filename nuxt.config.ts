@@ -59,7 +59,7 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       fallbackLocale: 'pl'
     },
-    lazy: true,
+    lazy: false,
     langDir: 'locales',
     vueI18n: './i18n.config.ts',
     ignoreRoutes: ['api', 'api/**', '_nuxt', 'assets']
