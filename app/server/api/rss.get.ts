@@ -94,15 +94,16 @@ export default defineEventHandler(async (event) => {
     // Fetch grants from Redis
     const grants = await grantStorage.getAllGrants()
     
-    // Sort by scrapedAt (newest first)
+    // Sort by deadline urgency (soonest first), fallback to scrapedAt for no-deadline grants
     grants.sort((a, b) => {
-      const dateA = new Date(a.scrapedAt || 0).getTime()
-      const dateB = new Date(b.scrapedAt || 0).getTime()
-      return dateB - dateA
+      const aDeadline = a.deadline ? new Date(a.deadline).getTime() : Infinity
+      const bDeadline = b.deadline ? new Date(b.deadline).getTime() : Infinity
+      if (aDeadline !== bDeadline) return aDeadline - bDeadline
+      return new Date(b.scrapedAt || 0).getTime() - new Date(a.scrapedAt || 0).getTime()
     })
 
-    // Diversify: cap at 15 grants per source so no single scraper dominates
-    const MAX_PER_SOURCE = 15
+    // Diversify: cap at 5 grants per source so all scrapers are represented
+    const MAX_PER_SOURCE = 5
     const MAX_TOTAL = 100
     const countBySource: Record<string, number> = {}
     const recentGrants = grants.filter(g => {

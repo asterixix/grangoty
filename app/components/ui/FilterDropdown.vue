@@ -34,13 +34,13 @@
     >
       <div
         v-if="isOpen"
-        class="filter-menu absolute z-50 mt-1 min-w-40 rounded-lg shadow-lg overflow-hidden"
-        style="
+        class="filter-menu absolute z-50 mt-1 min-w-40 max-h-60 overflow-y-auto rounded-lg shadow-lg"
+        :style="`
           background-color: var(--color-dark-teal-200);
           border: 1px solid var(--color-strong-cyan-700);
           top: 100%;
-          left: 0;
-        "
+          ${alignRight ? 'right: 0;' : 'left: 0;'}
+        `"
         role="listbox"
         :aria-label="placeholder"
       >
@@ -94,6 +94,7 @@ const emit = defineEmits<{
 
 const isOpen = ref(false)
 const containerRef = ref<HTMLElement | null>(null)
+const alignRight = ref(false)
 
 function handleOutsideClick(event: MouseEvent): void {
   if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
@@ -101,8 +102,20 @@ function handleOutsideClick(event: MouseEvent): void {
   }
 }
 
-onMounted(() => document.addEventListener('mousedown', handleOutsideClick))
-onBeforeUnmount(() => document.removeEventListener('mousedown', handleOutsideClick))
+onMounted(() => {
+  document.addEventListener('mousedown', handleOutsideClick)
+  checkAlignment()
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleOutsideClick)
+})
+
+function checkAlignment(): void {
+  if (!containerRef.value) return
+  const rect = containerRef.value.getBoundingClientRect()
+  alignRight.value = rect.right + 160 > window.innerWidth
+}
 
 const displayLabel = computed(() => {
   if (!props.modelValue) return props.placeholder
@@ -126,6 +139,7 @@ const triggerStyle = computed(() => {
 })
 
 function toggleOpen(): void {
+  checkAlignment()
   isOpen.value = !isOpen.value
 }
 

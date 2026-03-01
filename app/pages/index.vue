@@ -9,7 +9,7 @@
           {{ t('home.openGrants') }}
         </h1>
         <p class="text-sm mt-1" style="color: var(--color-dark-teal-600);">
-          {{ t('grants.resultsCount', { count: filteredGrants.length, total: totalGrants, page: currentPage, totalPages }) }}
+          {{ t('grants.resultsCount', { count: filteredGrants.length, total: totalInDatabase, page: currentPage, totalPages }) }}
         </p>
       </div>
 
@@ -196,11 +196,14 @@ const selectedStatus = ref('')
 
 const { data: apiResponse, pending: isLoading } = await useAsyncData(
   'grants',
-  () => $fetch<{ data: Grant[] }>('/api/grants'),
-  { default: () => ({ data: [] as Grant[] }) }
+  () => $fetch<{ data: Grant[]; meta: { total: number } }>('/api/grants', {
+    query: { pageSize: 1000 }
+  }),
+  { default: () => ({ data: [] as Grant[], meta: { total: 0 } }) }
 )
 
 const grants = computed(() => apiResponse.value?.data ?? [])
+const totalInDatabase = computed(() => apiResponse.value?.meta?.total ?? grants.value.length)
 
 useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
   if (event === 'save') handleSave(rank)
@@ -332,3 +335,4 @@ useHead({
   background-color: var(--color-strong-cyan-900);
 }
 </style>
+</code>
