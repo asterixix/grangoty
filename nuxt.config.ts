@@ -67,6 +67,7 @@ export default defineNuxtConfig({
     preset: 'vercel',
     routeRules: {
       '/api/**': { cors: true, prerender: false, cache: false },
+      '/api/cron/**': { cors: false },
       '/**': { isr: 300 }
     }
   },
