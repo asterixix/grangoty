@@ -1,5 +1,5 @@
 import { Redis } from '@upstash/redis'
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 /**
  * Redis client singleton for Upstash

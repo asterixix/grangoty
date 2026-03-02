@@ -2,7 +2,7 @@ import { defineEventHandler } from 'h3'
 import { getRedisClient, REDIS_KEYS } from '~/server/utils/redis'
 import { runAllScrapers } from '~/server/scrapers/sources'
 import { deduplicateGrants, validateGrant } from '~/server/scrapers/base-scraper'
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 async function runScrapeAndStore(): Promise<{ saved: number; failed: number; scraped: number }> {
   const t0 = Date.now()
@@ -40,6 +40,50 @@ async function runScrapeAndStore(): Promise<{ saved: number; failed: number; scr
 
   // Single mega-pipeline: all grants' Redis writes in one HTTP request to Upstash
   const redis = getRedisClient()
+  
+  const existingGrantIds = await redis.smembers(REDIS_KEYS.GRANTS_LIST) as string[] || []
+  if (existingGrantIds.length > 0) {
+    const keysToFetch = existingGrantIds.map(id => REDIS_KEYS.GRANT_BY_ID(id))
+    const CHUNK_SIZE = 100
+    const existingGrants: Grant[] = []
+    
+    for (let i = 0; i < keysToFetch.length; i += CHUNK_SIZE) {
+      const chunk = keysToFetch.slice(i, i + CHUNK_SIZE)
+      const values = await redis.mget<Grant[]>(...chunk)
+      existingGrants.push(...values.filter(Boolean))
+    }
+
+    const now = Date.now()
+    const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
+    const NINETY_DAYS = 90 * 24 * 60 * 60 * 1000
+
+    const idsToDelete = existingGrants.filter(g => {
+      if (g.deadline) {
+        const deadlineTime = new Date(g.deadline).getTime()
+        if (now - deadlineTime > THIRTY_DAYS) return true
+      }
+      
+      const lastVerified = new Date(g.lastVerifiedAt || g.scrapedAt || 0).getTime()
+      if (now - lastVerified > NINETY_DAYS) return true
+
+      return false
+    }).map(g => g.id)
+
+    if (idsToDelete.length > 0) {
+      console.log(`[Cron] Cleaning up ${idsToDelete.length} expired/old grants`)
+      const delPipeline = redis.pipeline()
+      idsToDelete.forEach(id => {
+        delPipeline.del(REDIS_KEYS.GRANT_BY_ID(id))
+        delPipeline.srem(REDIS_KEYS.GRANTS_LIST, id)
+      })
+      try {
+        await delPipeline.exec()
+      } catch (e) {
+        console.error('[Cron] Cleanup pipeline failed:', e)
+      }
+    }
+  }
+
   const pipeline = redis.pipeline()
 
   for (const grant of grantsToSave) {

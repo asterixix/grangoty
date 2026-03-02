@@ -1,4 +1,4 @@
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 /**
  * Get sample grants for development and testing
