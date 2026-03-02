@@ -1,5 +1,5 @@
 import { parseStringPromise } from 'xml2js'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 /**
  * Parse RSS/Atom feed and convert to Grant objects

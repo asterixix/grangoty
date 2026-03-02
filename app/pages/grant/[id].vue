@@ -5,7 +5,7 @@
       class="py-8 text-center"
       style="color: var(--color-dark-teal-600);"
     >
-      Loading…
+      {{ t('common.loading') }}
     </div>
 
     <div v-else-if="!grant" class="py-8 text-center">
@@ -104,7 +104,7 @@
       <div class="mb-4">
         <h2 class="text-xs font-medium mb-1" style="color: var(--color-dark-teal-600);">{{ t('grants.description') }}</h2>
         <p class="text-sm leading-relaxed whitespace-pre-line" style="color: var(--color-dark-teal-500);">
-          {{ grant.description || 'No description available.' }}
+          {{ grant.description || t('grants.noDescription') }}
         </p>
       </div>
 
@@ -220,7 +220,7 @@ function formatDate(dateStr: string): string {
 async function fetchGrant(): Promise<void> {
   isLoading.value = true
   try {
-    const id = route.params.id as string
+    const id = (route.params as any).id as string
     const response = await $fetch(`/api/grants/${id}`)
     grant.value = response as Grant
   } catch (error) {
