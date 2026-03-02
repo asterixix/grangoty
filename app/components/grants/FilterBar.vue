@@ -1,7 +1,7 @@
 <template>
   <nav
     role="navigation"
-    aria-label="Filtry konkursów"
+    :aria-label="t('nav.filtersAria')"
     class="filter-bar"
   >
     <div class="filter-scroll-container">
@@ -23,6 +23,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n({ useScope: 'global' })
 
 interface FilterOption {
   value: string

@@ -9,7 +9,7 @@
           {{ t('home.openGrants') }}
         </h1>
         <p class="text-sm mt-1" style="color: var(--color-dark-teal-600);">
-          {{ t('grants.resultsCount', { count: filteredGrants.length, total: totalInDatabase, page: currentPage, totalPages }) }}
+          {{ t('grants.resultsCount', { count: filteredTotal, total: totalInDatabase, page: currentPage, totalPages }) }}
         </p>
       </div>
 
@@ -17,24 +17,32 @@
         <GrantsFilterBar
           v-model="activeFilter"
           :filters="[
-            { value: '', label: t('filters.all') || 'Wszystkie' },
-            { value: 'krajowe', label: t('filters.national') || 'Krajowe' },
-            { value: 'regionalne', label: t('filters.regional') || 'Regionalne' },
-            { value: 'ue', label: 'UE' },
-            { value: 'terminujace', label: t('filters.ending') || 'Terminujące' }
+            { value: '', label: t('filters.all') },
+            { value: 'krajowe', label: t('filters.national') },
+            { value: 'regionalne', label: t('filters.regional') },
+            { value: 'ue', label: t('filters.ue') },
+            { value: 'terminujace', label: t('filters.ending') }
           ]"
         />
       </div>
 
-      <div class="mb-4 flex flex-wrap items-center gap-2 text-sm">
-        <UInput
-          id="search"
-          v-model="searchQuery"
+      <div class="mb-4">
+        <button
+          class="sm:hidden mb-2 px-3 py-1.5 text-sm font-medium rounded-lg border w-full flex justify-between items-center"
+          style="background-color: var(--color-mint-cream-700); border-color: var(--color-strong-cyan-700); color: var(--color-dark-teal-600);"
+          @click="showMobileFilters = !showMobileFilters"
+        >
+          <span>{{ t('filters.title') }} <span v-if="activeFilterCount > 0">({{ activeFilterCount }})</span></span>
+          <UIcon :name="showMobileFilters ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'" />
+        </button>
+        <div :class="['flex flex-wrap items-center gap-2 text-sm', showMobileFilters ? 'block' : 'hidden sm:flex']">
+          <UInput
+            id="search"
+            v-model="searchQuery"
           type="search"
           :placeholder="t('filters.searchPlaceholder')"
           size="sm"
           class="w-full sm:w-64"
-          :ui="{ icon: { trailing: { pointer: '' } } }"
         >
           <template #trailing>
             <UButton
@@ -65,6 +73,15 @@
           v-model="selectedStatus"
           :placeholder="t('filters.status')"
           :options="statusOptions"
+        />
+
+        <UiFilterDropdown
+          v-model="sortBy"
+          :placeholder="t('filters.sort')"
+          :options="[
+            { label: t('filters.sortDeadline'), value: 'deadline' },
+            { label: t('filters.sortAdded'), value: 'added' }
+          ]"
         />
 
         <UButton
@@ -145,14 +162,21 @@
         aria-label="Pagination"
       >
         <div class="flex justify-center items-center gap-2 text-sm">
-          <button
-            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-40"
-            :disabled="currentPage === 1"
+          <NuxtLink
+            v-if="currentPage > 1"
+            :to="{ query: { ...route.query, page: currentPage > 2 ? currentPage - 1 : undefined } }"
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150"
             style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
-            @click="goToPage(currentPage - 1)"
           >
             ‹ {{ t('common.previous') }}
-          </button>
+          </NuxtLink>
+          <span
+            v-else
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium opacity-40 cursor-not-allowed"
+            style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
+          >
+            ‹ {{ t('common.previous') }}
+          </span>
 
           <span
             class="px-3 py-1.5 rounded-lg text-sm font-medium"
@@ -161,14 +185,21 @@
             {{ currentPage }} / {{ totalPages }}
           </span>
 
-          <button
-            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-40"
-            :disabled="currentPage === totalPages"
+          <NuxtLink
+            v-if="currentPage < totalPages"
+            :to="{ query: { ...route.query, page: currentPage + 1 } }"
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150"
             style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
-            @click="goToPage(currentPage + 1)"
           >
             {{ t('common.next') }} ›
-          </button>
+          </NuxtLink>
+          <span
+            v-else
+            class="px-3 py-1.5 rounded-lg border text-sm font-medium opacity-40 cursor-not-allowed"
+            style="border-color: var(--color-dark-teal-700); color: var(--color-dark-teal-500);"
+          >
+            {{ t('common.next') }} ›
+          </span>
         </div>
       </nav>
     </main>
@@ -178,53 +209,70 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import type { Grant } from '~/types'
 import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
 
 const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+const router = useRouter()
 
-const currentPage = ref(1)
 const pageSize = 30
 const savedGrants = ref<string[]>([])
-const activeFilter = ref('')
 const currentIndex = ref(0)
+const showMobileFilters = ref(false)
 
-const searchQuery = ref('')
-const selectedCategory = ref('')
-const selectedRegion = ref('')
-const selectedStatus = ref('')
+const activeFilterCount = computed(() => {
+  let count = 0
+  if (searchQuery.value) count++
+  if (selectedCategory.value) count++
+  if (selectedRegion.value) count++
+  if (selectedStatus.value) count++
+  return count
+})
 
-const { data: apiResponse, pending: isLoading } = await useAsyncData(
-  'grants',
-  () => $fetch<{ data: Grant[]; meta: { total: number } }>('/api/grants', {
-    query: { pageSize: 1000 }
-  }),
-  { default: () => ({ data: [] as Grant[], meta: { total: 0 } }) }
+const currentPage = computed({
+  get: () => parseInt(route.query.page as string) || 1,
+  set: (val) => router.push({ query: { ...route.query, page: val === 1 ? undefined : val } })
+})
+const searchQuery = computed({
+  get: () => route.query.q as string || '',
+  set: (val) => router.push({ query: { ...route.query, q: val || undefined, page: undefined } })
+})
+const selectedCategory = computed({
+  get: () => route.query.category as string || '',
+  set: (val) => router.push({ query: { ...route.query, category: val || undefined, page: undefined } })
+})
+const selectedRegion = computed({
+  get: () => route.query.region as string || '',
+  set: (val) => router.push({ query: { ...route.query, region: val || undefined, page: undefined } })
+})
+const selectedStatus = computed({
+  get: () => route.query.status as string || '',
+  set: (val) => router.push({ query: { ...route.query, status: val || undefined, page: undefined } })
+})
+const activeFilter = computed({
+  get: () => route.query.activeFilter as string || '',
+  set: (val) => router.push({ query: { ...route.query, activeFilter: val || undefined, page: undefined } })
+})
+const sortBy = computed({
+  get: () => route.query.sort as string || 'deadline',
+  set: (val) => router.push({ query: { ...route.query, sort: val === 'deadline' ? undefined : val, page: undefined } })
+})
+
+const { data: metaResponse } = await useAsyncData(
+  'grants-metadata',
+  () => $fetch<{ categories: string[]; regions: string[]; totalCount: number }>('/api/grants/metadata'),
+  { default: () => ({ categories: [], regions: [], totalCount: 0 }) }
 )
 
-const grants = computed(() => apiResponse.value?.data ?? [])
-const totalInDatabase = computed(() => apiResponse.value?.meta?.total ?? grants.value.length)
-
-useKeyboardShortcuts(grants, currentIndex, (event: string, rank: number) => {
-  if (event === 'save') handleSave(rank)
-})
-
-const categories = computed(() => {
-  const cats = new Set(grants.value.map(g => g.category).filter(Boolean))
-  return Array.from(cats).sort()
-})
-
-const regions = computed(() => {
-  const regs = new Set(grants.value.map(g => g.region).filter(Boolean))
-  return Array.from(regs).sort()
-})
-
 const categoryOptions = computed(() =>
-  categories.value.map(cat => ({ label: cat, value: cat }))
+  metaResponse.value.categories.map(cat => ({ label: cat, value: cat }))
 )
 
 const regionOptions = computed(() =>
-  regions.value.map(reg => ({ label: reg, value: reg }))
+  metaResponse.value.regions.map(reg => ({ label: reg, value: reg }))
 )
 
 const statusOptions = computed(() => [
@@ -233,75 +281,51 @@ const statusOptions = computed(() => [
   { label: t('status.closed'), value: 'closed' }
 ])
 
+const apiQuery = computed(() => ({
+  page: currentPage.value,
+  pageSize,
+  ...(searchQuery.value ? { q: searchQuery.value } : {}),
+  ...(selectedCategory.value ? { category: selectedCategory.value } : {}),
+  ...(selectedRegion.value ? { region: selectedRegion.value } : {}),
+  ...(selectedStatus.value ? { status: selectedStatus.value } : {}),
+  ...(activeFilter.value ? { activeFilter: activeFilter.value } : {})
+}))
+
+const { data: apiResponse, pending: isLoading, refresh } = await useAsyncData(
+  'grants-paginated',
+  () => $fetch<{ data: Grant[]; meta: { total: number; totalPages: number } }>('/api/grants', {
+    query: apiQuery.value
+  }),
+  { 
+    default: () => ({ data: [] as Grant[], meta: { total: 0, totalPages: 0 } }),
+    watch: [apiQuery]
+  }
+)
+
+const paginatedGrants = computed(() => apiResponse.value?.data ?? [])
+const filteredTotal = computed(() => apiResponse.value?.meta?.total ?? 0)
+const totalPages = computed(() => apiResponse.value?.meta?.totalPages ?? 1)
+const totalInDatabase = computed(() => metaResponse.value?.totalCount ?? 0)
+
+useKeyboardShortcuts(paginatedGrants, currentIndex, (event: string, rank: number) => {
+  if (event === 'save') handleSave(rank)
+})
+
 const hasFilters = computed(() =>
   !!(searchQuery.value || selectedCategory.value || selectedRegion.value || selectedStatus.value || activeFilter.value)
 )
 
-const filteredGrants = computed(() => {
-  let result = grants.value
-
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    result = result.filter(g =>
-      g.title.toLowerCase().includes(query) ||
-      g.description?.toLowerCase().includes(query) ||
-      g.tags?.some(tag => tag.toLowerCase().includes(query))
-    )
-  }
-
-  if (selectedCategory.value) {
-    result = result.filter(g => g.category === selectedCategory.value)
-  }
-
-  if (selectedRegion.value) {
-    result = result.filter(g => g.region === selectedRegion.value)
-  }
-
-  if (selectedStatus.value) {
-    result = result.filter(g => g.status === selectedStatus.value)
-  }
-
-  if (activeFilter.value) {
-    if (activeFilter.value === 'terminujace') {
-      const sevenDaysFromNow = new Date()
-      sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7)
-      result = result.filter(g => g.deadline && new Date(g.deadline) <= sevenDaysFromNow)
-    } else {
-      result = result.filter(g => g.region.toLowerCase().includes(activeFilter.value.toLowerCase()))
-    }
-  }
-
-  return [...result].sort((a, b) => {
-    if (!a.deadline) return 1
-    if (!b.deadline) return -1
-    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-  })
-})
-
-const totalGrants = computed(() => filteredGrants.value.length)
-const totalPages = computed(() => Math.ceil(totalGrants.value / pageSize))
-
-const paginatedGrants = computed(() => {
-  const start = (currentPage.value - 1) * pageSize
-  return filteredGrants.value.slice(start, start + pageSize)
-})
-
 function clearFilters(): void {
-  searchQuery.value = ''
-  selectedCategory.value = ''
-  selectedRegion.value = ''
-  selectedStatus.value = ''
-  activeFilter.value = ''
-  currentPage.value = 1
+  router.push({ query: {} })
 }
 
 function goToPage(page: number): void {
-  currentPage.value = Math.max(1, Math.min(page, totalPages.value))
+  currentPage.value = page
 }
 
 function handleSave(rank: number): void {
-  const index = rank - 1 - (currentPage.value - 1) * pageSize
-  const grant = paginatedGrants.value[index]
+  const localIndex = rank - 1 - (currentPage.value - 1) * pageSize
+  const grant = paginatedGrants.value[localIndex]
   if (!grant) return
   const pos = savedGrants.value.indexOf(grant.id)
   if (pos > -1) {
@@ -310,10 +334,6 @@ function handleSave(rank: number): void {
     savedGrants.value.push(grant.id)
   }
 }
-
-watch([searchQuery, selectedCategory, selectedRegion, selectedStatus, activeFilter], () => {
-  currentPage.value = 1
-})
 
 useHead({
   title: 'GRANgoTY - ' + t('home.heroTitle'),
@@ -335,4 +355,3 @@ useHead({
   background-color: var(--color-strong-cyan-900);
 }
 </style>
-

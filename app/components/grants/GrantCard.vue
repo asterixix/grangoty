@@ -62,10 +62,9 @@
           :href="grant.website"
           target="_blank"
           rel="noopener noreferrer"
-          class="font-medium hover:underline transition-colors duration-150"
-          style="color: var(--color-dark-teal-500);"
+          class="grant-title font-medium hover:underline transition-colors duration-150"
           @mouseenter="(e) => (e.target as HTMLElement).style.color = 'var(--color-strong-cyan-400)'"
-          @mouseleave="(e) => (e.target as HTMLElement).style.color = 'var(--color-dark-teal-500)'"
+          @mouseleave="(e) => (e.target as HTMLElement).style.color = ''"
         >
           {{ grant.title }} ↗
         </a>
@@ -78,6 +77,14 @@
           <span v-if="grant.source" style="color: var(--color-dark-teal-600);">
             {{ grant.source }}
           </span>
+
+          <NuxtLink
+            :to="localePath(`/grant/${grant.id}`)"
+            class="hover:underline font-medium"
+            style="color: var(--color-strong-cyan-700);"
+          >
+            {{ t('common.showDetails') }}
+          </NuxtLink>
 
           <span v-if="grant.region" style="color: var(--color-dark-teal-600);">
             {{ grant.region }}
@@ -108,12 +115,7 @@
         </div>
 
         <div v-if="grant.deadline" class="mt-2">
-          <ClientOnly>
-            <GrantsDeadlineCountdown :deadline="grant.deadline" />
-            <template #fallback>
-              <USkeleton class="h-4 w-24" />
-            </template>
-          </ClientOnly>
+          <GrantsDeadlineCountdown :deadline="grant.deadline" />
         </div>
       </div>
     </template>
@@ -143,6 +145,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n({ useScope: 'global' })
+const localePath = useLocalePath()
 
 const scrapedAtText = computed(() => {
   if (!props.grant.scrapedAt) return ''
@@ -185,5 +188,13 @@ function truncateText(text: string, maxLength: number): string {
 
 .grant-card {
   @apply transition-colors duration-200;
+}
+
+.grant-title {
+  color: var(--color-dark-teal-500);
+}
+
+.grant-title:visited {
+  color: var(--color-dark-teal-600);
 }
 </style>

@@ -1,5 +1,5 @@
-import { useFiltersStore } from '~/app/stores/filters'
-import type { FilterState } from '~/app/types'
+import { useFiltersStore } from '~/stores/filters'
+import type { FilterState } from '~/types'
 
 /**
  * Composable for managing filter state
