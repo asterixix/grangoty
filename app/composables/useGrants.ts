@@ -1,5 +1,5 @@
-import { useGrantsStore } from '~/app/stores/grants'
-import type { Grant, PaginatedResponse } from '~/app/types'
+import { useGrantsStore } from '~/stores/grants'
+import type { Grant, PaginatedResponse } from '~/types'
 
 /**
  * Composable for managing grants data and operations

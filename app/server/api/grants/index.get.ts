@@ -1,7 +1,7 @@
 import { defineEventHandler, getQuery, createError } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
 import { getSampleGrants } from './seed'
-import type { PaginatedResponse, Grant } from '~/app/types'
+import type { PaginatedResponse, Grant } from '~/types'
 
 export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant>> => {
   if (event.method === 'OPTIONS') {
@@ -11,22 +11,21 @@ export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant
 
   const query = getQuery(event)
   const page = parseInt(query.page as string) || 1
-  const pageSize = parseInt(query.pageSize as string) || 20
+  const pageSize = parseInt(query.pageSize as string) || 30
   const searchQuery = query.q as string || query.search as string || ''
   const category = query.category as string
   const region = query.region as string
   const status = query.status as string
+  const activeFilter = query.activeFilter as string
+  const sortBy = query.sort as string || 'deadline'
 
   try {
     let grants = await grantStorage.getAllGrants()
 
-    // Only use sample data in development if no real data exists
     if (grants.length === 0 && process.env.NODE_ENV !== 'production') {
-      console.log('[GRANgoTY] No real grants found, using minimal development data.')
       grants = getSampleGrants()
     }
 
-    // In production, if no real data exists, return empty result
     if (grants.length === 0 && process.env.NODE_ENV === 'production') {
       return {
         data: [],
@@ -60,11 +59,29 @@ export default defineEventHandler(async (event): Promise<PaginatedResponse<Grant
       grants = grants.filter(g => g.status === status)
     }
 
-    grants.sort((a, b) => {
-      if (!a.deadline) return 1
-      if (!b.deadline) return -1
-      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-    })
+    if (activeFilter) {
+      if (activeFilter === 'terminujace') {
+        const sevenDaysFromNow = new Date()
+        sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7)
+        grants = grants.filter(g => g.deadline && new Date(g.deadline) <= sevenDaysFromNow)
+      } else {
+        grants = grants.filter(g => g.region.toLowerCase().includes(activeFilter.toLowerCase()))
+      }
+    }
+
+    if (sortBy === 'added') {
+      grants.sort((a, b) => {
+        const dateA = (a as any).scrapedAt ? new Date((a as any).scrapedAt).getTime() : 0
+        const dateB = (b as any).scrapedAt ? new Date((b as any).scrapedAt).getTime() : 0
+        return dateB - dateA
+      })
+    } else {
+      grants.sort((a, b) => {
+        if (!a.deadline) return 1
+        if (!b.deadline) return -1
+        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+      })
+    }
 
     const total = grants.length
     const startIndex = (page - 1) * pageSize

@@ -6,8 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useState } from '#app'
 
 function parseDate(dateString: string): Date {
   return new Date(dateString)
@@ -24,17 +25,13 @@ const props = defineProps<{
 
 const { t } = useI18n({ useScope: 'global' })
 
-const mounted = ref(false)
-
-onMounted(() => {
-  mounted.value = true
-})
+// Sync server time with client to avoid hydration mismatch
+const now = useState('current-time', () => new Date())
 
 const daysRemaining = computed(() => {
   try {
     const deadline = parseDate(props.deadline)
-    const now = mounted.value ? new Date() : new Date('2026-02-28')
-    return differenceInDays(deadline, now)
+    return differenceInDays(deadline, now.value)
   } catch {
     return null
   }
