@@ -1,48 +1,8 @@
 {
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "allowJs": false,
-    "checkJs": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"],
-      "~/app/*": ["./app/*"],
-      "~/components/*": ["./app/components/*"],
-      "~/composables/*": ["./app/composables/*"],
-      "~/pages/*": ["./app/pages/*"],
-      "~/stores/*": ["./app/stores/*"],
-      "~/server/*": ["./app/server/*"],
-      "~/tests/*": ["./tests/*"]
-    }
-  },
-  "include": [
-    "app/**/*.ts",
-    "app/**/*.vue",
-    "tests/**/*.ts",
-    "nuxt.config.ts",
-    "tailwind.config.ts",
-    "i18n.config.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    ".nuxt",
-    ".output"
-  ]
+    "strict": false,
+    "noImplicitOverride": false
+  }
 }

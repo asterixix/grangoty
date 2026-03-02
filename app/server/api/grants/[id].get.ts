@@ -1,6 +1,6 @@
 import { defineEventHandler, createError } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 export default defineEventHandler(async (event): Promise<Grant> => {
   const id = event.context.params?.id

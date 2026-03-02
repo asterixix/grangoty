@@ -62,7 +62,7 @@
           @mouseleave="(e) => (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'"
         >
           <UIcon name="i-lucide-bug" class="w-4 h-4" />
-          {{ t('errors.reportBug') || 'Report Bug' }}
+          {{ t('errors.reportBug') }}
         </a>
       </div>
 
@@ -75,7 +75,7 @@
             class="px-4 py-2 text-xs font-medium cursor-pointer select-none"
             style="background-color: var(--color-strong-cyan-900); color: var(--color-dark-teal-600);"
           >
-            {{ t('errors.technicalDetails') || 'Technical details' }}
+            {{ t('errors.technicalDetails') }}
           </summary>
           <pre
             class="px-4 py-3 text-xs overflow-auto max-h-40"

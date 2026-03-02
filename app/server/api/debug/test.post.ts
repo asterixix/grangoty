@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, setResponseStatus } from 'h3'
 import { scrapers } from '~/server/scrapers/real-scrapers'
 import { scraperLogger } from '~/server/utils/logger'
-import type { ScraperTestResult } from '~/app/types'
+import type { ScraperTestResult } from '~/types'
 
 /**
  * Test scraper API - safely test individual scrapers without affecting production data

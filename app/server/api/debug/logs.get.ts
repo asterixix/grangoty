@@ -2,7 +2,7 @@ import { defineEventHandler, getQuery, createError, getHeader } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
 import { scrapers } from '~/server/scrapers/real-scrapers'
 import { scraperLogger } from '~/server/utils/logger'
-import type { ScraperLogs } from '~/app/types'
+import type { ScraperLogs } from '~/types'
 
 /**
  * Logs API for scraper debugging and monitoring

@@ -79,7 +79,7 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    typedPages: true
+    typedPages: false
   },
 
   typescript: {
