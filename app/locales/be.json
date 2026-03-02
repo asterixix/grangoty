@@ -4,7 +4,14 @@
     "home": "Галоўная",
     "submit": "Падаць грант",
     "language": "Мова",
-    "reportIssue": "Паведаміць аб праблеме"
+    "reportIssue": "Паведаміць аб праблеме",
+    "filtersAria": "Фільтры грантаў",
+    "closeMenu": "Зачыніць меню",
+    "openMenu": "Адкрыць меню",
+    "themeSwitch": "Пераключыць тэму",
+    "themeLight": "светлая",
+    "themeDark": "цёмная",
+    "titleHome": "GRANgoTY - Галоўная"
   },
   "home": {
     "heroTitle": "Знайдзіце гранты для вашай арганізацыі",
@@ -30,7 +37,15 @@
     "status": "Статус",
     "amount": "Сума",
     "min": "Мін",
-    "max": "Макс"
+    "max": "Макс",
+    "all": "Усе",
+    "national": "Нацыянальныя",
+    "regional": "Рэгіянальныя",
+    "ending": "Заканчваюцца неўзабаве",
+    "sort": "Сартаваць па",
+    "sortDeadline": "Тэрмін",
+    "sortAdded": "Найноўшыя",
+    "ue": "ЕС"
   },
   "grants": {
     "loading": "Загрузка...",
@@ -57,7 +72,8 @@
     "scrapedDayAgo": "1 дзень таму",
     "scrapedDaysAgo": "{n} дзён таму",
     "scrapedWeeksAgo": "{n} тыд. таму",
-    "scrapedMonthsAgo": "{n} мес. таму"
+    "scrapedMonthsAgo": "{n} мес. таму",
+    "noDescription": "Апісанне адсутнічае."
   },
   "submit": {
     "title": "Падаць грант",
@@ -76,7 +92,28 @@
     "website": "Вэбсайт",
     "websitePlaceholder": "https://...",
     "email": "Электронная пошта",
-    "emailPlaceholder": "contact (at) арганізацыя.org"
+    "emailPlaceholder": "contact (at) арганізацыя.org",
+    "backToSubmit": "Назад да падачы",
+    "featureAdvancedFilters": "Пашыраныя опcyі фільтрацыі",
+    "featureAlerts": "Абвесткі аб тэрмінах",
+    "featureApi": "Публічны доступ да API",
+    "featureDescription": "Маеце ідэю, як палепшыць GRANgoTY? Мы будзем рады яе пачуць!",
+    "featureExport": "Экспарт грантаў у CSV/PDF",
+    "featureGithubDescription": "Калі ласка, стварыце запыт на функцыю ў GitHub, каб падзяліцца з намі сваімі ідэямі.",
+    "featureNotifications": "Электронныя паведамленні пра новыя гранты",
+    "featureSaved": "Захаваць/закладка для абраных грантаў",
+    "githubDescription": "Мы выкарыстоўваем GitHub для адсочвання пададзеных грантаў. Калі ласка, стварыце праблему з дэталямі гранта.",
+    "includeAmount": "Сума гранта (калі даступна)",
+    "includeDeadline": "Тэрмін падачы заяўкі",
+    "includeDescription": "Кароткае апісанне",
+    "includeRegion": "Прымальны рэгіён/краіна",
+    "includeTitle": "Назва гранта",
+    "includeWebsite": "Спасылка на афіцыйны сайт",
+    "popularFeatures": "Папулярныя ідэі функцый:",
+    "requestFeature": "Прапанаваць функцыю",
+    "submitFeature": "Адправіць запыт на функцыю",
+    "submitViaGithub": "Падаць грант на GitHub",
+    "whatToInclude": "Што ўключыць:"
   },
   "common": {
     "cancel": "Скасаваць",
@@ -109,7 +146,8 @@
     "allRights": "Усе правы абаронены.",
     "madeWithLove": "Зроблена з ❤️ для супольнасці НКА",
     "reportBug": "Паведаміць аб памылцы",
-    "featureRequest": "Запыт функцыі"
+    "featureRequest": "Запыт функцыі",
+    "rssFeed": "RSS-стужка"
   },
   "skipLink": "Перайсці да асноўнага зместу",
   "deadline": {
@@ -176,9 +214,11 @@
     "technicalDetails": "Тэхнічныя дэталі",
     "unauthorizedDescription": "Вам трэба ўвайсці, каб атрымаць доступ да гэтага рэсурсу.",
     "forbiddenDescription": "У вас няма дазволу на доступ да гэтага рэсурсу.",
-    "serviceUnavailableDescription": "Сэрвіс часова недаступны. Паспрабуйце яшчэ раз праз некалькі хвілін.",
-    "serverErrorDescription": "Нешта пайшло не так з нашага боку. Мы атрымалі паведамленне і працуем над выпраўленнем.",
-    "unexpectedDescription": "Узнікла нечаканая памылка. Паспрабуйце абнавіць старонку."
+    "serviceUnavailableDescription": "Сэрвіс часова недаступны. Калі ласка, паспрабуйте яшчэ раз праз імгненне.",
+    "serverErrorDescription": "Нешта пайшло не так з нашага боку. Нас паведамілі, і мы працуем над выпраўленнем.",
+    "unexpectedDescription": "Адбылася нечаканая памылка. Калі ласка, паспрабуйце абнавіць старонку.",
+    "boundaryTitle": "Нешта пайшло не так",
+    "boundaryMessage": "Падчас рэндэрынгу гэтага кампанента ўзнікла памылка."
   },
   "help": {
     "title": "Гарачыя клавішы",

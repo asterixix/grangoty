@@ -2,8 +2,16 @@
   "nav": {
     "title": "GRANgoTY",
     "home": "Strona główna",
+    "submit": "Zgłoś dotację",
     "language": "Język",
-    "reportIssue": "Zgłoś problem"
+    "reportIssue": "Zgłoś problem",
+    "filtersAria": "Filtry konkursów",
+    "closeMenu": "Zamknij menu",
+    "openMenu": "Otwórz menu",
+    "themeSwitch": "Przełącz motyw",
+    "themeLight": "jasny",
+    "themeDark": "ciemny",
+    "titleHome": "GRANgoTY - Strona główna"
   },
   "home": {
     "heroTitle": "Znajdź dotacje dla swojej organizacji",
@@ -33,7 +41,11 @@
     "all": "Wszystkie",
     "national": "Krajowe",
     "regional": "Regionalne",
-    "ending": "Kończące się"
+    "ending": "Kończące się",
+    "sort": "Sortowanie",
+    "sortDeadline": "Termin",
+    "sortAdded": "Najnowsze",
+    "ue": "UE"
   },
   "grants": {
     "loading": "Ładowanie...",
@@ -42,6 +54,7 @@
     "resultsCount": "Wyświetlanie {count} dotacji z {total} (strona {page} z {totalPages})",
     "notFound": "Dotacja nie znaleziona",
     "notFoundDescription": "Przepraszamy, ale ta dotacja nie istnieje lub została usunięta.",
+    "noDescription": "Brak opisu.",
     "backToFeed": "Wróć do listy",
     "description": "Opis",
     "amount": "Kwota",
@@ -133,7 +146,8 @@
     "allRights": "Wszelkie prawa zastrzeżone.",
     "madeWithLove": "Stworzone z ❤️ dla społeczności NGO",
     "reportBug": "Zgłoś błąd",
-    "featureRequest": "Prośba o funkcję"
+    "featureRequest": "Prośba o funkcję",
+    "rssFeed": "Kanał RSS"
   },
   "skipLink": "Pomiń do głównej zawartości",
   "deadline": {
@@ -197,6 +211,8 @@
     "backHome": "Wróć na stronę główną",
     "retry": "Spróbuj ponownie",
     "reportBug": "Zgłoś błąd",
+    "boundaryTitle": "Coś poszło nie tak",
+    "boundaryMessage": "Wystąpił błąd podczas renderowania tego komponentu.",
     "technicalDetails": "Szczegóły techniczne",
     "unauthorizedDescription": "Musisz się zalogować, aby uzyskać dostęp do tego zasobu.",
     "forbiddenDescription": "Nie masz uprawnień do dostępu do tego zasobu.",

@@ -4,7 +4,14 @@
     "home": "Startseite",
     "submit": "Fördermittel einreichen",
     "language": "Sprache",
-    "reportIssue": "Problem melden"
+    "reportIssue": "Problem melden",
+    "filtersAria": "Förderfilter",
+    "closeMenu": "Menü schließen",
+    "openMenu": "Menü öffnen",
+    "themeSwitch": "Thema wechseln",
+    "themeLight": "hell",
+    "themeDark": "dunkel",
+    "titleHome": "GRANgoTY Startseite"
   },
   "home": {
     "heroTitle": "Finden Sie Fördermittel für Ihre Organisation",
@@ -30,7 +37,15 @@
     "status": "Status",
     "amount": "Betrag",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "all": "Alle",
+    "national": "National",
+    "regional": "Regional",
+    "ending": "Endet bald",
+    "sort": "Sortieren nach",
+    "sortDeadline": "Frist",
+    "sortAdded": "Neueste",
+    "ue": "EU"
   },
   "grants": {
     "loading": "Laden...",
@@ -57,7 +72,8 @@
     "scrapedDayAgo": "vor 1 Tag",
     "scrapedDaysAgo": "vor {n} Tagen",
     "scrapedWeeksAgo": "vor {n} Wo.",
-    "scrapedMonthsAgo": "vor {n} Mo."
+    "scrapedMonthsAgo": "vor {n} Mo.",
+    "noDescription": "Keine Beschreibung verfügbar."
   },
   "submit": {
     "title": "Fördermittel einreichen",
@@ -76,7 +92,28 @@
     "website": "Webseite",
     "websitePlaceholder": "https://...",
     "email": "E-Mail",
-    "emailPlaceholder": "kontakt (at) organisation.org"
+    "emailPlaceholder": "kontakt (at) organisation.org",
+    "backToSubmit": "Zurück zum Einreichen",
+    "featureAdvancedFilters": "Erweiterte Filteroptionen",
+    "featureAlerts": "Frist-Benachrichtigungen",
+    "featureApi": "Öffentlicher API-Zugriff",
+    "featureDescription": "Haben Sie eine Idee zur Verbesserung von GRANgoTY? Wir würden sie gerne hören!",
+    "featureExport": "Fördermittel nach CSV/PDF exportieren",
+    "featureGithubDescription": "Bitte erstellen Sie eine Funktionsanfrage auf GitHub, um Ihre Ideen mit uns zu teilen.",
+    "featureNotifications": "E-Mail-Benachrichtigungen für neue Fördermittel",
+    "featureSaved": "Favoriten speichern/Lesezeichen setzen",
+    "githubDescription": "Wir nutzen GitHub, um Fördermittel-Einreichungen zu verfolgen. Bitte öffnen Sie ein Issue mit den Details der Fördermittel.",
+    "includeAmount": "Förderbetrag (falls verfügbar)",
+    "includeDeadline": "Bewerbungsfrist",
+    "includeDescription": "Kurzbeschreibung",
+    "includeRegion": "Förderfähige Region/Land",
+    "includeTitle": "Förder-Titel",
+    "includeWebsite": "Link zur offiziellen Webseite",
+    "popularFeatures": "Beliebte Funktionsideen:",
+    "requestFeature": "Funktion vorschlagen",
+    "submitFeature": "Funktionsanfrage senden",
+    "submitViaGithub": "Fördermittel auf GitHub einreichen",
+    "whatToInclude": "Was enthalten sein sollte:"
   },
   "common": {
     "cancel": "Abbrechen",
@@ -109,7 +146,8 @@
     "allRights": "Alle Rechte vorbehalten.",
     "madeWithLove": "Gemacht mit ❤️ für die NGO-Community",
     "reportBug": "Fehler melden",
-    "featureRequest": "Funktionsanfrage"
+    "featureRequest": "Funktionsanfrage",
+    "rssFeed": "RSS-Feed"
   },
   "skipLink": "Zum Hauptinhalt springen",
   "deadline": {
@@ -176,9 +214,11 @@
     "technicalDetails": "Technische Details",
     "unauthorizedDescription": "Sie müssen sich anmelden, um auf diese Ressource zuzugreifen.",
     "forbiddenDescription": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
-    "serviceUnavailableDescription": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.",
-    "serverErrorDescription": "Auf unserer Seite ist etwas schiefgelaufen. Wir wurden benachrichtigt und arbeiten an einer Lösung.",
-    "unexpectedDescription": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie, die Seite zu aktualisieren."
+    "serviceUnavailableDescription": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in einem Moment erneut.",
+    "serverErrorDescription": "Etwas ist auf unserer Seite schiefgelaufen. Wir wurden benachrichtigt und arbeiten an einer Lösung.",
+    "unexpectedDescription": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie, die Seite zu aktualisieren.",
+    "boundaryTitle": "Etwas ist schiefgelaufen",
+    "boundaryMessage": "Beim Rendern dieser Komponente ist ein Fehler aufgetreten."
   },
   "help": {
     "title": "Tastaturkürzel",

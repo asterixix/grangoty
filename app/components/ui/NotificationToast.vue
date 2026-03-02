@@ -22,14 +22,14 @@
 
     <div class="flex-1 min-w-0">
       <p class="text-sm font-medium" style="color: var(--color-dark-teal-500);">
-        {{ t(notification.titleKey, notification.params) }}
+        {{ t(notification.titleKey, notification.params || {}) }}
       </p>
       <p
         v-if="notification.messageKey"
         class="mt-1 text-sm"
         style="color: var(--color-dark-teal-600);"
       >
-        {{ t(notification.messageKey, notification.params) }}
+        {{ t(notification.messageKey, notification.params || {}) }}
       </p>
 
       <button

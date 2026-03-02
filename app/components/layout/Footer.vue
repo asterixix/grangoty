@@ -58,7 +58,7 @@
             </li>
             <li>
               <NuxtLink to="/api/rss" external class="text-sm transition-colors duration-200" style="color: var(--color-strong-cyan-400);">
-                RSS Feed
+                {{ t('footer.rssFeed') }}
               </NuxtLink>
             </li>
             <li>

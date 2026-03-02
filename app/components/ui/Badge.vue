@@ -66,6 +66,6 @@ const colorStyle = computed(() => {
     },
   }
 
-  return styles[props.color]?.[props.variant] ?? styles.primary.solid
+  return styles[props.color]?.[props.variant] ?? styles.primary!.solid
 })
 </script>

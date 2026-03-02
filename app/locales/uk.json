@@ -4,7 +4,14 @@
     "home": "Головна",
     "submit": "Подати грант",
     "language": "Мова",
-    "reportIssue": "Повідомити про проблему"
+    "reportIssue": "Повідомити про проблему",
+    "filtersAria": "Фільтри грантів",
+    "closeMenu": "Закрити меню",
+    "openMenu": "Відкрити меню",
+    "themeSwitch": "Переключити тему",
+    "themeLight": "світла",
+    "themeDark": "темна",
+    "titleHome": "GRANgoTY - Головна"
   },
   "home": {
     "heroTitle": "Знайдіть гранти для вашої організації",
@@ -30,7 +37,15 @@
     "status": "Статус",
     "amount": "Сума",
     "min": "Мін",
-    "max": "Макс"
+    "max": "Макс",
+    "all": "Всі",
+    "national": "Національні",
+    "regional": "Регіональні",
+    "ending": "Закінчуються незабаром",
+    "sort": "Сортувати за",
+    "sortDeadline": "Термін",
+    "sortAdded": "Найновіші",
+    "ue": "ЄС"
   },
   "grants": {
     "loading": "Завантаження...",
@@ -57,7 +72,8 @@
     "scrapedDayAgo": "1 день тому",
     "scrapedDaysAgo": "{n} днів тому",
     "scrapedWeeksAgo": "{n} тиж. тому",
-    "scrapedMonthsAgo": "{n} міс. тому"
+    "scrapedMonthsAgo": "{n} міс. тому",
+    "noDescription": "Опис відсутній."
   },
   "submit": {
     "title": "Подати грант",
@@ -76,7 +92,28 @@
     "website": "Вебсайт",
     "websitePlaceholder": "https://...",
     "email": "Електронна пошта",
-    "emailPlaceholder": "contact (at) організація.org"
+    "emailPlaceholder": "contact (at) організація.org",
+    "backToSubmit": "Назад до подання",
+    "featureAdvancedFilters": "Розширені опції фільтрації",
+    "featureAlerts": "Сповіщення про терміни",
+    "featureApi": "Публічний доступ до API",
+    "featureDescription": "Маєте ідею, як покращити GRANgoTY? Ми з радістю її вислухаємо!",
+    "featureExport": "Експорт грантів у CSV/PDF",
+    "featureGithubDescription": "Будь ласка, створіть запит на функцію в GitHub, щоб поділитися з нами своїми ідеями.",
+    "featureNotifications": "Електронні сповіщення про нові гранти",
+    "featureSaved": "Зберегти/закладка для улюблених грантів",
+    "githubDescription": "Ми використовуємо GitHub для відстеження поданих грантів. Будь ласка, створіть проблему з деталями гранту.",
+    "includeAmount": "Сума гранту (якщо доступна)",
+    "includeDeadline": "Термін подачі заявки",
+    "includeDescription": "Короткий опис",
+    "includeRegion": "Прийнятний регіон/країна",
+    "includeTitle": "Назва гранту",
+    "includeWebsite": "Посилання на офіційний сайт",
+    "popularFeatures": "Популярні ідеї функцій:",
+    "requestFeature": "Запропонувати функцію",
+    "submitFeature": "Надіслати запит на функцію",
+    "submitViaGithub": "Подати грант на GitHub",
+    "whatToInclude": "Що додати:"
   },
   "common": {
     "cancel": "Скасувати",
@@ -109,7 +146,8 @@
     "allRights": "Усі права захищено.",
     "madeWithLove": "Зроблено з ❤️ для спільноти НКО",
     "reportBug": "Повідомити про помилку",
-    "featureRequest": "Запит функції"
+    "featureRequest": "Запит функції",
+    "rssFeed": "RSS-стрічка"
   },
   "skipLink": "Перейти до основного вмісту",
   "deadline": {
@@ -176,9 +214,11 @@
     "technicalDetails": "Технічні деталі",
     "unauthorizedDescription": "Вам потрібно увійти, щоб отримати доступ до цього ресурсу.",
     "forbiddenDescription": "У вас немає дозволу на доступ до цього ресурсу.",
-    "serviceUnavailableDescription": "Сервіс тимчасово недоступний. Спробуйте ще раз за кілька хвилин.",
-    "serverErrorDescription": "Щось пішло не так з нашого боку. Ми отримали повідомлення і працюємо над виправленням.",
-    "unexpectedDescription": "Виникла несподівана помилка. Спробуйте оновити сторінку."
+    "serviceUnavailableDescription": "Сервіс тимчасово недоступний. Будь ласка, спробуйте ще раз через мить.",
+    "serverErrorDescription": "Щось пішло не так з нашого боку. Нас було повідомлено, і ми працюємо над виправленням.",
+    "unexpectedDescription": "Сталася неочікувана помилка. Будь ласка, спробуйте оновити сторінку.",
+    "boundaryTitle": "Щось пішло не так",
+    "boundaryMessage": "Під час рендерингу цього компонента виникла помилка."
   },
   "help": {
     "title": "Гарячі клавіші",

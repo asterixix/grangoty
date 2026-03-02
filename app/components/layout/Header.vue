@@ -36,7 +36,7 @@
             size="sm"
             variant="ghost"
             :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-            :aria-label="`Switch to ${isDark ? 'light' : 'dark'} mode`"
+            :aria-label="t('nav.themeSwitch')"
             style="color: var(--color-strong-cyan-800);"
             @click="toggleTheme"
           />
@@ -61,7 +61,7 @@
             size="sm"
             variant="ghost"
             :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-            :aria-label="`Switch to ${isDark ? 'light' : 'dark'} mode`"
+            :aria-label="t('nav.themeSwitch')"
             style="color: var(--color-strong-cyan-800);"
             @click="toggleTheme"
           />
@@ -69,9 +69,9 @@
           <UButton
             size="sm"
             variant="ghost"
-            :icon="isMobileMenuOpen.value ? 'i-lucide-x' : 'i-lucide-menu'"
-            :aria-expanded="isMobileMenuOpen.value"
-            :aria-label="isMobileMenuOpen.value ? 'Close menu' : 'Open menu'"
+            :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
+            :aria-expanded="isMobileMenuOpen"
+            :aria-label="isMobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')"
             style="color: var(--color-strong-cyan-800);"
             @click="toggleMobileMenu"
           />
@@ -80,7 +80,7 @@
     </div>
 
     <div
-      v-if="isMobileMenuOpen.value"
+      v-if="isMobileMenuOpen"
       class="md:hidden animate-fade-in"
       style="background-color: var(--color-dark-teal-400); border-top: 1px solid var(--color-dark-teal-300);"
     >

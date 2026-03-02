@@ -2,8 +2,16 @@
   "nav": {
     "title": "GRANgoTY",
     "home": "Home",
+    "submit": "Submit Grant",
     "language": "Language",
-    "reportIssue": "Report Issue"
+    "reportIssue": "Report Issue",
+    "filtersAria": "Grant filters",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
+    "themeSwitch": "Switch theme",
+    "themeLight": "light",
+    "themeDark": "dark",
+    "titleHome": "GRANgoTY Home"
   },
   "home": {
     "heroTitle": "Find grants for your organization",
@@ -33,7 +41,11 @@
     "all": "All",
     "national": "National",
     "regional": "Regional",
-    "ending": "Ending Soon"
+    "ending": "Ending Soon",
+    "sort": "Sort by",
+    "sortDeadline": "Deadline",
+    "sortAdded": "Newest",
+    "ue": "EU"
   },
   "grants": {
     "loading": "Loading...",
@@ -42,6 +54,7 @@
     "resultsCount": "Showing {count} grants of {total} (page {page} of {totalPages})",
     "notFound": "Grant Not Found",
     "notFoundDescription": "Sorry, this grant doesn't exist or has been removed.",
+    "noDescription": "No description available.",
     "backToFeed": "Back to Feed",
     "description": "Description",
     "amount": "Amount",
@@ -133,7 +146,8 @@
     "allRights": "All rights reserved.",
     "madeWithLove": "Made with ❤️ for the NGO community",
     "reportBug": "Report Bug",
-    "featureRequest": "Feature Request"
+    "featureRequest": "Feature Request",
+    "rssFeed": "RSS Feed"
   },
   "skipLink": "Skip to main content",
   "deadline": {
@@ -197,6 +211,8 @@
     "backHome": "Back to Home",
     "retry": "Try Again",
     "reportBug": "Report Bug",
+    "boundaryTitle": "Something went wrong",
+    "boundaryMessage": "An error occurred while rendering this component.",
     "technicalDetails": "Technical details",
     "unauthorizedDescription": "You need to log in to access this resource.",
     "forbiddenDescription": "You don't have permission to access this resource.",

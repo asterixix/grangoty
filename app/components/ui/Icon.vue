@@ -2,8 +2,7 @@
   <div
     :class="[
       'icon',
-      sizeClass,
-      class
+      sizeClass
     ]"
   >
     <svg
@@ -150,7 +149,6 @@ import { computed } from 'vue'
 const props = defineProps<{
   name: string
   size?: 'sm' | 'md' | 'lg'
-  class?: string
 }>()
 
 const sizeClass = computed(() => {
