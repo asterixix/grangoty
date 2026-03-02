@@ -9,7 +9,7 @@
  * Usage: Filter by region using ?urzadid=[municipal_id]
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 // Witkac Municipalities (Urzędy Gminy/Powiatów)
 // Full list available at: https://witkac.pl/Offer/GetAllUrzedys

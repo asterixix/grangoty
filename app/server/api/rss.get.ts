@@ -1,6 +1,6 @@
 import { defineEventHandler, setHeader, getQuery } from 'h3'
 import { grantStorage } from '~/server/utils/redis'
-import type { Grant } from '~/app/types'
+import type { Grant } from '~/types'
 
 /**
  * Escape XML special characters

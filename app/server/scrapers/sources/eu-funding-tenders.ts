@@ -7,7 +7,7 @@
  * This scraper fetches EU funding opportunities available to Polish NGOs.
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class EuFundingTendersScraper {
   source = 'eu-funding-tenders'

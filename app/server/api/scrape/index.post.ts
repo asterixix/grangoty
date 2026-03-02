@@ -4,7 +4,7 @@ import { scrapers } from '~/server/scrapers/real-scrapers'
 import { deduplicateGrants, filterValidGrants } from '~/server/utils/deduplicator'
 import { scraperLogger } from '~/server/utils/logger'
 import { withRetry, classifyScraperError } from '~/server/utils/scraper-helpers'
-import type { ApiError, ScrapeResult, Grant } from '~/app/types'
+import type { ApiError, ScrapeResult, Grant } from '~/types'
 
 export default defineEventHandler(async (event): Promise<ScrapeResult | ApiError> => {
   const requestStart = performance.now()

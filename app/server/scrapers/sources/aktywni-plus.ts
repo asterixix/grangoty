@@ -7,7 +7,7 @@
  * This scraper handles the Aktywni+ program (38M PLN annually).
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class AktywniPlusScraper {
   source = 'aktywni-plus'

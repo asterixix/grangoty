@@ -5,7 +5,7 @@
  * Website: https://eurodesk.pl
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class EurodeskPlScraper {
   source = 'eurodesk'

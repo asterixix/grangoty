@@ -1,5 +1,5 @@
 import { ref, readonly, type Ref } from 'vue'
-import type { NotificationAction } from '~/app/types/notifications'
+import type { NotificationAction } from '~/types/notifications'
 
 // Import useNotifications explicitly for TypeScript
 import { useNotifications } from './useNotifications'

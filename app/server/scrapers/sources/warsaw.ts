@@ -7,7 +7,7 @@
  * Uses Witkac platform + own portal
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class WarsawNgoScraper {
   source = 'warsaw'

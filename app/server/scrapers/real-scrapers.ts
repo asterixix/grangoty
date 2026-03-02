@@ -1,6 +1,6 @@
 import { PlaywrightCrawler, createPlaywrightRouter } from 'crawlee'
 import * as cheerio from 'cheerio'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 import { WitkacApiScraper } from './sources/witkac-api'
 import { GovPlPozytekScraper } from './sources/gov-pl-pozytek'
 import { NiwGeneratorScraper } from './sources/niw-generator'

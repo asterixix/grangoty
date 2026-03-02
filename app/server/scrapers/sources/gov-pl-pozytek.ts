@@ -9,7 +9,7 @@
  */
 
 import * as cheerio from 'cheerio'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 const GRANT_KEYWORDS = /nabor|nabór|konkurs|dotacj|ofert|grant/i
 const MAX_GRANTS = 60

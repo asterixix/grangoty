@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { LocaleCode } from '~/app/types'
+import type { LocaleCode } from '~/types'
 
 export const useLocaleStore = defineStore('locale', () => {
   const currentLocale = ref<LocaleCode>('pl')

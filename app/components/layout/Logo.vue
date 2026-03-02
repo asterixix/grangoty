@@ -1,6 +1,6 @@
 <template>
   <div class="logo flex items-center">
-    <NuxtLink to="/" class="flex items-center group" aria-label="GRANgoTY Home">
+    <NuxtLink to="/" class="flex items-center group" :aria-label="t('nav.titleHome')">
       <!-- Logo Icon -->
       <div class="logo-icon h-8 w-8 sm:h-10 sm:w-10 bg-primary-500 rounded-lg flex items-center justify-center mr-3 transition-transform group-hover:scale-105">
         <svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-// Logo component for GRANgoTY brand identity
+const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <style scoped>

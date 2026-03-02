@@ -5,7 +5,7 @@
  * Website: https://podkarpackie.pl/ngo/dotacje
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class PodkarpackieNgoScraper {
   source = 'podkarpackie'

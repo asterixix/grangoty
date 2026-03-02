@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue'
-import type { Notification, NotificationInput, NotificationLevel } from '~/app/types/notifications'
+import type { Notification, NotificationInput, NotificationLevel } from '~/types/notifications'
 
 /**
  * Default auto-dismiss durations by notification level

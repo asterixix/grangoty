@@ -7,7 +7,7 @@
  * This scraper handles EEA and Norway Grants funding opportunities.
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class ActiveCitizensFundScraper {
   source = 'active-citizens-fund'

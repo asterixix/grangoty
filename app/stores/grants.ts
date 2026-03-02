@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed, reactive } from 'vue'
-import type { Grant, FilterState, PaginatedResponse } from '~/app/types'
+import type { Grant, FilterState, PaginatedResponse } from '~/types'
 
 export const useGrantsStore = defineStore('grants', () => {
   const grants = ref<Grant[]>([])

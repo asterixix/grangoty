@@ -5,7 +5,7 @@
  * Website: https://poznan.pl/ngo
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class PoznanNgoScraper {
   source = 'poznan'

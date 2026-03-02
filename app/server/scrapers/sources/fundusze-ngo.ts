@@ -13,7 +13,7 @@
  * approach is implemented.
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 const LISTING_URL = 'https://fundusze.ngo.pl/aktualne'
 

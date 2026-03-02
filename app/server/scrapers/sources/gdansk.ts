@@ -10,7 +10,7 @@
  */
 
 import * as cheerio from 'cheerio'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 const LISTING_URL = 'https://bip.gdansk.pl/urzad-miejski/konkursy/Konkursy,a,808'
 const MAIN_PAGE_SUFFIX = ',a,808'

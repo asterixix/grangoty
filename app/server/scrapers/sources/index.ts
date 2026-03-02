@@ -32,7 +32,7 @@ export { ActiveCitizensFundScraper } from './active-citizens-fund'
 export { AktywniPlusScraper } from './aktywni-plus'
 
 // Import types
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 // Scraper registry
 import { FunduszeNgoScraper } from './fundusze-ngo'

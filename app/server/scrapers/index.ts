@@ -1,5 +1,5 @@
 import { StaticHtmlScraper } from './base-scraper'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 /**
  * Scraper for fundusze.ngo.pl

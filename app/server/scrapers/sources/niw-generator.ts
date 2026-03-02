@@ -10,7 +10,7 @@
  * Website: https://generator.niw.gov.pl/nabory
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class NiwGeneratorScraper {
   source = 'niw-generator'

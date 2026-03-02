@@ -5,7 +5,7 @@
  * Website: https://wroclaw.pl/organizacje-pozarzadowe
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class WroclawNgoScraper {
   source = 'wroclaw'

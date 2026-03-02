@@ -8,7 +8,7 @@
  */
 
 import * as cheerio from 'cheerio'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 const BASE_URL = 'https://grantowo.pl'
 

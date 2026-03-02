@@ -148,7 +148,7 @@ const isDev = import.meta.dev
 const grantsStore = useGrantsStore()
 const filtersStore = useFiltersStore()
 const notifications = useNotifications()
-const { queue } = storeToRefs(notifications as any)
+const queue = notifications.queue
 const { isOnline } = useNetworkStatus()
 const errorSimulator = useErrorSimulator()
 

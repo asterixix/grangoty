@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio'
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 /**
  * Abstract base class for all scrapers

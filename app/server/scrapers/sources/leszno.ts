@@ -5,7 +5,7 @@
  * Website: https://ngo.leszno.pl
  */
 
-import type { RawGrant } from '~/app/types'
+import type { RawGrant } from '~/types'
 
 export class LesznoNgoScraper {
   source = 'leszno'
