@@ -69,8 +69,8 @@ export abstract class BaseScraper {
       return { min: amount, max: amount, currency }
     }
 
-    const min = this.parseNumber(numbers[0])
-    const max = this.parseNumber(numbers[1])
+    const min = this.parseNumber(numbers[0]!)
+    const max = this.parseNumber(numbers[1]!)
     return { min, max, currency }
   }
 

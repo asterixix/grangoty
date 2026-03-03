@@ -21,8 +21,6 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap' }
@@ -43,7 +41,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
 
-  // @ts-expect-error - i18n module extends NuxtConfig
   i18n: {
     strategy: 'prefix',
     locales: [
@@ -59,6 +56,7 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       fallbackLocale: 'pl'
     },
+    // @ts-ignore
     lazy: false,
     langDir: 'locales',
     vueI18n: './i18n.config.ts',
@@ -92,6 +90,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    // @ts-ignore
     plugins: [tailwindcss()],
   },
 

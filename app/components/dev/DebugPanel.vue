@@ -141,6 +141,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useErrorSimulator } from '~/composables/dev/useErrorSimulator'
 
 // Only renders when NUXT_DEBUG=true or dev mode
 const isDev = import.meta.dev

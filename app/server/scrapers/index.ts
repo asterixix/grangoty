@@ -6,11 +6,11 @@ import type { RawGrant } from '~/types'
  * Uses Playwright for dynamic content
  */
 export class FunduszeNgoScraper extends StaticHtmlScraper {
-  source = 'fundusze-ngo'
-  url = 'https://fundusze.ngo.pl'
-  enabled = true
+  override source = 'fundusze-ngo'
+  override url = 'https://fundusze.ngo.pl'
+  override enabled = true
 
-  async scrape(): Promise<RawGrant[]> {
+  override async scrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     // Note: This site uses JavaScript heavily
@@ -28,11 +28,11 @@ export class FunduszeNgoScraper extends StaticHtmlScraper {
  * Static HTML site
  */
 export class NiwGovPlScraper extends StaticHtmlScraper {
-  source = 'niw'
-  url = 'https://niw.gov.pl'
-  enabled = true
+  override source = 'niw'
+  override url = 'https://niw.gov.pl'
+  override enabled = true
 
-  async scrape(): Promise<RawGrant[]> {
+  override async scrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     await this.load(this.url)
@@ -61,11 +61,11 @@ export class NiwGovPlScraper extends StaticHtmlScraper {
  * Static HTML site
  */
 export class MalopolskaPlScraper extends StaticHtmlScraper {
-  source = 'malopolska'
-  url = 'https://malopolska.pl'
-  enabled = true
+  override source = 'malopolska'
+  override url = 'https://malopolska.pl'
+  override enabled = true
 
-  async scrape(): Promise<RawGrant[]> {
+  override async scrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     await this.load(this.url)
@@ -94,11 +94,11 @@ export class MalopolskaPlScraper extends StaticHtmlScraper {
  * Static HTML site
  */
 export class KrakowNgoPlScraper extends StaticHtmlScraper {
-  source = 'krakow-ngo'
-  url = 'https://ngo.krakow.pl'
-  enabled = true
+  override source = 'krakow-ngo'
+  override url = 'https://ngo.krakow.pl'
+  override enabled = true
 
-  async scrape(): Promise<RawGrant[]> {
+  override async scrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     await this.load(this.url)
@@ -127,11 +127,11 @@ export class KrakowNgoPlScraper extends StaticHtmlScraper {
  * Static HTML site
  */
 export class EurodeskPlScraper extends StaticHtmlScraper {
-  source = 'eurodesk'
-  url = 'https://eurodesk.pl'
-  enabled = true
+  override source = 'eurodesk'
+  override url = 'https://eurodesk.pl'
+  override enabled = true
 
-  async scrape(): Promise<RawGrant[]> {
+  override async scrape(): Promise<RawGrant[]> {
     const grants: RawGrant[] = []
 
     await this.load(this.url)

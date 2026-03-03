@@ -171,11 +171,11 @@ async function getScraperMetrics(): Promise<any> {
   if (sources.length > 0) {
     metrics.performanceStats.averageGrantsPerScraper = metrics.totalGrants / sources.length
 
-    const [mostProductive] = sources.sort(([,a], [,b]) => b - a)
-    const [leastProductive] = sources.sort(([,a], [,b]) => a - b)
+    const [mostProductive] = [...sources].sort(([,a], [,b]) => b - a)
+    const [leastProductive] = [...sources].sort(([,a], [,b]) => a - b)
 
-    metrics.performanceStats.mostProductiveSource = mostProductive[0]
-    metrics.performanceStats.leastProductiveSource = leastProductive[0]
+    if (mostProductive) metrics.performanceStats.mostProductiveSource = mostProductive[0]
+    if (leastProductive) metrics.performanceStats.leastProductiveSource = leastProductive[0]
   }
 
   // Count successful/failed runs

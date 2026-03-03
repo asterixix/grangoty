@@ -209,12 +209,11 @@ export class FunduszeNgoScraper extends RealScraper {
       try {
         await this.rateLimiter.acquire()
 
-        // Extract grant links with safe extraction
         const grantLinks = await safeExtract(
-          () => page.$eval('a[href*="/grant"], a[href*="/fundusz"], a[href*="/dotacja"]',
-            (links: any[]) => links.map((link: any) => link.getAttribute('href')).filter(Boolean)
+          () => page.$$eval('a[href*="/grant"], a[href*="/fundusz"], a[href*="/dotacja"]',
+            (links: any[]) => links.map((link: any) => link.getAttribute('href')).filter(Boolean) as string[]
           ),
-          [],
+          Promise.resolve([] as string[]),
           { source: this._config.name, field: 'grantLinks' }
         )
 
@@ -268,7 +267,7 @@ export class FunduszeNgoScraper extends RealScraper {
         // Extract title with safe extraction
         grant.title = await safeExtract(
           () => page.$eval('h1, .grant-title, .title', el => el.textContent?.trim() || ''),
-          '',
+          Promise.resolve(''),
           { source: this._config.name, field: 'title' }
         )
 
@@ -277,7 +276,7 @@ export class FunduszeNgoScraper extends RealScraper {
           () => page.$eval('.description, .content, .grant-description, article',
             el => el.textContent?.trim() || ''
           ),
-          '',
+          Promise.resolve(''),
           { source: this._config.name, field: 'description' }
         )
 
@@ -286,7 +285,7 @@ export class FunduszeNgoScraper extends RealScraper {
           () => page.$eval('.amount, .kwota, [class*="amount"]',
             el => el.textContent?.trim() || ''
           ),
-          '',
+          Promise.resolve(''),
           { source: this._config.name, field: 'amount' }
         )
         if (amountText) {
@@ -298,7 +297,7 @@ export class FunduszeNgoScraper extends RealScraper {
           () => page.$eval('.deadline, [class*="termin"], [class*="date"]',
             el => el.textContent?.trim() || ''
           ),
-          '',
+          Promise.resolve(''),
           { source: this._config.name, field: 'deadline' }
         )
         if (deadlineText) {
@@ -310,7 +309,7 @@ export class FunduszeNgoScraper extends RealScraper {
           () => page.$eval('.category, [class*="kategoria"]',
             el => el.textContent?.trim() || 'general'
           ),
-          'general',
+          Promise.resolve('general'),
           { source: this._config.name, field: 'category' }
         )
 
@@ -349,7 +348,7 @@ export class FunduszeNgoScraper extends RealScraper {
           scraperLogger.error({
             source: this._config.name,
             url: request.url,
-            error: error.message
+            error: (error as Error).message
           }, 'Crawler request failed')
         }
       })

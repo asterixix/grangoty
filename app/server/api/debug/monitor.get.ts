@@ -77,7 +77,7 @@ async function getPerformanceMonitor(): Promise<any> {
       grantsCount: status?.count || 0,
       errorCount: status?.error ? 1 : 0,
       performance: metrics,
-      alerts: []
+      alerts: [] as any[]
     }
 
     if (metrics.avgResponseTime > 30000) { // 30 seconds
