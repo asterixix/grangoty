@@ -44,11 +44,11 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'prefix',
     locales: [
-      { code: 'pl', name: 'Polski', language: 'pl-PL', file: 'pl.json' },
-      { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
-      { code: 'uk', name: 'Українська', language: 'uk-UA', file: 'uk.json' },
-      { code: 'be', name: 'Белaruska', language: 'be-BY', file: 'be.json' },
-      { code: 'de', name: 'Deutsch', language: 'de-DE', file: 'de.json' }
+      { code: 'pl', name: 'Polski', language: 'pl-PL' },
+      { code: 'en', name: 'English', language: 'en-US' },
+      { code: 'uk', name: 'Українська', language: 'uk-UA' },
+      { code: 'be', name: 'Белaruska', language: 'be-BY' },
+      { code: 'de', name: 'Deutsch', language: 'de-DE' }
     ],
     defaultLocale: 'pl',
     detectBrowserLanguage: {
@@ -56,9 +56,6 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       fallbackLocale: 'pl'
     },
-    // @ts-ignore
-    lazy: false,
-    langDir: 'locales',
     vueI18n: './i18n.config.ts',
     ignoreRoutes: ['api', 'api/**', '_nuxt', 'assets']
   },
