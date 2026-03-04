@@ -44,13 +44,15 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'prefix',
     locales: [
-      { code: 'pl', name: 'Polski', language: 'pl-PL' },
-      { code: 'en', name: 'English', language: 'en-US' },
-      { code: 'uk', name: 'Українська', language: 'uk-UA' },
-      { code: 'be', name: 'Белaruska', language: 'be-BY' },
-      { code: 'de', name: 'Deutsch', language: 'de-DE' }
+      { code: 'pl', name: 'Polski', language: 'pl-PL', file: 'pl.json' },
+      { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
+      { code: 'uk', name: 'Українська', language: 'uk-UA', file: 'uk.json' },
+      { code: 'be', name: 'Белaruska', language: 'be-BY', file: 'be.json' },
+      { code: 'de', name: 'Deutsch', language: 'de-DE', file: 'de.json' }
     ],
     defaultLocale: 'pl',
+    lazy: false,
+    langDir: 'locales',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
